@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GoalDetector : MonoBehaviour{
 
-	float rotationSpeed = 50f;
 	public GameObject mapGen;
 	private wallPlacer WallPlacer;
 
@@ -15,17 +14,10 @@ public class GoalDetector : MonoBehaviour{
         WallPlacer.startMap();
     }
 
-    // Update is called once per frame
-    void Update(){
-        
-    }
 
-    void FixedUpdate(){
-    	gameObject.transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
-    }
+
 
 	void OnTriggerEnter(Collider other){
-        Debug.Log("TRIGGER");
         WallPlacer.resetMap();
         // WallPlacer
         // foreach (ContactPoint contact in collision.contacts)

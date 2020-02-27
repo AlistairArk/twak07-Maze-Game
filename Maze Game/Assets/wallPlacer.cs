@@ -32,6 +32,8 @@ public class wallPlacer : MonoBehaviour{
     public int endY;
     public int endDist = -1;
 
+    public int mapScale = 10;
+
     int startDistance = 0;
 
     // Start is called before the first frame update
@@ -46,35 +48,33 @@ public class wallPlacer : MonoBehaviour{
                 List<int> cellWallsGroup = new List<int>();
 
                 GameObject cube1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube1.transform.localScale = new Vector3(.25f, 1, 1);
+                cube1.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
                 cube1.transform.Rotate(0f, 90f, 0f);
                 cube1.GetComponent<Renderer>().material = wallMat;
                 cell.Add(cube1); // North Wall
 
                 GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube2.transform.localScale = new Vector3(.25f, 1, 1);
+                cube2.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
                 cube2.GetComponent<Renderer>().material = wallMat;
                 cell.Add(cube2); // East Wall
 
                 GameObject cube3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube3.transform.localScale = new Vector3(.25f, 1, 1);
+                cube3.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
                 cube3.transform.Rotate(0f, 90f, 0f);
                 cube3.GetComponent<Renderer>().material = wallMat;
                 cell.Add(cube3); // South Wall
 
                 GameObject cube4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube4.transform.localScale = new Vector3(.25f, 1, 1);
+                cube4.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
                 cube4.GetComponent<Renderer>().material = wallMat;
                 cell.Add(cube4); // West Wall
 
-                cube1.transform.position = new Vector3(cellX, wallHeight, cellY);
-                cube2.transform.position = new Vector3(cellX+.5f, wallHeight, cellY-.5f);
-                cube3.transform.position = new Vector3(cellX, wallHeight, cellY-1f);
-                cube4.transform.position = new Vector3(cellX-.5f, wallHeight, cellY-.5f);
+                cube1.transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(1f+cellY));
+                cube2.transform.position = new Vector3(mapScale*(cellX+1f), 	wallHeight,  mapScale*(cellY+.5f));
+                cube3.transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(cellY));
+                cube4.transform.position = new Vector3(mapScale*(cellX),		wallHeight,  mapScale*(cellY+.5f));
                 
-
                 cellRow.Add(cell);
-
 
                 cellWallsGroup.Add(1);
                 cellWallsGroup.Add(1);
@@ -89,17 +89,19 @@ public class wallPlacer : MonoBehaviour{
         }
 
 
-        // Build Grid
-        for(int cellX = 0; cellX < gridX-1; cellX++){
-            for(int cellY = 0; cellY < gridZ-1; cellY++){
-                placeCell(cellX,cellY);
-            }
-        }
+        // // Build Grid
+        // for(int cellX = 0; cellX < gridX-1; cellX++){
+        //     for(int cellY = 0; cellY < gridZ-1; cellY++){
+        //     	if (cellX==0 || cellY==0){
+	       //          placeCell(cellX,cellY);
+        //     	}
+        //     }
+        // }
 
         // Create level base
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3((gridX*.5f)-.5f, 0, (gridZ*.5f)-1);
-        cube.transform.localScale = new Vector3(gridX, 0.01f, gridZ);
+        cube.transform.position 	= new Vector3(mapScale*(gridX*.5f), 	0, 		mapScale*(gridZ*.5f));
+        cube.transform.localScale 	= new Vector3(mapScale*gridX, 				0.01f, 	mapScale*gridZ);
         cube.layer = 8;
 
         recursiveBacktrack(gridX-1,gridZ-1); // Build Maze
@@ -230,17 +232,18 @@ public class wallPlacer : MonoBehaviour{
             }
         }
         getCellEnds();
-        print("Wowee");
     }
 
 
-    // Update is called once per frame
-    public void placeCell(int cellX, int cellY){
-        cellList[cellX][cellY][0].transform.position = new Vector3(cellX, wallHeight, cellY);
-        cellList[cellX][cellY][1].transform.position = new Vector3(cellX+.5f, wallHeight, cellY-.5f);
-        cellList[cellX][cellY][2].transform.position = new Vector3(cellX, wallHeight, cellY-1f);
-        cellList[cellX][cellY][3].transform.position = new Vector3(cellX-.5f, wallHeight, cellY-.5f);
-    }
+    // // Update is called once per frame
+    // public void placeCell(int cellX, int cellY){
+    // 	print(cellX);
+    // 	print(cellY);
+    //     cellList[cellX][cellY][0].transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(1f+cellY));
+    //     cellList[cellX][cellY][1].transform.position = new Vector3(mapScale*(cellX+1f), 	wallHeight,  mapScale*(cellY+.5f));
+    //     cellList[cellX][cellY][2].transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(cellY));
+    //     cellList[cellX][cellY][3].transform.position = new Vector3(mapScale*(cellX), 		wallHeight,  mapScale*(cellY+.5f));
+    // }
 
     public void getCellEnds(){
         // List all candidates for start and end points
@@ -305,7 +308,6 @@ public class wallPlacer : MonoBehaviour{
         startDistance = 0;
         stack.Clear();
         visited.Clear();
-        print("HELLO");
 
         recursiveBacktrack(gridX-1,gridZ-1); // Build Maze
         goalObject.transform.position = new Vector3(endX, goalObject.transform.position.y, endY-0.5f);
