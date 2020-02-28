@@ -36,6 +36,20 @@ public class wallPlacer : MonoBehaviour{
 
     int startDistance = 0;
 
+    // Map Prefabs
+    public GameObject CorridorHall;
+    public GameObject CorridorEnd;
+    public GameObject CorridorTJunction;
+    public GameObject CorridorIntersection;
+    float prefabOffsetX = .5f;
+    float prefabOffsetY = 0.5f;
+
+
+    // void Start(){
+    //     Instantiate(myPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+    // }
+
+
     // Start is called before the first frame update
     public void startMap() {
 
@@ -69,10 +83,10 @@ public class wallPlacer : MonoBehaviour{
                 cube4.GetComponent<Renderer>().material = wallMat;
                 cell.Add(cube4); // West Wall
 
-                cube1.transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(1f+cellY));
-                cube2.transform.position = new Vector3(mapScale*(cellX+1f), 	wallHeight,  mapScale*(cellY+.5f));
-                cube3.transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(cellY));
-                cube4.transform.position = new Vector3(mapScale*(cellX),		wallHeight,  mapScale*(cellY+.5f));
+                cube1.transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(1f+cellY));
+                cube2.transform.position = new Vector3(mapScale*(cellX+1f),     wallHeight,  mapScale*(cellY+.5f));
+                cube3.transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(cellY));
+                cube4.transform.position = new Vector3(mapScale*(cellX),        wallHeight,  mapScale*(cellY+.5f));
                 
                 cellRow.Add(cell);
 
@@ -92,16 +106,16 @@ public class wallPlacer : MonoBehaviour{
         // // Build Grid
         // for(int cellX = 0; cellX < gridX-1; cellX++){
         //     for(int cellY = 0; cellY < gridZ-1; cellY++){
-        //     	if (cellX==0 || cellY==0){
-	       //          placeCell(cellX,cellY);
-        //     	}
+        //         if (cellX==0 || cellY==0){
+           //          placeCell(cellX,cellY);
+        //         }
         //     }
         // }
 
         // Create level base
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position 	= new Vector3(mapScale*(gridX*.5f), 	0, 		mapScale*(gridZ*.5f));
-        cube.transform.localScale 	= new Vector3(mapScale*gridX, 				0.01f, 	mapScale*gridZ);
+        cube.transform.position     = new Vector3(mapScale*(gridX*.5f),     0,         mapScale*(gridZ*.5f));
+        cube.transform.localScale     = new Vector3(mapScale*gridX,                 0.01f,     mapScale*gridZ);
         cube.layer = 8;
 
         recursiveBacktrack(gridX-1,gridZ-1); // Build Maze
@@ -237,12 +251,12 @@ public class wallPlacer : MonoBehaviour{
 
     // // Update is called once per frame
     // public void placeCell(int cellX, int cellY){
-    // 	print(cellX);
-    // 	print(cellY);
-    //     cellList[cellX][cellY][0].transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(1f+cellY));
-    //     cellList[cellX][cellY][1].transform.position = new Vector3(mapScale*(cellX+1f), 	wallHeight,  mapScale*(cellY+.5f));
-    //     cellList[cellX][cellY][2].transform.position = new Vector3(mapScale*(.5f+cellX),	wallHeight,  mapScale*(cellY));
-    //     cellList[cellX][cellY][3].transform.position = new Vector3(mapScale*(cellX), 		wallHeight,  mapScale*(cellY+.5f));
+    //     print(cellX);
+    //     print(cellY);
+    //     cellList[cellX][cellY][0].transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(1f+cellY));
+    //     cellList[cellX][cellY][1].transform.position = new Vector3(mapScale*(cellX+1f),     wallHeight,  mapScale*(cellY+.5f));
+    //     cellList[cellX][cellY][2].transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(cellY));
+    //     cellList[cellX][cellY][3].transform.position = new Vector3(mapScale*(cellX),         wallHeight,  mapScale*(cellY+.5f));
     // }
 
     public void getCellEnds(){
@@ -269,6 +283,39 @@ public class wallPlacer : MonoBehaviour{
                         endDist = cellWalls[cellX][cellY][4];
                     }
                 }
+
+
+
+                switch(findCount) {
+                     case (1):
+                        if (cellWalls[cellX][cellY][0] == 0 ){
+                            Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellY+prefabOffsetY)*mapScale), Quaternion.Euler(0,180,0));
+                        } else if (cellWalls[cellX][cellY][1] == 0){
+                            Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellY+prefabOffsetY)*mapScale), Quaternion.Euler(0,270,0));
+                        } else if (cellWalls[cellX][cellY][2] == 0){
+                            Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellY+prefabOffsetY)*mapScale), Quaternion.Euler(0,0,0));
+                        } else if (cellWalls[cellX][cellY][3] == 0){
+                            Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellY+prefabOffsetY)*mapScale), Quaternion.Euler(0,90,0));
+                        }
+                        break;
+                    case (2):
+                        if (cellWalls[cellX][cellY][0] == 0  && cellWalls[cellX][cellY][2] == 0 ){
+                        	
+                    	} else if (cellWalls[cellX][cellY][0] == 0  && cellWalls[cellX][cellY][2] == 0 ){
+
+                    	}
+                        break;
+                    case (3):
+                        break;
+                    case (4):
+							Instantiate(CorridorIntersection, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellY+prefabOffsetY)*mapScale), Quaternion.Euler(0,0,0));
+                        break;
+                }
+
+                // PlaceCorridorHall();
+                // PlaceCorridorEnd();
+                // PlaceCorridorTJunction();
+                // PlaceCorridorIntersection();
             }
         }
         setSpawnPoints();
