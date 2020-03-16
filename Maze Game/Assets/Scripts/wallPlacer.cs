@@ -8,10 +8,10 @@ public class WallPlacer : MonoBehaviour{
     [Header("Maze Settings", order=0)]
     public int gridX;
     public int gridZ;
-    public int startX;
-    public int startZ;
     public int endX;
     public int endZ;
+    private int startX=0;
+    private int startZ=0;
     public bool showRawMaze = true;
     public bool showPrefabMaze = true;
     public bool hideBase = true;
@@ -26,7 +26,6 @@ public class WallPlacer : MonoBehaviour{
     public GameObject CorridorIntersection;
     float prefabOffsetX = .5f;
     float prefabOffsetZ = 0.5f;
-    public GameObject prefabMazeParent;
 
 
     // RawMaze
@@ -38,7 +37,7 @@ public class WallPlacer : MonoBehaviour{
     public GameObject goalObject;
     public GameObject playerObject;
 
-    public GameObject rawMazeParent;
+
     public List<List<List<GameObject>>> cellList = new List<List<List<GameObject>>>();
     public List<List<List<int>>> cellWalls = new List<List<List<int>>>();
 
@@ -60,9 +59,19 @@ public class WallPlacer : MonoBehaviour{
     
     public List<List<int>> stack = new List<List<int>>();
     public List<List<int>> visited = new List<List<int>>();
+    public List<List<int>> optimalPath = new List<List<int>>();
+
+    private GameObject prefabMazeParent;
+    private GameObject rawMazeParent;
+    private GameObject guideCubeParent;
+
 
     public void Start(){
         charController = playerObject.GetComponent<CharacterController>();
+
+        prefabMazeParent = new GameObject("prefabMazeParent");;
+        rawMazeParent = new GameObject("rawMazeParent");;
+        guideCubeParent = new GameObject("guideCubeParent");;
 
     }
 
@@ -139,7 +148,9 @@ public class WallPlacer : MonoBehaviour{
                 cellWallsGroup.Add(1);
                 cellWallsGroup.Add(1);
                 cellWallsGroup.Add(1);
-                cellWallsGroup.Add(0);
+                cellWallsGroup.Add(0);  // Distance from start
+                cellWallsGroup.Add(0);  // On path to goal
+                cellWallsGroup.Add(0);  // Room cell
                 cellWallsRow.Add(cellWallsGroup);
             }
             cellList.Add(cellRow);
@@ -168,9 +179,6 @@ public class WallPlacer : MonoBehaviour{
             cube4.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale*gridZ);
             cube4.transform.position = new Vector3(cube4.transform.position.x, cube4.transform.position.y, cube4.transform.position.x+(gridZ*.5f*mapScale));
             cube4.GetComponent<Renderer>().material = wallMat;
-
-
-
         // }
 
 
@@ -178,7 +186,7 @@ public class WallPlacer : MonoBehaviour{
 
         RecursiveBacktrack(startX,startZ); // Build Maze
         FindMainPath(); // Crawl through the maze and find the main path
-        // AddRooms(); // Interspace rooms along that path 
+        AddRooms(); // Interspace rooms along that path 
 
 
         float pcPosX = (startX+.5f) * mapScale;
@@ -200,7 +208,7 @@ public class WallPlacer : MonoBehaviour{
     public void FindMainPath(){
         // startX,startZ
         // endX, endZ
-
+        optimalPath.Clear();
         bool endFound = false;
         int counter = 0;
         x = endX-1;
@@ -233,6 +241,9 @@ public class WallPlacer : MonoBehaviour{
             }
 
             GuideCube(x,z);
+            cellWalls[x][z][5]=1;
+            optimalPath.Add(new List<int>{x,z});
+
 
             if (distance==0){
                 endFound = true;
@@ -247,29 +258,10 @@ public class WallPlacer : MonoBehaviour{
         GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube2.transform.localScale = new Vector3(1f, 1f, 1f);
         cube2.GetComponent<Renderer>().material = playerMat;
-
-
-
         cube2.transform.position = new Vector3((cubeX+.5f)*mapScale, 10f, (cubeZ+.5f)*mapScale);
+        cube2.transform.parent = guideCubeParent.transform;
+
     }
-
-    // public void moveN(){
-    //     cellWalls[x][y][0] = 0;
-
-    // public void moveE(){
-    //     cellWalls[x][y][1] = 0;
-
-    // public void moveS(){
-    //     cellWalls[x][y][2] = 0;
-
-    // public void moveW(){
-    //     cellWalls[x][y][3] = 0;
-
-
-
-
-
-
 
 
 
@@ -280,22 +272,127 @@ public class WallPlacer : MonoBehaviour{
 
     public void AddRooms(){
 
-        List<int> x =  new List<int>{0,1,2};
-        List<int> z =  new List<int>{0,1,2};
+        // List<int> x =  new List<int>{0,1};
+        // List<int> z =  new List<int>{0,1};
+        List<List<int>> roomCells = new List<List<int>>();
+        roomCells.Add(new List<int>{0,1});
+        roomCells.Add(new List<int>{1,1});
+        roomCells.Add(new List<int>{1,0});
+        roomCells.Add(new List<int>{0,0});
+
+        List<List<List<int>>> rooms = new List<List<List<int>>>();
+        rooms.Add(roomCells);
+
+        // nextCell.Add(x[i]);
+        // nextCell.Add(z[i]);
+        // stack.Add(nextCell);     // add to visited list
         
-        for(int i = 0; i < x.Count; i++){
-            List<int> nextCell = new List<int>();
-            nextCell.Add(x[i]);
-            nextCell.Add(z[i]);
-            stack.Add(nextCell);     // add to visited list
-            visited.Add(nextCell);   // place current cell on to stack        
+        // iterate over elements in optimal path
+        foreach(List<int> pathElement in optimalPath){
+            int X = pathElement[0];
+            int Z = pathElement[1];
+
+            foreach(List<List<int>> room in rooms){
+
+                int cellCount = room.Count;
+                foreach(List<int> cell in room){
+                    int cellX = X+cell[0];
+                    int cellZ = Z+cell[1];
+
+                    // If cell is in grid and cell is on a path
+                    if (cellX<gridX && cellZ<gridZ && cellWalls[cellX][cellZ][5]==1){
+                        cellCount--;
+                    }else{
+                        break;
+                    }
+                    // print("( "+X+", "+Z+")   ("+cellX+", "+cellZ+")");
+                }
+
+                
+                if (cellCount==0){
+                    print("Room Fits: ("+X+", "+Z+")");
+                    x = X;  // Set starting point
+                    z = Z;
+                    foreach(List<int> cell in room){
+                        int cellX = X+cell[0];
+                        int cellZ = Z+cell[1];
+                        
+                        if (cellX == x && cellZ == z+1){
+                            moveN();
+                        }else if (cellX == x+1 && cellZ == z){
+                            moveE();
+                        }else if (cellX == x && cellZ == z-1){
+                            moveS();
+                        }else if (cellX == x-1 && cellZ == z){
+                            moveW();
+                        }
+                    }
+                }
+            }
+            // print("("+X+", "+Z+")");
         }
 
+
+
+
+        // for(int X = 0; X < gridX; X++){
+        //     for(int Z = 0; Z < gridZ; Z++){
+        //         foreach(List<List<int>> room in rooms){
+
+        //             int cellCount = room.Count;
+        //             foreach(List<int> cell in room){
+        //                 int cellX = X+cell[0];
+        //                 int cellZ = Z+cell[1];
+
+        //                 // If cell is on a path
+        //                 if (cellWalls[x][z][5]==1){
+        //                     cellCount--;
+        //                 }else{
+        //                     break;
+        //                 }
+        //                 // print("( "+X+", "+Z+")   ("+cellX+", "+cellZ+")");
+        //             }
+
+        //             // 
+        //             if (cellCount==0){
+        //                 print("Room Fits: ("+X+", "+Z+")");
+        //                 X = x;  // Set starting point
+        //                 Z = z;
+        //                 // foreach(List<int> cell in room){
+        //                 //     int cellX = X+cell[0];
+        //                 //     int cellZ = Z+cell[1];
+                            
+        //                 //     if (cellX == x && cellZ == z+1){
+        //                 //         moveN();
+        //                 //     }else if (cellX == x+1 && cellZ == z){
+        //                 //         moveE();
+        //                 //     }else if (cellX == x && cellZ == z-1){
+        //                 //         moveS();
+        //                 //     }else if (cellX == x-1 && cellZ == z){
+        //                 //         moveW();
+        //                 //     }
+        //                 // }
+        //             }
+        //         }
+        //     }
+        // }
+            
+        // for(int i = 0; i < x.Count; i++){
+        //     List<int> nextCell = new List<int>();
+        //     visited.Add(nextCell);   // place current cell on to stack        
+        // }
+
     }
+
+
+
+
+
 
     public bool availableCell(int cellX, int cellZ){
         // Debug.Log(""+cellX+">"+(gridX-1)+"   "+cellZ+">"+(gridZ-1)+"   "+cellX+"<0    "+cellZ+"<0");
         if (cellX>gridX-1 || cellZ>gridZ-1 || cellX<0 || cellZ<0) return false;
+        
         for(int i = 0; i < visited.Count; i++){
             // Debug.Log("Compare: ("+ cellX + ", "+cellZ+") to ("+visited[i][0]+ ", " + visited[i][1] + ")");
             if (visited[i][0]==cellX && visited[i][1]==cellZ ){
@@ -328,6 +425,7 @@ public class WallPlacer : MonoBehaviour{
             cellList[x][z][0].SetActive(false);
             // cellList[x][z+1][2].SetActive(false);
         }
+        z+=1;
     }
 
     public void moveE(){
@@ -338,6 +436,7 @@ public class WallPlacer : MonoBehaviour{
             cellList[x][z][1].SetActive(false);
             // cellList[x+1][z][3].SetActive(false);
         }
+        x+=1;
     }
 
     public void moveS(){
@@ -348,6 +447,7 @@ public class WallPlacer : MonoBehaviour{
             // cellList[x][z][2].SetActive(false);
             cellList[x][z-1][0].SetActive(false);
         }
+        z-=1;
     }
 
     public void moveW(){
@@ -358,6 +458,7 @@ public class WallPlacer : MonoBehaviour{
             // cellList[x][z][3].SetActive(false);
             cellList[x-1][z][1].SetActive(false);
         }
+        x-=1;                   // make this cell the current cell
     }
 
 
@@ -383,8 +484,8 @@ public class WallPlacer : MonoBehaviour{
         // Set start points to last end point
         startX = endX;
         startZ = endZ;
-        x = endX;
-        z = endZ;
+        x = endX-1;
+        z = endZ-1;
 
         // Reset distance counters
         endDist = -1;
@@ -393,6 +494,7 @@ public class WallPlacer : MonoBehaviour{
         stack.Clear();
         visited.Clear();
 
+        print("("+x+", "+z+")");
         List<int> currentCell = new List<int>();
         currentCell.Add(x);
         currentCell.Add(z);
@@ -425,22 +527,18 @@ public class WallPlacer : MonoBehaviour{
 
                 if (cellList[cellChosen] == "n"){
                     moveN();
-                    z+=1;
                 } 
 
                 if (cellList[cellChosen] == "e"){
                     moveE();
-                    x+=1;
                 } 
 
                 if (cellList[cellChosen] == "s"){
                     moveS();
-                    z-=1;
                 } 
 
                 if (cellList[cellChosen] == "w"){
                     moveW();
-                    x-=1;                   // make this cell the current cell
                 }
                 List<int> nextCell = new List<int>();
                 nextCell.Add(x);
@@ -607,6 +705,8 @@ public class WallPlacer : MonoBehaviour{
                 cellWalls[cellX][cellZ][2] = 1;
                 cellWalls[cellX][cellZ][3] = 1;
                 cellWalls[cellX][cellZ][4] = 0;
+                cellWalls[cellX][cellZ][5] = 0;
+                cellWalls[cellX][cellZ][6] = 0;
                 // }
 
                 if (showRawMaze){
