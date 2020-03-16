@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class wallPlacer : MonoBehaviour{
+public class WallPlacer : MonoBehaviour{
 
 
     [Header("Maze Settings", order=0)]
@@ -10,6 +10,8 @@ public class wallPlacer : MonoBehaviour{
     public int gridZ;
     public bool showRawMaze = true;
     public bool showPrefabMaze = true;
+    public bool hideBase = true;
+    public bool hideWalls = true;
 
     // Map Prefabs
     [Header("Tile Prefabs", order=1)]
@@ -31,14 +33,12 @@ public class wallPlacer : MonoBehaviour{
     public GameObject goalObject;
     public GameObject playerObject;
 
+    public GameObject rawMazeParent;
     public List<List<List<GameObject>>> cellList = new List<List<List<GameObject>>>();
     public List<List<List<int>>> cellWalls = new List<List<List<int>>>();
-    public GameObject rawMazeParent;
 
 
     [Header("Misc.", order=3)]
-    public List<List<int>> stack = new List<List<int>>();
-    public List<List<int>> visited = new List<List<int>>();
 
     public float gridOffset;
     private float wallHeight = .3f;
@@ -57,14 +57,19 @@ public class wallPlacer : MonoBehaviour{
     int startDistance = 0;
     private CharacterController charController;
     
+    public List<List<int>> stack = new List<List<int>>();
+    public List<List<int>> visited = new List<List<int>>();
 
-    void Start(){
+    public void Start(){
         charController = playerObject.GetComponent<CharacterController>();
 
     }
 
+
+
     // Start is called before the first frame update
     public void startMap() {
+        
 
         for(int cellX = 0; cellX < gridX; cellX++){
             List<List<GameObject>> cellRow = new List<List<GameObject>>();
@@ -86,28 +91,32 @@ public class wallPlacer : MonoBehaviour{
                     cube2.GetComponent<Renderer>().material = wallMat;
                     cell.Add(cube2); // East Wall
 
-                    GameObject cube3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube3.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
-                    cube3.transform.Rotate(0f, 90f, 0f);
-                    cube3.GetComponent<Renderer>().material = wallMat;
-                    cell.Add(cube3); // South Wall
+                    if (hideWalls){
+                        cube1.GetComponent<MeshRenderer>().enabled = false;
+                        cube2.GetComponent<MeshRenderer>().enabled = false;
+                    }
+                    // GameObject cube3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    // cube3.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
+                    // cube3.transform.Rotate(0f, 90f, 0f);
+                    // cube3.GetComponent<Renderer>().material = wallMat;
+                    // cell.Add(cube3); // South Wall
 
-                    GameObject cube4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube4.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
-                    cube4.GetComponent<Renderer>().material = wallMat;
-                    cell.Add(cube4); // West Wall
+                    // GameObject cube4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    // cube4.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
+                    // cube4.GetComponent<Renderer>().material = wallMat;
+                    // cell.Add(cube4); // West Wall
 
                     // Place object under a single parent
             		cube1.transform.parent = rawMazeParent.transform;
             		cube2.transform.parent = rawMazeParent.transform;
-            		cube3.transform.parent = rawMazeParent.transform;
-            		cube4.transform.parent = rawMazeParent.transform;
+            		// cube3.transform.parent = rawMazeParent.transform;
+            		// cube4.transform.parent = rawMazeParent.transform;
 
             		// Set position of walls
                     cube1.transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(1f+cellY));
                     cube2.transform.position = new Vector3(mapScale*(cellX+1f),     wallHeight,  mapScale*(cellY+.5f));
-                    cube3.transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(cellY));
-                    cube4.transform.position = new Vector3(mapScale*(cellX),        wallHeight,  mapScale*(cellY+.5f));
+                    // cube3.transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(cellY));
+                    // cube4.transform.position = new Vector3(mapScale*(cellX),        wallHeight,  mapScale*(cellY+.5f));
                 }
                 
                 // Add objects to list
@@ -124,17 +133,53 @@ public class wallPlacer : MonoBehaviour{
         }
 
 
-        if (showRawMaze){
+        // if (showRawMaze){
             // Create level base
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position     = new Vector3(mapScale*(gridX*.5f),     0,         mapScale*(gridZ*.5f));
-            cube.transform.localScale     = new Vector3(mapScale*gridX,                 0.01f,     mapScale*gridZ);
+            cube.transform.position   = new Vector3(mapScale*(gridX*.5f), 0, mapScale*(gridZ*.5f));
+            cube.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
             cube.layer = 8;
             cube.transform.parent = rawMazeParent.transform; // Place object under a single parent
-        } 
+            if (hideBase) cube.GetComponent<MeshRenderer>().enabled = false;
+
+            // South Wall
+            GameObject cube3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube3.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale*gridX);
+            cube3.transform.Rotate(0f, 90f, 0f);
+            cube3.GetComponent<Renderer>().material = wallMat;
+            cube3.transform.position = new Vector3(cube3.transform.position.x+(gridX*.5f*mapScale), cube3.transform.position.y, cube3.transform.position.x);
+
+            // West Wall
+            GameObject cube4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube4.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale*gridZ);
+            cube4.transform.position = new Vector3(cube4.transform.position.x, cube4.transform.position.y, cube4.transform.position.x+(gridZ*.5f*mapScale));
+            cube4.GetComponent<Renderer>().material = wallMat;
+
+
+
+        // }
+
+        AddRooms();
+        print(visited);
         recursiveBacktrack(gridX-1,gridZ-1); // Build Maze
     }
 
+
+    public void AddRooms(){
+
+        List<int> x =  new List<int>{1,1,2,2};
+        List<int> y =  new List<int>{1,2,2,1};
+        
+        for(int i = 0; i < x.Count; i++){
+            List<int> nextCell = new List<int>();
+            nextCell.Add(x[i]);
+            nextCell.Add(y[i]);
+            print("("+x[i]+", "+y[i]+")");
+            stack.Add(nextCell);     // add to visited list
+            visited.Add(nextCell);   // place current cell on to stack        
+        }
+
+    }
 
     public bool availableCell(int cellX, int cellY){
         // Debug.Log(""+cellX+">"+(gridX-1)+"   "+cellY+">"+(gridZ-1)+"   "+cellX+"<0    "+cellY+"<0");
@@ -156,7 +201,7 @@ public class wallPlacer : MonoBehaviour{
         
         if (showRawMaze){
             cellList[x][y][0].SetActive(false);
-            cellList[x][y+1][2].SetActive(false);
+            // cellList[x][y+1][2].SetActive(false);
         }
     }
 
@@ -166,7 +211,7 @@ public class wallPlacer : MonoBehaviour{
 
         if (showRawMaze){
             cellList[x][y][1].SetActive(false);
-            cellList[x+1][y][3].SetActive(false);
+            // cellList[x+1][y][3].SetActive(false);
         }
     }
 
@@ -175,7 +220,7 @@ public class wallPlacer : MonoBehaviour{
         cellWalls[x][y-1][0] = 0;
 
         if (showRawMaze){
-            cellList[x][y][2].SetActive(false);
+            // cellList[x][y][2].SetActive(false);
             cellList[x][y-1][0].SetActive(false);
         }
     }
@@ -185,7 +230,7 @@ public class wallPlacer : MonoBehaviour{
         cellWalls[x-1][y][1] = 0;
 
         if (showRawMaze){
-            cellList[x][y][3].SetActive(false);
+            // cellList[x][y][3].SetActive(false);
             cellList[x-1][y][1].SetActive(false);
         }
     }
@@ -384,8 +429,8 @@ public class wallPlacer : MonoBehaviour{
                 if (showRawMaze){
                     cellList[cellX][cellY][0].SetActive(true);
                     cellList[cellX][cellY][1].SetActive(true);
-                    cellList[cellX][cellY][2].SetActive(true);
-                    cellList[cellX][cellY][3].SetActive(true);
+                    // cellList[cellX][cellY][2].SetActive(true);
+                    // cellList[cellX][cellY][3].SetActive(true);
                 }
             }
         }
@@ -399,6 +444,10 @@ public class wallPlacer : MonoBehaviour{
         startDistance = 0;
         stack.Clear();
         visited.Clear();
+
+        foreach (Transform child in prefabMazeParent.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
 
         recursiveBacktrack(gridX-1,gridZ-1); // Build Maze
         goalObject.transform.position = new Vector3(endX, goalObject.transform.position.y, endY-0.5f);
