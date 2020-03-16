@@ -303,6 +303,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridX: 10
   gridZ: 10
+  startX: 1
+  startZ: 1
   showRawMaze: 1
   showPrefabMaze: 1
   hideBase: 1
@@ -327,11 +329,9 @@ MonoBehaviour:
   gridOffset: 0
   x: 0
   y: 0
-  startX: 0
-  startY: 0
   startDist: -1
   endX: 0
-  endY: 0
+  endZ: 0
   endDist: -1
   mapScale: 10
 --- !u!4 &549688084
