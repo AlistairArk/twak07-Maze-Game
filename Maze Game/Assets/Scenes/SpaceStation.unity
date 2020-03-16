@@ -303,8 +303,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridX: 10
   gridZ: 10
-  startX: 1
-  startZ: 1
+  startX: 0
+  startZ: 0
+  endX: 0
+  endZ: 0
   showRawMaze: 1
   showPrefabMaze: 1
   hideBase: 1
@@ -323,15 +325,13 @@ MonoBehaviour:
   wall: {fileID: 0}
   walls: []
   wallMat: {fileID: 2100000, guid: 8a44425506331f247810369e41b15006, type: 2}
+  playerMat: {fileID: 2100000, guid: d781334c4b0ac2c4cadf121d2f09cd57, type: 2}
   goalObject: {fileID: 581727590}
   playerObject: {fileID: 795503894}
   rawMazeParent: {fileID: 1222167965}
   gridOffset: 0
   x: 0
-  y: 0
-  startDist: -1
-  endX: 0
-  endZ: 0
+  z: 0
   endDist: -1
   mapScale: 10
 --- !u!4 &549688084

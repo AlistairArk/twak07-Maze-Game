@@ -25,7 +25,7 @@ public class WallPlacer : MonoBehaviour{
     public GameObject CorridorTJunction;
     public GameObject CorridorIntersection;
     float prefabOffsetX = .5f;
-    float prefabOffsetY = 0.5f;
+    float prefabOffsetZ = 0.5f;
     public GameObject prefabMazeParent;
 
 
@@ -34,6 +34,7 @@ public class WallPlacer : MonoBehaviour{
     public GameObject wall;
     public GameObject[ ] walls;
     public Material wallMat;
+    public Material playerMat;
     public GameObject goalObject;
     public GameObject playerObject;
 
@@ -47,9 +48,9 @@ public class WallPlacer : MonoBehaviour{
     public float gridOffset;
     private float wallHeight = .3f;
     public int x;
-    public int y;
+    public int z;
 
-    public int startDist = -1;
+
     public int endDist = -1;
 
     public int mapScale = 10;
@@ -172,16 +173,17 @@ public class WallPlacer : MonoBehaviour{
 
         // }
 
-        AddRooms();
 
 
 
-        recursiveBacktrack(startX,startZ); // Build Maze
+        RecursiveBacktrack(startX,startZ); // Build Maze
+        FindMainPath(); // Crawl through the maze and find the main path
+        // AddRooms(); // Interspace rooms along that path 
 
-        float pcPosX = (startX-.5f) * mapScale;
-        float pcPosZ = (startZ-.5f) * mapScale;
 
-        print("Player: ("+startX+", "+startZ+")");
+        float pcPosX = (startX+.5f) * mapScale;
+        float pcPosZ = (startZ+.5f) * mapScale;
+
         // Temporarily disable controller while repositioning the player object
         charController.enabled = false;
         playerObject.transform.position = new Vector3(pcPosX, playerObject.transform.position.y, pcPosZ);
@@ -193,16 +195,98 @@ public class WallPlacer : MonoBehaviour{
 
 
 
+
+
+    public void FindMainPath(){
+        // startX,startZ
+        // endX, endZ
+
+        bool endFound = false;
+        int counter = 0;
+        x = endX-1;
+        z = endZ-1;
+
+        int distance;
+
+        // Get starting distance based off goal location
+        print("Start Point ("+x+", "+z+")");
+
+        distance = cellWalls[x][z][4];
+        while (!endFound){
+            counter++;
+
+            // Find neighboring cell with lowest distance from start
+
+
+            // If there is a adjacent path && distance is less than previous (i.e. getting closer to the start.)
+            if (cellWalls[x][z][0]==0 && cellWalls[x][z+1][4]<distance){ // North
+                distance=cellWalls[x][z+1][4]; z++;
+
+            }else if (cellWalls[x][z][1]==0 && cellWalls[x+1][z][4]<distance){ // East
+                distance=cellWalls[x+1][z][4]; x++;
+
+            }else if (cellWalls[x][z][2]==0 && cellWalls[x][z-1][4]<distance){ // South
+                distance=cellWalls[x][z-1][4]; z--;
+
+            }else if (cellWalls[x][z][3]==0 && cellWalls[x-1][z][4]<distance){ // West
+                distance=cellWalls[x-1][z][4]; x--;
+            }
+
+            GuideCube(x,z);
+
+            if (distance==0){
+                endFound = true;
+            }
+        }
+    }
+
+
+
+
+    public void GuideCube(int cubeX, int cubeZ){
+        GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube2.transform.localScale = new Vector3(1f, 1f, 1f);
+        cube2.GetComponent<Renderer>().material = playerMat;
+
+
+
+        cube2.transform.position = new Vector3((cubeX+.5f)*mapScale, 10f, (cubeZ+.5f)*mapScale);
+    }
+
+    // public void moveN(){
+    //     cellWalls[x][y][0] = 0;
+
+    // public void moveE(){
+    //     cellWalls[x][y][1] = 0;
+
+    // public void moveS(){
+    //     cellWalls[x][y][2] = 0;
+
+    // public void moveW(){
+    //     cellWalls[x][y][3] = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void AddRooms(){
 
-        List<int> x =  new List<int>{1,1,2,2};
-        List<int> y =  new List<int>{1,2,2,1};
+        List<int> x =  new List<int>{0,1,2};
+        List<int> z =  new List<int>{0,1,2};
         
         for(int i = 0; i < x.Count; i++){
             List<int> nextCell = new List<int>();
             nextCell.Add(x[i]);
-            nextCell.Add(y[i]);
-            // print("("+x[i]+", "+y[i]+")");
+            nextCell.Add(z[i]);
             stack.Add(nextCell);     // add to visited list
             visited.Add(nextCell);   // place current cell on to stack        
         }
@@ -237,42 +321,42 @@ public class WallPlacer : MonoBehaviour{
 
 
     public void moveN(){
-        cellWalls[x][y][0] = 0;
-        cellWalls[x][y+1][2] = 0;
+        cellWalls[x][z][0] = 0;
+        cellWalls[x][z+1][2] = 0;
         
         if (showRawMaze){
-            cellList[x][y][0].SetActive(false);
-            // cellList[x][y+1][2].SetActive(false);
+            cellList[x][z][0].SetActive(false);
+            // cellList[x][z+1][2].SetActive(false);
         }
     }
 
     public void moveE(){
-        cellWalls[x][y][1] = 0;
-        cellWalls[x+1][y][3] = 0;
+        cellWalls[x][z][1] = 0;
+        cellWalls[x+1][z][3] = 0;
 
         if (showRawMaze){
-            cellList[x][y][1].SetActive(false);
-            // cellList[x+1][y][3].SetActive(false);
+            cellList[x][z][1].SetActive(false);
+            // cellList[x+1][z][3].SetActive(false);
         }
     }
 
     public void moveS(){
-        cellWalls[x][y][2] = 0;
-        cellWalls[x][y-1][0] = 0;
+        cellWalls[x][z][2] = 0;
+        cellWalls[x][z-1][0] = 0;
 
         if (showRawMaze){
-            // cellList[x][y][2].SetActive(false);
-            cellList[x][y-1][0].SetActive(false);
+            // cellList[x][z][2].SetActive(false);
+            cellList[x][z-1][0].SetActive(false);
         }
     }
 
     public void moveW(){
-        cellWalls[x][y][3] = 0;
-        cellWalls[x-1][y][1] = 0;
+        cellWalls[x][z][3] = 0;
+        cellWalls[x-1][z][1] = 0;
 
         if (showRawMaze){
-            // cellList[x][y][3].SetActive(false);
-            cellList[x-1][y][1].SetActive(false);
+            // cellList[x][z][3].SetActive(false);
+            cellList[x-1][z][1].SetActive(false);
         }
     }
 
@@ -294,17 +378,25 @@ public class WallPlacer : MonoBehaviour{
 
 
 
-    public void recursiveBacktrack(int startX, int startZ){
+    public void RecursiveBacktrack(int startX, int startZ){
 
+        // Set start points to last end point
+        startX = endX;
+        startZ = endZ;
+        x = endX;
+        z = endZ;
+
+        // Reset distance counters
+        endDist = -1;
         startDistance = 0;
 
-        x = startX;
-        y = startZ;
+        stack.Clear();
+        visited.Clear();
 
         List<int> currentCell = new List<int>();
         currentCell.Add(x);
-        currentCell.Add(y);
-        // single_cell(x, y)                    // starting positing of maze
+        currentCell.Add(z);
+        // single_cell(x, z)                    // starting positing of maze
 
         stack.Add(currentCell);                 // place starting cell into stack
         visited.Add(currentCell);               // add starting cell to visited list
@@ -313,18 +405,17 @@ public class WallPlacer : MonoBehaviour{
         while(stack.Count > 0){
             // Log cells relative distance from start
             // int positionFromStart = startDistance;
-            cellWalls[x][y][4] = startDistance;
+            cellWalls[x][z][4] = startDistance;
 
             List<string> cellList = new List<string>();
 
-            if (availableCell(x,y+1)) cellList.Add("n");
-            if (availableCell(x+1,y)) cellList.Add("e");
-            if (availableCell(x,y-1)) cellList.Add("s");
-            if (availableCell(x-1,y)) cellList.Add("w");
+            if (availableCell(x,z+1)) cellList.Add("n");
+            if (availableCell(x+1,z)) cellList.Add("e");
+            if (availableCell(x,z-1)) cellList.Add("s");
+            if (availableCell(x-1,z)) cellList.Add("w");
 
             // Log cells relative distance from start
-            cellWalls[x][y][4] = startDistance;
-            // print("Cell: ("+x+", "+y+") "+cellWalls[x][y][4]);
+            cellWalls[x][z][4] = startDistance;
             
             if (cellList.Count > 0){
                 startDistance+=1;
@@ -334,7 +425,7 @@ public class WallPlacer : MonoBehaviour{
 
                 if (cellList[cellChosen] == "n"){
                     moveN();
-                    y+=1;
+                    z+=1;
                 } 
 
                 if (cellList[cellChosen] == "e"){
@@ -344,7 +435,7 @@ public class WallPlacer : MonoBehaviour{
 
                 if (cellList[cellChosen] == "s"){
                     moveS();
-                    y-=1;
+                    z-=1;
                 } 
 
                 if (cellList[cellChosen] == "w"){
@@ -353,21 +444,22 @@ public class WallPlacer : MonoBehaviour{
                 }
                 List<int> nextCell = new List<int>();
                 nextCell.Add(x);
-                nextCell.Add(y);
+                nextCell.Add(z);
                 stack.Add(nextCell);     // add to visited list
                 visited.Add(nextCell);   // place current cell on to stack
 
-                // Debug.Log(cellList[cellChosen] + " ("+x+", "+y+")");
+                // Debug.Log(cellList[cellChosen] + " ("+x+", "+z+")");
             }else{
                 startDistance-=1;
                 stack.RemoveAt(stack.Count - 1);
                 if (stack.Count == 0) break;
                 x = stack[stack.Count-1][0];
-                y = stack[stack.Count-1][1];
+                z = stack[stack.Count-1][1];
 
             }
         }
-        getCellEnds();
+        GetCellEnds();
+
     }
 
 
@@ -388,7 +480,7 @@ public class WallPlacer : MonoBehaviour{
 
 
 
-    public void getCellEnds(){
+    public void GetCellEnds(){
         // List all candidates for start and end points
 
 
@@ -407,13 +499,13 @@ public class WallPlacer : MonoBehaviour{
                     switch(findCount) {
                          case (1):
                             if (cellWalls[cellX][cellZ][0] == 0 ){
-                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,180,0));
+                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
                             } else if (cellWalls[cellX][cellZ][1] == 0){
-                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,270,0));
+                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,270,0));
                             } else if (cellWalls[cellX][cellZ][2] == 0){
-                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,0,0));
+                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                             } else {
-                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,90,0));
+                                cellPrefab = Instantiate(CorridorEnd, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
                             }
     		                cellPrefab.transform.parent = prefabMazeParent.transform;
 
@@ -430,44 +522,45 @@ public class WallPlacer : MonoBehaviour{
                         case (2):
                         	// Hallways
                             if (cellWalls[cellX][cellZ][0] == 0  && cellWalls[cellX][cellZ][2] == 0 ){
-                                cellPrefab = Instantiate(CorridorHall, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,0,0));
+                                cellPrefab = Instantiate(CorridorHall, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                         	} else if (cellWalls[cellX][cellZ][1] == 0  && cellWalls[cellX][cellZ][3] == 0 ){
-                                cellPrefab = Instantiate(CorridorHall, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,90,0));
+                                cellPrefab = Instantiate(CorridorHall, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
 
                             // Corners
                         	} else if (cellWalls[cellX][cellZ][0] == 0  && cellWalls[cellX][cellZ][1] == 0 ){
-                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,270,0));
+                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,270,0));
                         	} else if (cellWalls[cellX][cellZ][1] == 0  && cellWalls[cellX][cellZ][2] == 0 ){
-                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,0,0));
+                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                         	} else if (cellWalls[cellX][cellZ][2] == 0  && cellWalls[cellX][cellZ][3] == 0 ){
-                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,90,0));
+                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
                         	} else{
-                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,180,0));
+                                cellPrefab = Instantiate(CorridorCorner, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
                         	}
     		                cellPrefab.transform.parent = prefabMazeParent.transform;
                             break;
                         case (3):
                         	// T Junction
                         	if (cellWalls[cellX][cellZ][0] == 1){
-                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,90,0));
+                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
                         	} else if (cellWalls[cellX][cellZ][1] == 1){
-                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,180,0));
+                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
                         	} else if (cellWalls[cellX][cellZ][2] == 1){
-                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,270,0));
+                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,270,0));
                         	} else{
-                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,0,0));
+                                cellPrefab = Instantiate(CorridorTJunction, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                         	}
     		                cellPrefab.transform.parent = prefabMazeParent.transform;
                             break;
                         case (4):
-    						cellPrefab = Instantiate(CorridorIntersection, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetY)*mapScale), Quaternion.Euler(0,0,0));
+    						cellPrefab = Instantiate(CorridorIntersection, new Vector3((cellX+prefabOffsetX)*mapScale, 0, (cellZ+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
     		                cellPrefab.transform.parent = prefabMazeParent.transform;
                             break;
                     }
                 }
             }
         }
-        setSpawnPoints();
+        SetSpawnPoints();
+
     }
 
 
@@ -480,12 +573,12 @@ public class WallPlacer : MonoBehaviour{
 
 
 
-    public void setSpawnPoints(){
+    public void SetSpawnPoints(){
         float gX, gZ = 0f;
         gX  = (endX-.5f) * mapScale;
         gZ  = (endZ-.5f) * mapScale;
 
-        print("Goal: (" + endX + ", " + endZ + ")");
+        // print("Goal: (" + endX + ", " + endZ + ")");
         // Place the goal object in a new location
         goalObject.transform.position = new Vector3(gX, goalObject.transform.position.y, gZ);
 
@@ -525,62 +618,15 @@ public class WallPlacer : MonoBehaviour{
             }
         }
 
-        startX=endX;
-        startZ=endZ;
-        endX=0;
-        endZ=0;
-        startDist = -1;
-        endDist = -1;
-        startDistance = 0;
-        stack.Clear();
-        visited.Clear();
+
 
         foreach (Transform child in prefabMazeParent.transform) {
             GameObject.Destroy(child.gameObject);
         }
 
 
-        recursiveBacktrack(startX,startZ); // Build Maze
+        RecursiveBacktrack(startX,startZ); // Build Maze
     } 
 }
 
 
-
-
-
-
-
-
-
-
-
-    // if (cellWalls[cellX][cellY][4]<startDist||startDist==-1){
-    //     startX = cellX+1;
-    //     startY = cellY+1;
-    //     startDist = cellWalls[cellX][cellY][4];
-    // }else if (cellWalls[cellX][cellY][4]>endDist  ||  endDist==-1){
-    //     endX = cellX;
-    //     endY = cellY;
-    //     endDist = cellWalls[cellX][cellY][4];
-    // }
-
-
-
-// // print("Cell: ("+cellX+", "+cellZ+") "+cellWalls[cellX][cellZ][4]);
-// // cell is a end point if it has only 1 opening
-// for (int i = 0; i < 4; i++){
-//     if (cellWalls[cellX][cellZ][i]==0) findCount++;
-// }
-
-
-// // If the current cell is an end point
-// if (findCount==1){
-//     // print("END FOUND: ("+cellX+", "+cellZ+") "+cellWalls[cellX][cellZ][4]);
-//     // If end cell is further than the current end cell
-//     if (cellWalls[cellX][cellZ][4]>endDist  ||  endDist==-1){
-//         // set new end point
-//         endX = cellX;
-//         endZ = cellZ;
-//         endDist = cellWalls[cellX][cellZ][4];
-//     }
-// }
