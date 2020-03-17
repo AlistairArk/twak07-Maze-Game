@@ -25,6 +25,7 @@ public class WallPlacer : MonoBehaviour{
     public GameObject CorridorCorner;
     public GameObject CorridorTJunction;
     public GameObject CorridorIntersection;
+    public GameObject Door;
     float prefabOffsetX = .5f;
     float prefabOffsetZ = 0.5f;
 
@@ -185,7 +186,6 @@ public class WallPlacer : MonoBehaviour{
         FindMainPath();     // Crawl through the maze and find the main path
         AddRooms();         // Interspace rooms along that path 
 
-
         float pcPosX = (startX+.5f) * mapScale;
         float pcPosZ = (startZ+.5f) * mapScale;
 
@@ -238,7 +238,7 @@ public class WallPlacer : MonoBehaviour{
             }
 
             if (hideWaypoint==false) GuideCube(x,z);
-            cellWalls[x][z][5]=1;
+            cellWalls[x][z][5]=1;   // Mark cell as on path
             optimalPath.Add(new List<int>{x,z});
 
 
@@ -272,74 +272,124 @@ public class WallPlacer : MonoBehaviour{
 
         List<List<int>> roomCells1 = new List<List<int>>();
         List<List<List<int>>> rooms = new List<List<List<int>>>();
+        roomCells1.Add(new List<int>{0,0});
         roomCells1.Add(new List<int>{0,1});
         roomCells1.Add(new List<int>{0,2});
-        roomCells1.Add(new List<int>{1,2});
-        roomCells1.Add(new List<int>{1,1});
         roomCells1.Add(new List<int>{1,0});
-        roomCells1.Add(new List<int>{0,0});
+        roomCells1.Add(new List<int>{1,1});
+        roomCells1.Add(new List<int>{1,2});
         rooms.Add(roomCells1);
 
         List<List<int>> roomCells2 = new List<List<int>>();
+        roomCells2.Add(new List<int>{0,0});
         roomCells2.Add(new List<int>{0,1});
         roomCells2.Add(new List<int>{1,1});
         roomCells2.Add(new List<int>{1,0});
-        roomCells2.Add(new List<int>{0,0});
         rooms.Add(roomCells2);
 
+        int counter = 0;
 
-        // nextCell.Add(x[i]);
-        // nextCell.Add(z[i]);
-        // stack.Add(nextCell);     // add to visited list
-        
         // iterate over elements in optimal path
         foreach(List<int> pathElement in optimalPath){
+            counter++;
+
             int X = pathElement[0];
             int Z = pathElement[1];
-
             foreach(List<List<int>> room in rooms){
+                // print("Optimal Path ("+X+", "+Z+") "+ cellWalls[X][Z][5]+ " " + room.Count);
 
-                print("room: "+room);
                 int cellCount = room.Count;
+                int cellX = 0;
+                int cellZ = 0;
+
                 foreach(List<int> cell in room){
-                    int cellX = X+cell[0];
-                    int cellZ = Z+cell[1];
+                    cellX = X+cell[0];
+                    cellZ = Z+cell[1];
 
                     // If cell is in grid && cell is on a path && cell is not room
                     if (cellX<gridX && cellZ<gridZ && cellWalls[cellX][cellZ][5]==1 && cellWalls[cellX][cellZ][6]==0){
                         cellCount--;
                     }else{
-                        break;
+                        // break;
                     }
-                    // print("( "+X+", "+Z+")   ("+cellX+", "+cellZ+")");
+                    // print("     ("+X+", "+Z+")   ("+cellX+", "+cellZ+")   ("+cell[0]+", "+cell[1]+")");
+                    // print("     ("+X+", "+Z+")    ("+cell[0]+", "+cell[1]+")");
                 }
 
                 
                 if (cellCount==0){
-                    // print("Room Fits: ("+X+", "+Z+")");
-                    x = X;  // Set starting point
-                    z = Z;
+                    // Set global X & Z
+                    x=X;
+                    z=Z;
+                    // print("Room Found");
                     foreach(List<int> cell in room){
-                        int cellX = X+cell[0];
-                        int cellZ = Z+cell[1];
-                        
-                        if (cellX == x && cellZ == z+1){
-                            moveN();
-                        }else if (cellX == x+1 && cellZ == z){
-                            moveE();
-                        }else if (cellX == x && cellZ == z-1){
-                            moveS();
-                        }else if (cellX == x-1 && cellZ == z){
-                            moveW();
-                        }
-                        // Mark current cell as a room cell
-                        cellWalls[x][z][6]=1;
-                        Destroy(prefabList[x][z]);
+                        cellX = cell[0]+X;
+                        cellZ = cell[1]+Z;
+
+                        roomCell(cellX,cellZ,room); // n
+                        cellWalls[cellX][cellZ][6]=1;    // Mark cell as room
+                        Destroy(prefabList[cellX][cellZ]);
+
+                        // Run code to place the door here, otherwise you may run the issue of rooms being connected when they shouldn't
                     }
                 }
             }
-            // print("("+X+", "+Z+")");
         }
+    }
+
+
+
+
+
+    public void roomCell(int X, int Z, List<List<int>> room){
+
+
+
+        // cellList[X][Z][0].GetComponent<Renderer>().material = playerMat;
+        print("ROOM CELL ("+X+", "+Z+")");
+
+        foreach(List<int> cell in room){
+            int cellX = x+cell[0];
+            int cellZ = z+cell[1];
+            print("     ("+cellX+", "+cellZ+")");
+            if (cellX == X && cellZ == Z+1){
+                Destroy(cellList[X][Z][0]);     // print("DESTROYING");  // cellList[X][Z][0].GetComponent<Renderer>().material = playerMat;
+
+            }else if (cellX == X+1 && cellZ == Z){
+                Destroy(cellList[X][Z][1]);     // print("DESTROYING");  // cellList[X][Z][1].GetComponent<Renderer>().material = playerMat;
+
+            }else if (cellX == X && cellZ == Z-1){
+                Destroy(cellList[X][Z-1][0]);   // print("DESTROYING");  // cellList[X][Z-1][0].GetComponent<Renderer>().material = playerMat;
+
+            }else if (cellX == X-1 && cellZ == Z){
+                Destroy(cellList[X-1][Z][1]);   // print("DESTROYING");  // cellList[X-1][Z][1].GetComponent<Renderer>().material = playerMat;
+            }
+        }
+
+
+
+
+
+        // foreach(List<int> cell in room){
+        //     int cellX = X+cell[0];
+        //     int cellZ = Z+cell[1];
+        //     print("N - Cell ("+cellX+", "+cellZ+")");
+
+        //     // // Check if cell shares a neighboring cell in the room 
+        //     // if (cellX == X && cellZ == Z+1){
+        //     //     // print("N - Cell ("+cellX+", "+cellZ+")");
+        //     //     cellList[X][Z][0].transform.position = new Vector3(cellList[X][Z][0].transform.position.x, 10f ,cellList[X][Z][0].transform.position.z); // .SetActive(false);// Remove the wall between the cells
+        //     // }else if (cellX == X+1 && cellZ == Z){
+        //     //     // print("E - Cell ("+cellX+", "+cellZ+")");
+        //     //     cellList[X][Z][1].transform.position = new Vector3(cellList[X][Z][1].transform.position.x, 10f ,cellList[X][Z][1].transform.position.z); // .SetActive(false);
+        //     // }else if (cellX == X && cellZ == Z-1){
+        //     //     // print("S - Cell ("+cellX+", "+cellZ+")");
+        //     //     cellList[X][Z-1][0].transform.position = new Vector3(cellList[X][Z-1][0].transform.position.x, 10f ,cellList[X][Z-1][0].transform.position.z); // .SetActive(false);
+        //     // }else if (cellX == X-1 && cellZ == Z){
+        //     //     // print("W - Cell ("+cellX+", "+cellZ+")");
+        //     //     cellList[X-1][Z][1].transform.position = new Vector3(cellList[X-1][Z][1].transform.position.x, 10f ,cellList[X-1][Z][1].transform.position.z); // .SetActive(false);
+        //     // }
+        // }
     }
 
 
@@ -694,7 +744,30 @@ public class WallPlacer : MonoBehaviour{
 
 
         RecursiveBacktrack(startX,startZ); // Build Maze
+        FindMainPath();     // Crawl through the maze and find the main path
+        AddRooms();         // Interspace rooms along that path 
     } 
 }
 
 
+
+
+
+
+// foreach(List<int> cell in room){
+//     int cellX = X+cell[0];
+//     int cellZ = Z+cell[1];
+
+//     if (cellX == x && cellZ == z+1){
+//         moveN();
+//     }else if (cellX == x+1 && cellZ == z){
+//         moveE();
+//     }else if (cellX == x && cellZ == z-1){
+//         moveS();
+//     }else if (cellX == x-1 && cellZ == z){
+//         moveW();
+//     }
+//     // Mark current cell as a room cell
+//     cellWalls[x][z][6]=1;
+//     Destroy(prefabList[x][z]);
+// }
