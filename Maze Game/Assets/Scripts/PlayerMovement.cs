@@ -17,10 +17,17 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 velocity;
     bool isGrounded;
-
+    public GameObject playerCamera;
 
     // Update is called once per frame
     void FixedUpdate() {
+
+        // // Match cylinder and camera rotation
+        // GameObject cube2 = gameObject;
+        // float y = playerCamera.transform.rotation.y;
+        // cube2.transform.rotation = Quaternion.Euler(cube2.transform.rotation.x, y, cube2.transform.rotation.z);
+        // // .Rotate = new Vector3(transform.Rotate.x,playerCamera.transform.Rotate.y,transform.Rotate.z);
+
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
