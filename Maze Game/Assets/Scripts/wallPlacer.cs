@@ -147,13 +147,13 @@ public class WallPlacer : MonoBehaviour{
 
                 if (showRawMaze){
                     GameObject cube1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube1.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
+                    cube1.transform.localScale = new Vector3(.25f, 2*mapScale, 1*mapScale);
                     cube1.transform.Rotate(0f, 90f, 0f);
                     cube1.GetComponent<Renderer>().material = wallMat;
                     cell.Add(cube1); // North Wall
 
                     GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube2.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale);
+                    cube2.transform.localScale = new Vector3(.25f, 2*mapScale, 1*mapScale);
                     cube2.GetComponent<Renderer>().material = wallMat;
                     cell.Add(cube2); // East Wall
 
