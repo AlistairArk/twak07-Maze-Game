@@ -230,13 +230,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335658851}
-  m_LocalRotation: {x: -0.24733935, y: 0.6384586, z: -0.47925976, w: -0.5490938}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 117.92, y: 97.657, z: -153.287}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!108 &335658853
 Light:
   m_ObjectHideFlags: 0
@@ -249,7 +249,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.2
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -408,7 +408,7 @@ MonoBehaviour:
   showPrefabMaze: 1
   hideBase: 1
   hideWalls: 0
-  hideWaypoint: 0
+  hideWaypoint: 1
   CorridorHall: {fileID: 4138733657458971485, guid: 4b282800a68286345866b7ad94555c0d,
     type: 3}
   CorridorEnd: {fileID: 6442411300058712817, guid: b15ab753db70c8b40aa4d6a00d9f2af7,
@@ -419,13 +419,16 @@ MonoBehaviour:
     type: 3}
   CorridorIntersection: {fileID: 5305678016596889535, guid: 09b7423eb08bf61408461c5eab7ad0b7,
     type: 3}
-  Door: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
+  Doorway: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
+  Room2x3: {fileID: 7465821053077798945, guid: 6d9f22eb474a00448ba2f7d6cc49df54, type: 3}
+  Room2x2: {fileID: 7465821053077798945, guid: d825de3d8ccb9e748b739db5f64631ec, type: 3}
   wall: {fileID: 0}
   walls: []
-  wallMat: {fileID: 2100000, guid: 8a44425506331f247810369e41b15006, type: 2}
-  playerMat: {fileID: 2100000, guid: d781334c4b0ac2c4cadf121d2f09cd57, type: 2}
   goalObject: {fileID: 581727590}
   playerObject: {fileID: 795503894}
+  wallMat: {fileID: 2100000, guid: 8a44425506331f247810369e41b15006, type: 2}
+  playerMat: {fileID: 2100000, guid: d781334c4b0ac2c4cadf121d2f09cd57, type: 2}
+  whiteMat: {fileID: 2100000, guid: 71f08a3b4a0b4804a960a35802888489, type: 2}
   gridOffset: 0
   x: 0
   z: 0
@@ -524,7 +527,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
