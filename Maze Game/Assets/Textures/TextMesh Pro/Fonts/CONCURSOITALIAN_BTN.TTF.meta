@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 63e3f7594601b1a4db7d1366caf55cf9
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ConcursoItalian BTN
+  fontNames:
+  - ConcursoItalian BTN
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1a1f24703b2363a4c9d548f9f5250ab4, type: 3}
+  - {fileID: 12800000, guid: 2bcc0b93746a097418da8130441d485f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
