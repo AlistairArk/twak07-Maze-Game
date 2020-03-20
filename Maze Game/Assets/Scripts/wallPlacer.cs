@@ -28,6 +28,7 @@ public class WallPlacer : MonoBehaviour{
     public GameObject Doorway;
     public GameObject Room2x3;
     public GameObject Room2x2;
+    public GameObject RoomWall;
     float prefabOffsetX = .5f;
     float prefabOffsetZ = 0.5f;
 
@@ -67,6 +68,7 @@ public class WallPlacer : MonoBehaviour{
     [HideInInspector] public GameObject rawMazeParent;
     [HideInInspector] public GameObject guideCubeParent;
     [HideInInspector] public GameObject cellDoorParent;
+    [HideInInspector] public GameObject cellWallParent;
     [HideInInspector] public GameObject mapObjects;
 
 
@@ -77,6 +79,7 @@ public class WallPlacer : MonoBehaviour{
         guideCubeParent = GameObject.Find("MapObjects/guideCubeParent");
         prefabMazeParent = GameObject.Find("MapObjects/prefabMazeParent");
         cellDoorParent = GameObject.Find("MapObjects/cellDoorParent");
+        cellWallParent = GameObject.Find("MapObjects/cellWallParent");
         mapObjects = GameObject.Find("MapObjects");
 
     }
@@ -107,12 +110,17 @@ public class WallPlacer : MonoBehaviour{
         }
 
 
-        // foreach (Transform child in prefabMazeParent.transform) GameObject.Destroy(child.gameObject);
-        // foreach (Transform child in cellDoorParent.transform) GameObject.Destroy(child.gameObject);
-        Destroy(prefabMazeParent);
-        Destroy(cellDoorParent);
-        prefabMazeParent = new GameObject("prefabMazeParent");
-        cellDoorParent = new GameObject("cellDoorParent");
+        /*You can deactive the container by using SetActive(false); instead of destroying it. And then run a coroutine to destroy every child object every frame. This might speed things up. By the way it is always good to show a loading screen while swithing between levels.*/
+        foreach (Transform child in rawMazeParent.transform) GameObject.Destroy(child.gameObject);
+        foreach (Transform child in guideCubeParent.transform) GameObject.Destroy(child.gameObject);
+        foreach (Transform child in prefabMazeParent.transform) GameObject.Destroy(child.gameObject);
+        foreach (Transform child in cellDoorParent.transform) GameObject.Destroy(child.gameObject);
+        foreach (Transform child in cellWallParent.transform) GameObject.Destroy(child.gameObject);
+
+        // Destroy(prefabMazeParent);
+        // Destroy(cellDoorParent);
+        // prefabMazeParent = new GameObject("prefabMazeParent");
+        // cellDoorParent = new GameObject("cellDoorParent");
 
 
         RecursiveBacktrack(startX,startZ); // Build Maze
@@ -394,6 +402,14 @@ public class WallPlacer : MonoBehaviour{
 
                         placeDoors(cellX,cellZ); // n
                     }
+
+                    // // Place Exterior walls
+                    // foreach(List<int> cell in room){
+                    //     cellX = cell[0]+X;
+                    //     cellZ = cell[1]+Z;
+
+                    //     placeWalls(cellX,cellZ); // n
+                    // }
                 }
             }
         }
@@ -414,16 +430,16 @@ public class WallPlacer : MonoBehaviour{
             int cellZ = z+cell[1];
             // print("     ("+cellX+", "+cellZ+")");
             if (cellX == X && cellZ == Z+1){
-                cellList[X][Z][0].SetActive(false);        // print("DESTROYING");  // cellList[X][Z][0].GetComponent<Renderer>().material = playerMat;
+                cellList[X][Z][0].SetActive(false);
 
             }else if (cellX == X+1 && cellZ == Z){
-                cellList[X][Z][1].SetActive(false);        // print("DESTROYING");  // cellList[X][Z][1].GetComponent<Renderer>().material = playerMat;
+                cellList[X][Z][1].SetActive(false);
 
             }else if (cellX == X && cellZ == Z-1){
-                cellList[X][Z-1][0].SetActive(false);      // print("DESTROYING");  // cellList[X][Z-1][0].GetComponent<Renderer>().material = playerMat;
+                cellList[X][Z-1][0].SetActive(false);
 
             }else if (cellX == X-1 && cellZ == Z){
-                cellList[X-1][Z][1].SetActive(false);      // print("DESTROYING");  // cellList[X-1][Z][1].GetComponent<Renderer>().material = playerMat;
+                cellList[X-1][Z][1].SetActive(false);
             }
         }
 
@@ -439,24 +455,61 @@ public class WallPlacer : MonoBehaviour{
         // Run code to place the door here, otherwise you may run the issue of rooms being connected when they shouldn't
 
         GameObject cellDoor;
-        if (X<gridX && Z+1<gridZ && cellWalls[X][Z+1][6]==0 && cellWalls[X][Z][0]==0){
-            cellDoor = Instantiate(Doorway, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+1f)*mapScale), Quaternion.Euler(0,0,0));
-            cellDoor.transform.parent = cellDoorParent.transform;
+        // If, in grid && next cell is not room
+        if (X<gridX && Z+1<gridZ && cellWalls[X][Z+1][6]==0){
+            switch(cellWalls[X][Z][0]){
+                case(0): // If Hallway, make door
+                cellDoor = Instantiate(Doorway, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+1f)*mapScale), Quaternion.Euler(0,0,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+                case(1): // If wall, make wall
+                cellDoor = Instantiate(RoomWall, new Vector3(X*mapScale, 0f, (Z+.95f)*mapScale), Quaternion.Euler(0,180,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+            }
         }
 
-        if (X+1<gridX && Z<gridZ && cellWalls[X+1][Z][6]==0 && cellWalls[X][Z][1]==0){
-            cellDoor = Instantiate(Doorway, new Vector3((X+1f)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
-            cellDoor.transform.parent = cellDoorParent.transform;
+        if (X+1<gridX && Z<gridZ && cellWalls[X+1][Z][6]==0){
+            switch(cellWalls[X][Z][1]){
+                case(0): // If Hallway, make door
+                cellDoor = Instantiate(Doorway, new Vector3((X+1f)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+                case(1): // If wall, make wall
+                cellDoor = Instantiate(RoomWall, new Vector3((X+1f)*mapScale, 0f, (Z+.95f)*mapScale), Quaternion.Euler(0,270,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                // cellDoor = Instantiate(RoomWall, new Vector3((X+.95f)*mapScale, 0f, (Z+1f*mapScale)), Quaternion.Euler(0,270,0));
+                // cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+            }
         }
 
-        if (X<gridX && Z-1>=0 && cellWalls[X][Z-1][6]==0 && cellWalls[X][Z][2]==0){
-            cellDoor = Instantiate(Doorway, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z)*mapScale), Quaternion.Euler(0,0,0));
-            cellDoor.transform.parent = cellDoorParent.transform;
+        if (X<gridX && Z-1>=0 && cellWalls[X][Z-1][6]==0){
+            switch(cellWalls[X][Z][2]){
+                case(0): // If Hallway, make door
+                cellDoor = Instantiate(Doorway, new Vector3((X+prefabOffsetX)*mapScale, 0, Z*mapScale), Quaternion.Euler(0,0,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+                case(1): // If wall, make wall
+                cellDoor = Instantiate(RoomWall, new Vector3((X+1f)*mapScale, 0f, (Z+0.05f)*mapScale), Quaternion.Euler(0,0,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                // cellDoor = Instantiate(RoomWall, new Vector3((X+.5f)*mapScale, 0f, (Z+0.05f)*mapScale), Quaternion.Euler(0,0,0));
+                // cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+            }
         }
 
-        if (X-1>=0 && Z<gridZ && cellWalls[X-1][Z][6]==0 && cellWalls[X][Z][3]==0){
-            cellDoor = Instantiate(Doorway, new Vector3((X)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
-            cellDoor.transform.parent = cellDoorParent.transform;
+        if (X-1>=0 && Z<gridZ && cellWalls[X-1][Z][6]==0){
+            switch(cellWalls[X][Z][3]){
+                case(0): // If Hallway, make door
+                cellDoor = Instantiate(Doorway, new Vector3((X)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+                case(1): // If wall, make wall
+                cellDoor = Instantiate(RoomWall, new Vector3((X+0.05f)*mapScale, 0f, Z*mapScale), Quaternion.Euler(0,90,0));
+                cellDoor.transform.parent = cellDoorParent.transform;
+                break;
+            }
         }
 
     }

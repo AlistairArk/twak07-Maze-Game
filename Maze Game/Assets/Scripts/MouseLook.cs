@@ -4,7 +4,7 @@ using UnityEngine;
 
 using System;
 
-public class MouseLook2 : MonoBehaviour {
+public class MouseLook : MonoBehaviour {
     [Flags]
     public enum RotationAxes
     {

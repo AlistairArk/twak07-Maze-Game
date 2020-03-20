@@ -225,6 +225,7 @@ Transform:
   - {fileID: 2134670597}
   - {fileID: 2123802942}
   - {fileID: 1466825994}
+  - {fileID: 1870367412}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -468,7 +469,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 7.13e-43, y: -1.7805714e-19, z: 7.13e-43, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: -6.2040253, z: 6.94e-43, w: 2.62e-43}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -875,6 +876,8 @@ MonoBehaviour:
   Doorway: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
   Room2x3: {fileID: 7465821053077798945, guid: 6d9f22eb474a00448ba2f7d6cc49df54, type: 3}
   Room2x2: {fileID: 7465821053077798945, guid: d825de3d8ccb9e748b739db5f64631ec, type: 3}
+  RoomWall: {fileID: 7465821053077798945, guid: e8d7cfd8bcbb44f48913280119d6e21c,
+    type: 3}
   wall: {fileID: 0}
   walls: []
   goalObject: {fileID: 581727590}
@@ -892,6 +895,7 @@ MonoBehaviour:
   rawMazeParent: {fileID: 0}
   guideCubeParent: {fileID: 0}
   cellDoorParent: {fileID: 0}
+  cellWallParent: {fileID: 0}
   mapObjects: {fileID: 0}
 --- !u!4 &549688084
 Transform:
@@ -1646,12 +1650,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axes: 1
-  sensitivityX: 0
-  sensitivityY: 0
-  minimumX: -360
-  maximumX: 360
-  minimumY: -70
-  maximumY: 70
+  horizontalSensitivity: 5
+  verticalSensitivity: 5
+  verticalMinimum: -90
+  verticalMaximum: 90
 --- !u!23 &795503897
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2107,12 +2109,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axes: 2
-  sensitivityX: 0
-  sensitivityY: 0
-  minimumX: -360
-  maximumX: 360
-  minimumY: -70
-  maximumY: 70
+  horizontalSensitivity: 5
+  verticalSensitivity: 5
+  verticalMinimum: -90
+  verticalMaximum: 90
 --- !u!1 &1115686527
 GameObject:
   m_ObjectHideFlags: 0
@@ -2397,6 +2397,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1157980742}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1175661251 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 157262, guid: c2e22098ce7c8da4590cceb5113bd50e,
+    type: 3}
+  m_PrefabInstance: {fileID: 423231372}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1175661252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175661251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18a9f4ad2c54ea4f88907f6a78fe8ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pc: {fileID: 795503894}
+  distance: 0
 --- !u!4 &1226926067 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6703920567943699405, guid: f7225c9ac0da4b742aaf37dfe03f14aa,
@@ -2966,6 +2986,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7225c9ac0da4b742aaf37dfe03f14aa, type: 3}
+--- !u!1 &1870367411
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1870367412}
+  m_Layer: 0
+  m_Name: cellWallParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1870367412
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870367411}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 111599607}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2005525422
 PrefabInstance:
   m_ObjectHideFlags: 0
