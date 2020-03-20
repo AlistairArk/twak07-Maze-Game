@@ -49,33 +49,35 @@ public class WallPlacer : MonoBehaviour{
 
     [Header("Misc.", order=4)]
 
-    public float gridOffset;
-    public int x;
-    public int z;
-    public int endDist = -1;
-    public int mapScale = 10;
-    private int startDistance = 0;
-    private float wallHeight = .3f;
+    [HideInInspector] public float gridOffset;
+    [HideInInspector] public int x;
+    [HideInInspector] public int z;
+    [HideInInspector] public int endDist = -1;
+    [HideInInspector] public int mapScale = 10;
+    [HideInInspector] private int startDistance = 0;
+    [HideInInspector] private float wallHeight = .3f;
     
-    public List<List<int>> stack = new List<List<int>>();
-    public List<List<int>> visited = new List<List<int>>();
-    public List<List<int>> optimalPath = new List<List<int>>();
-
-    private List<List<GameObject>> prefabList = new List<List<GameObject>>();
-    private CharacterController charController;
-    private GameObject prefabMazeParent;
-    private GameObject rawMazeParent;
-    private GameObject guideCubeParent;
-    private GameObject cellDoorParent;
+    [HideInInspector] public List<List<int>> stack = new List<List<int>>();
+    [HideInInspector] public List<List<int>> visited = new List<List<int>>();
+    [HideInInspector] public List<List<int>> optimalPath = new List<List<int>>();
+    
+    [HideInInspector] public List<List<GameObject>> prefabList = new List<List<GameObject>>();
+    [HideInInspector] public CharacterController charController;
+    [HideInInspector] public GameObject prefabMazeParent;
+    [HideInInspector] public GameObject rawMazeParent;
+    [HideInInspector] public GameObject guideCubeParent;
+    [HideInInspector] public GameObject cellDoorParent;
+    [HideInInspector] public GameObject mapObjects;
 
 
     public void Start(){
         charController = playerObject.GetComponent<CharacterController>();
 
-        rawMazeParent = new GameObject("rawMazeParent");
-        guideCubeParent = new GameObject("guideCubeParent");
-        prefabMazeParent = new GameObject("prefabMazeParent");
-        cellDoorParent = new GameObject("cellDoorParent");
+        rawMazeParent = GameObject.Find("MapObjects/rawMazeParent");
+        guideCubeParent = GameObject.Find("MapObjects/guideCubeParent");
+        prefabMazeParent = GameObject.Find("MapObjects/prefabMazeParent");
+        cellDoorParent = GameObject.Find("MapObjects/cellDoorParent");
+        mapObjects = GameObject.Find("MapObjects");
 
     }
 
@@ -150,11 +152,13 @@ public class WallPlacer : MonoBehaviour{
                     cube1.transform.localScale = new Vector3(.25f, 2*mapScale, 1*mapScale);
                     cube1.transform.Rotate(0f, 90f, 0f);
                     cube1.GetComponent<Renderer>().material = wallMat;
+                    cube1.AddComponent<ObjectHider>();
                     cell.Add(cube1); // North Wall
 
                     GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     cube2.transform.localScale = new Vector3(.25f, 2*mapScale, 1*mapScale);
                     cube2.GetComponent<Renderer>().material = wallMat;
+                    cube2.AddComponent<ObjectHider>();
                     cell.Add(cube2); // East Wall
 
                     if (hideWalls){
@@ -169,8 +173,6 @@ public class WallPlacer : MonoBehaviour{
             		// Set position of walls
                     cube1.transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(1f+cellZ));
                     cube2.transform.position = new Vector3(mapScale*(cellX+1f),     wallHeight,  mapScale*(cellZ+.5f));
-
-
                 }
                 
                 // Add objects to list
@@ -198,13 +200,14 @@ public class WallPlacer : MonoBehaviour{
         ground.layer = 8;
         ground.transform.parent = rawMazeParent.transform; // Place object under a single parent
         if (hideBase) ground.GetComponent<MeshRenderer>().enabled = false;
+        ground.transform.parent = mapObjects.transform; // Place object under a single parent
 
         GameObject mapGround = GameObject.CreatePrimitive(PrimitiveType.Cube);
         mapGround.transform.position   = new Vector3(mapScale*(gridX*.5f), -4f, mapScale*(gridZ*.5f));
         mapGround.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
         mapGround.GetComponent<Renderer>().material = whiteMat;
         mapGround.layer = 8;
-        mapGround.transform.parent = rawMazeParent.transform; // Place object under a single parent
+        mapGround.transform.parent = mapObjects.transform; // Place object under a single parent
 
         // South Wall
         GameObject cube3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -212,13 +215,14 @@ public class WallPlacer : MonoBehaviour{
         cube3.transform.Rotate(0f, 90f, 0f);
         cube3.GetComponent<Renderer>().material = wallMat;
         cube3.transform.position = new Vector3(cube3.transform.position.x+(gridX*.5f*mapScale), cube3.transform.position.y, cube3.transform.position.x);
+        cube3.transform.parent = mapObjects.transform; // Place object under a single parent
 
         // West Wall
         GameObject cube4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube4.transform.localScale = new Vector3(.25f, 1*mapScale, 1*mapScale*gridZ);
         cube4.transform.position = new Vector3(cube4.transform.position.x, cube4.transform.position.y, cube4.transform.position.x+(gridZ*.5f*mapScale));
         cube4.GetComponent<Renderer>().material = wallMat;
-
+        cube4.transform.parent = mapObjects.transform; // Place object under a single parent
 
 
 
@@ -365,12 +369,12 @@ public class WallPlacer : MonoBehaviour{
                     // Place the room prefab
                     switch(prefabCounter) {
                         case (1):
-                            prefabRoom = Instantiate(Room2x3, new Vector3((X+1f)*mapScale, -2.5f, (Z+1.5f)*mapScale), Quaternion.Euler(0,90,0));
+                            prefabRoom = Instantiate(Room2x3, new Vector3((X+1f)*mapScale, 0f, (Z+1.5f)*mapScale), Quaternion.Euler(0,90,0));
                             prefabRoom.transform.parent = cellDoorParent.transform;
                         break;
 
                         case (2):
-                            prefabRoom = Instantiate(Room2x2, new Vector3((X+1f)*mapScale, -2.5f, (Z+1f)*mapScale), Quaternion.Euler(0,90,0));
+                            prefabRoom = Instantiate(Room2x2, new Vector3((X+1f)*mapScale, 0f, (Z+1f)*mapScale), Quaternion.Euler(0,90,0));
                             prefabRoom.transform.parent = cellDoorParent.transform;
                         break;
                     }
@@ -683,6 +687,8 @@ public class WallPlacer : MonoBehaviour{
                                     prefabCell = Instantiate(CorridorEnd, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
                                 }
         		                prefabCell.transform.parent = prefabMazeParent.transform;
+                                prefabCell.tag = "Prefab"; // Tag as prefab
+                                prefabCell.AddComponent<ObjectHider>();
                                 prefabRow.Add(prefabCell);
                             }
 
@@ -713,6 +719,8 @@ public class WallPlacer : MonoBehaviour{
                                 prefabCell = Instantiate(CorridorCorner, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
                         	}
     		                prefabCell.transform.parent = prefabMazeParent.transform;
+                            prefabCell.tag = "Prefab"; // Tag as prefab
+                            prefabCell.AddComponent<ObjectHider>();
                             prefabRow.Add(prefabCell);
                             break;
                         case (3):
@@ -727,13 +735,18 @@ public class WallPlacer : MonoBehaviour{
                                 prefabCell = Instantiate(CorridorTJunction, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                         	}
     		                prefabCell.transform.parent = prefabMazeParent.transform;
+                            prefabCell.tag = "Prefab"; // Tag as prefab
+                            prefabCell.AddComponent<ObjectHider>();
                             prefabRow.Add(prefabCell);
                             break;
                         case (4):
     						prefabCell = Instantiate(CorridorIntersection, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
     		                prefabCell.transform.parent = prefabMazeParent.transform;
+                            prefabCell.tag = "Prefab"; // Tag as prefab
+                            prefabCell.AddComponent<ObjectHider>();
                             prefabRow.Add(prefabCell);
                             break;
+                    
                     }
                 }
             }
