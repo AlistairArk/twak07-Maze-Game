@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
-    // public float mouseSensitivity = 2f;
     public LayerMask groundMask; 
 
     Vector3 velocity;
@@ -22,21 +21,14 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate() {
 
-        // // Match cylinder and camera rotation
-        // GameObject cube2 = gameObject;
-        // float y = playerCamera.transform.rotation.y;
-        // cube2.transform.rotation = Quaternion.Euler(cube2.transform.rotation.x, y, cube2.transform.rotation.z);
-        // // .Rotate = new Vector3(transform.Rotate.x,playerCamera.transform.Rotate.y,transform.Rotate.z);
-
-
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if(isGrounded && velocity.y<0){
             velocity.y=-2f;
         }
 
-        float x = Input.GetAxis("Horizontal"); // * mouseSensitivity * Time.deltaTime;
-        float z = Input.GetAxis("Vertical"); // * mouseSensitivity * Time.deltaTime;
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
 
@@ -46,3 +38,14 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 }
+
+/*
+//Movement Stuff(WASD)
+Vector3 movement = Vector3.zero;
+float v = Input.GetAxis(PlayerInput.Vertical);
+float h = Input.GetAxis(PlayerInput.Horizontal);
+movement += transform.forward * v * moveSpeed * Time.deltaTime;
+movement += transform.right * h * moveSpeed * Time.deltaTime;
+movement += Physics.gravity;
+_cc.Move(movement);
+*/
