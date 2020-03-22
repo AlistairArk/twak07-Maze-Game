@@ -9,8 +9,8 @@ public class Occlusion : MonoBehaviour{
     public GameObject pcCam;
     private Camera cam;
 
-    public List<GameObject> prefabList = new List<GameObject>(); // list of objects to show.
-    public List<GameObject> prefabList2 = new List<GameObject>(); // list of last shown.
+    public List<GameObject> prefabList = new List<GameObject>();  // list of objects rays hit
+    public List<GameObject> prefabList2 = new List<GameObject>(); // list of objects rays hit last call
 
     // Start is called before the first frame update
     void Start(){
@@ -19,109 +19,70 @@ public class Occlusion : MonoBehaviour{
 
     // Update is called once per frame
     void FixedUpdate(){
-        float fovAngle = 90f;
-        int rayRes = 100;
-        int screenX = Screen.width;
 
-        prefabList.Clear();   // List objects to show
+        /*
+        rayRes - The amount of spacing between each ray
+                Higher means more precision - but at the cost of performance.
+                We may want to add bias to ray placement so they are focused 
+                on the edges of the screen. This will decrease chance of "object pop in"
+                for minimal performance cost.
 
-        print("list coppied prior " + prefabList2.Count);
+                Boosting screenX/screenY above the natural res may also do the trick as
+                this would allow the rays to work with a higher degree of fov than the
+                player camera.
 
+        */
+        prefabList.Clear();         // List objects rays hit
+        
+        int rayRes = 100;           // Spacing between rays
+        int screenX = Screen.width; // Pixel width of screen
+
+        // Loop across pixels in screen
         while (screenX>0){
+
             screenX-=rayRes;
             int screenY = Screen.height;
+
             while (screenY>0){
                 screenY-=rayRes;
+
                 Vector3 rayPos = new Vector3(screenX, screenY, 0);
                 Ray ray = cam.ScreenPointToRay(rayPos);
                 
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity)){ // If Hit
-                    // Debug.Log("Hitting: "+ hit.transform.gameObject.name);
-                    // Debug.DrawRay(cam., rayPos, Color.yellow);
-                    // Debug.Log("Hit: "+hit.transform.gameObject.name);
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity)){ // If object hit
 
-                    if (hit.transform.gameObject.tag == "Prefab" && !prefabList.Contains(hit.transform.gameObject)){
-                        Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
-                        prefabList.Add(hit.transform.gameObject);
+                    // If object is tagged as occludable
+                    if (hit.transform.gameObject.tag == "Prefab"+{
+                        // If it is not already listed by another ray
+                        if (!prefabList.Contains(hit.transform.gameObject)){
+                            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                            prefabList.Add(hit.transform.gameObject);
+                        }
                     }else{
+                        // Draw ray - Object is not occludable
                         Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
                     }
 
                 }else{
+                    // Draw ray - ray has no contacts
                     Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
                 }
             }
         }
 
-
-        foreach (GameObject cell in prefabList){
-            Debug.Log("showing: "+cell.name);
-            cell.transform.GetChild(0).gameObject.SetActive(true);
-        }
-
-        foreach (GameObject cell2 in prefabList2){
-            foreach (GameObject cell in prefabList){
-                print("Does: "+cell.name+"=="+cell2.name);
-            }
-        }
-            // Debug.Log("not present in list: "+cell.name);
-            // if (!prefabList.Contains(cell)) cell.transform.GetChild(0).gameObject.SetActive(false);
-
-
-
-        // print("list coppied from "+ prefabList2.Count + " to " + prefabList2.Count);
-
-        foreach (GameObject cell in prefabList)
-            if (!prefabList2.Contains(cell))
+        // Iterate over list of objects rays hit in the CURRENT call
+        foreach (GameObject cell in prefabList)     // If the object was not added to the list last call,
+            if (!prefabList2.Contains(cell))        // it must be inactive - hence, activate it.
                 cell.transform.GetChild(0).gameObject.SetActive(true); 
         
-
+        // Iterate over list of objects rays hit in the LAST call
         foreach (GameObject cell in prefabList2)
-            if (!prefabList.Contains(cell))
+            if (!prefabList.Contains(cell))         //  If the object can no longer be found - cull it
                 cell.transform.GetChild(0).gameObject.SetActive(false);
         
+        // Set new list of currently rendered objects       
         prefabList2 = new List<GameObject>(prefabList); 
     }
 }
-
-
-        // Vector3 rayPosition = new Vector3(cam.transform.position.x, cam.transform.position.y, cam.transform.position.z);
-        // Vector3 rayRotation = Quaternion.AngleAxis(-fovAngle, cam.transform.up) * cam.transform.forward;
-        // Ray rayCenter = new Ray(rayPosition, rayRotation);
-
-        // RaycastHit hit;
-        // // Does the ray intersect any objects excluding the player layer
-        // if (Physics.Raycast(rayCenter, out hit, Mathf.Infinity)){
-        //     Debug.DrawRay(rayPosition, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-        //     Debug.Log("Did Hit");
-        
-        // }else{
-        //     Debug.DrawRay(rayPosition, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-        //     Debug.Log("Did not Hit");
-        // }
-    // RaycastHit[] hits;
-    // hits = Physics.RaycastAll(transform.position, transform.forward, 100.0F);
-    // RaycastHit hit;
-
-    // Ray ray = pcCam.ScreenPointToRay(Input.mousePosition);
-    // if (Physics.Raycast(ray, out hit)) {
-    //     Transform objectHit = hit.transform;
-
-    //     foreach (RaycastHit hit2 in hits){
-    //         print(hit2.transform.gameObject.SetActive(false));
-    //     }
-    // }
-
-    // //Setting up Vector3's for rays
-    // Vector3 rayPosition = new Vector3(transform.position.x, headHeight, transform.position.z);
-    // Vector3 leftRayRotation = Quaternion.AngleAxis(-fovAngle, transform.up) * transform.forward;
-    // Vector3 rightRayRotation = Quaternion.AngleAxis(fovAngle, transform.up) * transform.forward;
-
-    // //Constructing rays
-    // Ray rayCenter = new Ray(rayPosition, transform.forward);
-    // Ray rayLeft = new Ray(rayPosition, leftRayRotation);
-    // Ray rayRight = new Ray(rayPosition, rightRayRotation);
-
-    // Debug.DrawRay(contact.point, contact.normal, Color.red, 5.0f);
