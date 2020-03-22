@@ -4,6 +4,8 @@ using System.Collections;
 
 public class CombineMeshes : MonoBehaviour {
 
+    public bool renderMeshCollider = true;
+
     void Start(){
         Combine();
     }
@@ -97,6 +99,12 @@ public class CombineMeshes : MonoBehaviour {
             meshFilterCombine.sharedMesh = new Mesh();
             meshFilterCombine.sharedMesh.CombineMeshes( combineInstances, false, false );
             
+            if (renderMeshCollider){
+                // create mesh collider
+                MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
+                meshc.sharedMesh = meshFilterCombine.sharedMesh; // assign mesh
+            }
+            
             // Destroy other meshes
             foreach( Mesh mesh in meshes )
             {
@@ -117,10 +125,12 @@ public class CombineMeshes : MonoBehaviour {
             meshRendererCombine.materials = materialsArray;    
         }
 
-        foreach (Transform child in gameObject.transform) GameObject.Destroy(child.gameObject);
         transform.rotation = oldRot;
         transform.position = oldPos;
         transform.localScale = oldScl;
+        foreach (Transform child in gameObject.transform) GameObject.Destroy(child.gameObject);
+        gameObject.GetComponent<Renderer>().enabled = false;    // Disable renderer
+
     }
 }
 

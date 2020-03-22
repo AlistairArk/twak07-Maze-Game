@@ -132,6 +132,7 @@ public class WallPlacer : MonoBehaviour{
 
     public void HidePrefabs(){ // hides all prefabs
         // foreach (Transform child in prefabMazeParent.transform) child.transform.GetChild(0).gameObject.SetActive(false);
+        // foreach (Transform child in prefabMazeParent.transform) child.gameObject.SetActive(false);
     }
 
 
@@ -165,12 +166,14 @@ public class WallPlacer : MonoBehaviour{
                     cube1.transform.Rotate(0f, 90f, 0f);
                     cube1.GetComponent<Renderer>().material = wallMat;
                     cube1.AddComponent<ObjectHider>();
+                    cube1.tag = "Occludable";
                     cell.Add(cube1); // North Wall
 
                     GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     cube2.transform.localScale = new Vector3(.25f, 2*mapScale, 1*mapScale);
                     cube2.GetComponent<Renderer>().material = wallMat;
                     cube2.AddComponent<ObjectHider>();
+                    cube2.tag = "Occludable";
                     cell.Add(cube2); // East Wall
 
                     if (hideWalls){
@@ -206,13 +209,13 @@ public class WallPlacer : MonoBehaviour{
 
 
         // Create level base
-        GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        ground.transform.position   = new Vector3(mapScale*(gridX*.5f), 0, mapScale*(gridZ*.5f));
-        ground.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
-        ground.layer = 8;
-        ground.transform.parent = rawMazeParent.transform; // Place object under a single parent
-        if (hideBase) ground.GetComponent<MeshRenderer>().enabled = false;
-        ground.transform.parent = mapObjects.transform; // Place object under a single parent
+        // GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        // ground.transform.position   = new Vector3(mapScale*(gridX*.5f), 0, mapScale*(gridZ*.5f));
+        // ground.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
+        // ground.layer = 8;
+        // ground.transform.parent = rawMazeParent.transform; // Place object under a single parent
+        // if (hideBase) ground.GetComponent<MeshRenderer>().enabled = false;
+        // ground.transform.parent = mapObjects.transform; // Place object under a single parent
 
         GameObject mapGround = GameObject.CreatePrimitive(PrimitiveType.Cube);
         mapGround.transform.position   = new Vector3(mapScale*(gridX*.5f), -4f, mapScale*(gridZ*.5f));
@@ -793,7 +796,7 @@ public class WallPlacer : MonoBehaviour{
                             break;
                     
                     }
-                    prefabRow[prefabRow.Count-1].tag = "Prefab"; // Tag as prefab
+                    prefabRow[prefabRow.Count-1].tag = "Occludable"; // Tag as prefab
                     prefabRow[prefabRow.Count-1].AddComponent<ObjectHider>();
                     prefabRow[prefabRow.Count-1].transform.parent = prefabMazeParent.transform; // Group objects
                     prefabRow[prefabRow.Count-1].name = X+","+Z; // Rename with co-ordinates

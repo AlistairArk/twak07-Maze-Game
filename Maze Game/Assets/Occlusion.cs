@@ -34,26 +34,26 @@ public class Occlusion : MonoBehaviour{
         */
         prefabList.Clear();         // List objects rays hit
         
-        int rayRes = 100;           // Spacing between rays
-        int screenX = Screen.width; // Pixel width of screen
+        int rayRes = 50;           // Spacing between rays
+        int screenX = Screen.width+rayRes; // Pixel width of screen
 
         // Loop across pixels in screen
         while (screenX>0){
 
             screenX-=rayRes;
-            int screenY = Screen.height;
+            int screenY = Screen.height+rayRes;
 
-            while (screenY>0){
+            while (screenY>-rayRes){
                 screenY-=rayRes;
 
-                Vector3 rayPos = new Vector3(screenX, screenY, 0);
+                Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 0);
                 Ray ray = cam.ScreenPointToRay(rayPos);
                 
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity)){ // If object hit
 
                     // If object is tagged as occludable
-                    if (hit.transform.gameObject.tag == "Prefab"){
+                    if (hit.transform.gameObject.tag == "Occludable"){
                         // If it is not already listed by another ray
                         if (!prefabList.Contains(hit.transform.gameObject)){
                             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
@@ -78,10 +78,12 @@ public class Occlusion : MonoBehaviour{
                 cell.GetComponent<Renderer>().enabled = true; 
         
         // Iterate over list of objects rays hit in the LAST call
-        foreach (GameObject cell in prefabList2)
-            if (!prefabList.Contains(cell))         //  If the object can no longer be found - cull it
+        foreach (GameObject cell in prefabList2){
+            if (!prefabList.Contains(cell) && cell!=null){         //  If the object can no longer be found - cull it
+                // Debug.Log(cell.name);
                 cell.GetComponent<Renderer>().enabled = false;
-        
+            }
+        }
         // Set new list of currently rendered objects       
         prefabList2 = new List<GameObject>(prefabList); 
     }

@@ -40,6 +40,7 @@ public class RelativeMovement : MonoBehaviour{
         transform.position = new Vector3(pc.transform.position.x-distance,pc.transform.position.y,pc.transform.position.z);
 
         gameObject.transform.parent.Rotate(Vector3.right * stationRotation * Time.deltaTime);
+        // transform.Rotate(Vector3.right * stationRotation * Time.deltaTime);
         transform.Rotate(Axis, orbitalSpeed * Time.deltaTime);
 
         RenderSettings.skybox.SetFloat("_Rotation", Time.time * orbitalSpeed);
