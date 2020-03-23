@@ -6,125 +6,125 @@ using UnityEngine;
 public class DrawDistanceHandler : MonoBehaviour{
 
 
-    public GameObject pcObject;
-    public GameObject pcCamera;
-    private Camera pcCam;
-    public Vector3 pcPos; 
-    public Vector3 pcRot; 
-    public int pcX;         // co-ords of the player's current maze cell
-    public int pcZ;         // co-ords of the player's current maze cell
-    public int pcX2=0;      // co-ords of the player's last maze cell
-    public int pcZ2=0;      // co-ords of the player's last maze cell
+    // public GameObject pcObject;
+    // public GameObject pcCamera;
+    // private Camera pcCam;
+    // public Vector3 pcPos; 
+    // public Vector3 pcRot; 
+    // public int pcX;         // co-ords of the player's current maze cell
+    // public int pcZ;         // co-ords of the player's current maze cell
+    // public int pcX2=0;      // co-ords of the player's last maze cell
+    // public int pcZ2=0;      // co-ords of the player's last maze cell
 
-    public int facing=0;    // Direction the player is currently facing
-    public int facing2=0;   // Direction the player was last facing
+    // public int facing=0;    // Direction the player is currently facing
+    // public int facing2=0;   // Direction the player was last facing
     
-    public List<GameObject> prefabList = new List<GameObject>(); // list of objects to show.
-    public List<GameObject> prefabList2 = new List<GameObject>(); // list of last shown.
+    // public List<GameObject> prefabList = new List<GameObject>(); // list of objects to show.
+    // public List<GameObject> prefabList2 = new List<GameObject>(); // list of last shown.
 
-    private WallPlacer WallPlacer;
+    // private WallPlacer WallPlacer;
 
 
 
-    void Start(){
-        WallPlacer = gameObject.GetComponent<WallPlacer>();
+    // void Start(){
+    //     WallPlacer = gameObject.GetComponent<WallPlacer>();
         
-        pcCam = pcCamera.GetComponent<Camera>();
-    }
+    //     pcCam = pcCamera.GetComponent<Camera>();
+    // }
 
 
 
-    void Mull(){
+    // void Mull(){
 
-        // Renderer renderer;
-        // Vector3 cellPos;
-        // int cellX;
-        // int cellZ;
+    //     // Renderer renderer;
+    //     // Vector3 cellPos;
+    //     // int cellX;
+    //     // int cellZ;
 
 
-        pcPos = pcObject.transform.position;
-        pcRot = pcObject.transform.rotation.eulerAngles;
-        pcX = (int)(Mathf.Floor(pcPos.x*0.1f)); // Round player position to map cell
-        pcZ = (int)(Mathf.Floor(pcPos.z*0.1f)); // Round player position to map cell
-        GetDirection();     // update direction facing
+    //     pcPos = pcObject.transform.position;
+    //     pcRot = pcObject.transform.rotation.eulerAngles;
+    //     pcX = (int)(Mathf.Floor(pcPos.x*0.1f)); // Round player position to map cell
+    //     pcZ = (int)(Mathf.Floor(pcPos.z*0.1f)); // Round player position to map cell
+    //     GetDirection();     // update direction facing
 
-        prefabList.Clear();   // List objects to show
-        int x=pcX; // Player position
-        int z=pcZ; // Player position
+    //     prefabList.Clear();   // List objects to show
+    //     int x=pcX; // Player position
+    //     int z=pcZ; // Player position
 
-        // if any changes to player position or rotation
-        if (pcX!=pcX2 || pcZ!=pcZ2 || facing!=facing2){
-            int xPush = 0,zPush = 0;
-            switch(facing){
-                case(0):
-                zPush = 1;
-                break;
+    //     // if any changes to player position or rotation
+    //     if (pcX!=pcX2 || pcZ!=pcZ2 || facing!=facing2){
+    //         int xPush = 0,zPush = 0;
+    //         switch(facing){
+    //             case(0):
+    //             zPush = 1;
+    //             break;
 
-                case(1):
-                xPush = 1;
-                break;
+    //             case(1):
+    //             xPush = 1;
+    //             break;
 
-                case(2):
-                zPush = -1;
-                break;
+    //             case(2):
+    //             zPush = -1;
+    //             break;
 
-                case(3):
-                xPush = -1;
-                break;
-            }
+    //             case(3):
+    //             xPush = -1;
+    //             break;
+    //         }
 
             
-            if (WallPlacer.cellWalls[x][z][6] == 0){ // if in corridor
-                Debug.Log("MapObjects/prefabMazeParent/"+x+","+z);
-                prefabList.Add(GameObject.Find("MapObjects/prefabMazeParent/"+x+","+z));
-            }
+    //         if (WallPlacer.cellData[x][z][6] == 0){ // if in corridor
+    //             Debug.Log("MapObjects/prefabMazeParent/"+x+","+z);
+    //             prefabList.Add(GameObject.Find("MapObjects/prefabMazeParent/"+x+","+z));
+    //         }
 
-            // While there is no wall in the direction you are facing && within map bounds
-            while (x>=0 && x<WallPlacer.gridX && z>=0 && z<WallPlacer.gridZ){
+    //         // While there is no wall in the direction you are facing && within map bounds
+    //         while (x>=0 && x<WallPlacer.gridX && z>=0 && z<WallPlacer.gridZ){
 
-                // if the cell is a corridor, add it to the draw list
-                if (GameObject.Find("MapObjects/prefabMazeParent/"+x+","+z) != null)
-                    prefabList.Add(GameObject.Find("MapObjects/prefabMazeParent/"+x+","+z));
+    //             // if the cell is a corridor, add it to the draw list
+    //             if (GameObject.Find("MapObjects/prefabMazeParent/"+x+","+z) != null)
+    //                 prefabList.Add(GameObject.Find("MapObjects/prefabMazeParent/"+x+","+z));
 
-                // if there is a wall, stop drawing
-                if (WallPlacer.cellWalls[x][z][facing]==1) break;
+    //             // if there is a wall, stop drawing
+    //             if (WallPlacer.cellData[x][z][facing]==1) break;
                 
-                x+=xPush;
-                z+=zPush;
-            }
+    //             x+=xPush;
+    //             z+=zPush;
+    //         }
 
 
             
-            foreach (GameObject cell in prefabList)
-                if (!prefabList2.Contains(cell))
-                    cell.transform.GetChild(0).gameObject.SetActive(true); // If cell is not the old list 
+    //         foreach (GameObject cell in prefabList)
+    //             if (!prefabList2.Contains(cell))
+    //                 cell.transform.GetChild(0).gameObject.SetActive(true); // If cell is not the old list 
 
-            foreach (GameObject cell in prefabList2)
-                if (!prefabList.Contains(cell))
-                    cell.transform.GetChild(0).gameObject.SetActive(false); // If cell is not the new list 
+    //         foreach (GameObject cell in prefabList2)
+    //             if (!prefabList.Contains(cell))
+    //                 cell.transform.GetChild(0).gameObject.SetActive(false); // If cell is not the new list 
 
-            prefabList2 = new List<GameObject>(prefabList); 
-            pcX2 = pcX;
-            pcZ2 = pcZ;
-            facing2 = facing;
-        }
-    }
+    //         prefabList2 = new List<GameObject>(prefabList); 
+    //         pcX2 = pcX;
+    //         pcZ2 = pcZ;
+    //         facing2 = facing;
+    //     }
+    // }
 
-    void GetDirection(){ // Get the direction the player is currently facing
-        if (pcRot.y<45f || pcRot.y>315f){
-            facing=0;
-            // Debug.Log("NORTH FACING");
-        }else if (pcRot.y>45f && pcRot.y<135f){
-            facing=1;
-            // Debug.Log("EAST FACING");
-        }else if (pcRot.y>135f && pcRot.y<225f){
-            facing=2;
-            // Debug.Log("SOUTH FACING");
-        }else{
-            facing=3;
-            // Debug.Log("WEST FACING");
-        }
-    }
+    // void GetDirection(){ // Get the direction the player is currently facing
+    //     if (pcRot.y<45f || pcRot.y>315f){
+    //         facing=0;
+    //         // Debug.Log("NORTH FACING");
+    //     }else if (pcRot.y>45f && pcRot.y<135f){
+    //         facing=1;
+    //         // Debug.Log("EAST FACING");
+    //     }else if (pcRot.y>135f && pcRot.y<225f){
+    //         facing=2;
+    //         // Debug.Log("SOUTH FACING");
+    //     }else{
+    //         facing=3;
+    //         // Debug.Log("WEST FACING");
+    //     }
+    // }
 }
 
 
@@ -330,7 +330,7 @@ public class DrawDistanceHandler : MonoBehaviour{
     //         print("Cell changed");
     //         // if (pcX >= 0 && pcX <= WallPlacer.gridX && pcZ >= 0 && pcZ <= WallPlacer.gridZ){
     //         try{
-    //             switch(WallPlacer.cellWalls[pcX][pcZ][6]){
+    //             switch(WallPlacer.cellData[pcX][pcZ][6]){
     //                 case(0): // Is corridor
     //                 print("In corridor");
     //                 DrawCells();
@@ -377,8 +377,8 @@ public class DrawDistanceHandler : MonoBehaviour{
     //         bool wallFound = false;
 
     //         while (wallFound==false){
-    //             if (WallPlacer.cellWalls[x][z][facing]==0){ // if no wall ahead of player
-    //                 if (WallPlacer.cellWalls[x][z][6]==0){ // if hallway prefab
+    //             if (WallPlacer.cellData[x][z][facing]==0){ // if no wall ahead of player
+    //                 if (WallPlacer.cellData[x][z][6]==0){ // if hallway prefab
     //                     prefabList.Add(WallPlacer.prefabList[x][z]);
     //                 }
     //             }else{
@@ -387,7 +387,7 @@ public class DrawDistanceHandler : MonoBehaviour{
     //             }
 
 
-    //             switch(WallPlacer.cellWalls[x][z][facing]){
+    //             switch(WallPlacer.cellData[x][z][facing]){
     //                 case(0):
     //                 x+=1;
     //                 break;
@@ -426,6 +426,6 @@ public class DrawDistanceHandler : MonoBehaviour{
     //         prefabList2 = prefabList;
 
     //         // WallPlacer.prefabList[pcX][pcZ].SetActive(true);
-    //         // if (WallPlacer.cellWalls[pcX2][pcZ2][6]==0) WallPlacer.prefabList[pcX2][pcZ2].SetActive(false);
+    //         // if (WallPlacer.cellData[pcX2][pcZ2][6]==0) WallPlacer.prefabList[pcX2][pcZ2].SetActive(false);
     //     }
     // }

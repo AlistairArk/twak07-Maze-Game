@@ -922,6 +922,11 @@ GameObject:
   - component: {fileID: 549688083}
   - component: {fileID: 549688085}
   - component: {fileID: 549688086}
+  - component: {fileID: 549688088}
+  - component: {fileID: 549688087}
+  - component: {fileID: 549688090}
+  - component: {fileID: 549688089}
+  - component: {fileID: 549688091}
   m_Layer: 0
   m_Name: Map Generator
   m_TagString: Untagged
@@ -936,7 +941,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 549688082}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cce0fa0035653004187c60cac8da4c60, type: 3}
   m_Name: 
@@ -950,15 +955,15 @@ MonoBehaviour:
   hideBase: 1
   hideWalls: 0
   hideWaypoint: 1
-  CorridorHall: {fileID: 4138733657458971485, guid: 4b282800a68286345866b7ad94555c0d,
+  CorridorHall: {fileID: 4138733657458971485, guid: 6cbc36462ddfb4f4a86c92743077aeb7,
     type: 3}
-  CorridorEnd: {fileID: 6442411300058712817, guid: b15ab753db70c8b40aa4d6a00d9f2af7,
+  CorridorEnd: {fileID: 6442411300058712817, guid: 94f860989f35ea043bdc57b47420056e,
     type: 3}
-  CorridorCorner: {fileID: 6442411300058712817, guid: 401b9063bc2e641499baf65c264cb32e,
+  CorridorCorner: {fileID: 6442411300058712817, guid: 49aea586325aa384dac4c0398925375c,
     type: 3}
-  CorridorTJunction: {fileID: 5305678016596889535, guid: cf5728556fddadc429d7b37cb22105e6,
+  CorridorTJunction: {fileID: 5305678016596889535, guid: 22bb1c75ae9e40d4692f75681b238835,
     type: 3}
-  CorridorIntersection: {fileID: 5305678016596889535, guid: 09b7423eb08bf61408461c5eab7ad0b7,
+  CorridorIntersection: {fileID: 5305678016596889535, guid: 6e529c94e7bbe5d45a6ad2b2c63df69d,
     type: 3}
   Doorway: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
   Room2x3: {fileID: 7465821053077798945, guid: 6d9f22eb474a00448ba2f7d6cc49df54, type: 3}
@@ -1011,6 +1016,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GoalObj: {fileID: 1314543633}
+  RecursiveBacktrack: {fileID: 0}
+  InitializeMaze: {fileID: 549688086}
+  MazePrefabs: {fileID: 0}
+  MazeGlobals: {fileID: 0}
+  ResetMaze: {fileID: 549688088}
+  Check: {fileID: 0}
 --- !u!114 &549688086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1020,21 +1031,122 @@ MonoBehaviour:
   m_GameObject: {fileID: 549688082}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca93c2dd4d84c4b4fb7a617d6776fa15, type: 3}
+  m_Script: {fileID: 11500000, guid: af317bb6525dd1a49a3809652ba27bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pcObject: {fileID: 795503894}
-  pcCamera: {fileID: 963194225}
-  pcPos: {x: 0, y: 0, z: 0}
-  pcRot: {x: 0, y: 0, z: 0}
-  pcX: 0
-  pcZ: 0
-  pcX2: 0
-  pcZ2: 0
-  facing: 0
-  facing2: 0
-  prefabList: []
-  prefabList2: []
+  MazeGlobals: {fileID: 549688087}
+--- !u!114 &549688087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549688082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32476b8afe3114848a3fd7bcabc20e38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridX: 10
+  gridZ: 10
+  endX: 1
+  endZ: 1
+  showRawMaze: 1
+  showPrefabMaze: 1
+  hideBase: 1
+  hideWalls: 0
+  hideWaypoint: 1
+  wall: {fileID: 0}
+  walls: []
+  goalObject: {fileID: 581727590}
+  playerObject: {fileID: 795503894}
+  wallMat: {fileID: 2100000, guid: 8a44425506331f247810369e41b15006, type: 2}
+  playerMat: {fileID: 2100000, guid: d781334c4b0ac2c4cadf121d2f09cd57, type: 2}
+  whiteMat: {fileID: 2100000, guid: 71f08a3b4a0b4804a960a35802888489, type: 2}
+  gridOffset: 0
+  x: 0
+  z: 0
+  endDist: -1
+  mapScale: 10
+  startDistance: 0
+  wallHeight: 0.3
+  charController: {fileID: 0}
+  prefabMazeParent: {fileID: 0}
+  rawMazeParent: {fileID: 0}
+  guideCubeParent: {fileID: 0}
+  cellDoorParent: {fileID: 0}
+  cellWallParent: {fileID: 0}
+  mapObjects: {fileID: 0}
+--- !u!114 &549688088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549688082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 740b4013ad590b34a882da6ffed1ad2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MazeGlobals: {fileID: 549688087}
+--- !u!114 &549688089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549688082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b3158a141c02446acd4db1ce42e4aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MazeGlobals: {fileID: 0}
+  Check: {fileID: 0}
+--- !u!114 &549688090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549688082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016abd862fbc62b4c995a454a1a3329f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MazeGlobals: {fileID: 0}
+--- !u!114 &549688091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549688082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39571318cbed376418e74dbf372c73c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MazeGlobals: {fileID: 0}
+  CorridorHall: {fileID: 4138733657458971485, guid: 6cbc36462ddfb4f4a86c92743077aeb7,
+    type: 3}
+  CorridorEnd: {fileID: 6442411300058712817, guid: 94f860989f35ea043bdc57b47420056e,
+    type: 3}
+  CorridorCorner: {fileID: 6442411300058712817, guid: 49aea586325aa384dac4c0398925375c,
+    type: 3}
+  CorridorTJunction: {fileID: 5305678016596889535, guid: 6e529c94e7bbe5d45a6ad2b2c63df69d,
+    type: 3}
+  CorridorIntersection: {fileID: 5305678016596889535, guid: 22bb1c75ae9e40d4692f75681b238835,
+    type: 3}
+  Doorway: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
+  Room2x3: {fileID: 7465821053077798945, guid: 6d9f22eb474a00448ba2f7d6cc49df54, type: 3}
+  Room2x2: {fileID: 7465821053077798945, guid: d825de3d8ccb9e748b739db5f64631ec, type: 3}
+  RoomWall: {fileID: 7465821053077798945, guid: e8d7cfd8bcbb44f48913280119d6e21c,
+    type: 3}
+  prefabOffsetX: 0.5
+  prefabOffsetZ: 0.5
 --- !u!1 &556846185
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,8 +1972,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 795503894}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 0.75, z: 1}
   m_Children:
   - {fileID: 1425135552}
   - {fileID: 963194228}
@@ -2289,6 +2401,7 @@ MonoBehaviour:
   pcCam: {fileID: 963194225}
   prefabList: []
   prefabList2: []
+  enableOccluder: 0
 --- !u!1 &1017477652
 GameObject:
   m_ObjectHideFlags: 0

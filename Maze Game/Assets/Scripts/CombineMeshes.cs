@@ -129,7 +129,7 @@ public class CombineMeshes : MonoBehaviour {
         transform.position = oldPos;
         transform.localScale = oldScl;
         foreach (Transform child in gameObject.transform) GameObject.Destroy(child.gameObject);
-        gameObject.GetComponent<Renderer>().enabled = false;    // Disable renderer
+        // gameObject.GetComponent<Renderer>().enabled = false;    // Disable renderer
 
     }
 }
