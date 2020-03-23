@@ -6,57 +6,104 @@ public class RelativeMovement : MonoBehaviour{
     /* This function alters the position of the earth to create 
     the illusion that it's large and far away */
 
-    public GameObject pc;
-    public float distance;
+    public GameObject skyboxCamera;
+    public GameObject playerCamera;
+    public GameObject skyboxPlayerRig;
+    public GameObject earth;
+
+    [Tooltip("Distance between the planet and the camera")]
+    public float distance = 50f;
 
     [Tooltip("Planet axis in world vector, defaults to start up vector")]
     public Vector3 Axis;
 
     [Range(-1000.0f, 1000.0f)]
     [Tooltip("Rotation speed around axis")]
-    public float orbitalSpeed = 0f;
+    public float orbitalRotation = 10f;
     [Range(-1000.0f, 1000.0f)]
     [Tooltip("Rotation speed around axis")]
     public float stationRotation = 10f;
 
 
 
-    private void OnEnable(){
+
+    private void OnValidate(){
         if (Axis == Vector3.zero){
             Axis = transform.up;
         }else{
             Axis = Axis.normalized;
         }
+
+        skyboxCamera.transform.localPosition = new Vector3(distance,
+            skyboxCamera.transform.localPosition.y,
+            skyboxCamera.transform.localPosition.z);
     }
 
 
-    void Start(){
-        distance = pc.transform.position.x - transform.position.x;
-    }
 
 
     void Update(){
-        // Move planet relative to player to create size illusion
-        transform.position = new Vector3(pc.transform.position.x-distance,pc.transform.position.y,pc.transform.position.z);
+        skyboxCamera.transform.RotateAround(earth.transform.position, Vector3.down, orbitalRotation * Time.deltaTime);
+        skyboxCamera.transform.Rotate(Vector3.left * stationRotation * Time.deltaTime);
+        skyboxPlayerRig.transform.localRotation = playerCamera.transform.rotation;
 
-        gameObject.transform.parent.Rotate(Vector3.right * stationRotation * Time.deltaTime);
-        // transform.Rotate(Vector3.right * stationRotation * Time.deltaTime);
-        transform.Rotate(Axis, orbitalSpeed * Time.deltaTime);
-
-        RenderSettings.skybox.SetFloat("_Rotation", Time.time * orbitalSpeed);
-        RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(0f,orbitalSpeed,0f));
-
-        RenderSettings.skybox.SetFloat("_Rotation", Time.time * stationRotation);
-        RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,0f,0f));
-        // RenderSettings.skybox.SetVector("_RotationAxis", Axis);
     }
 }
+
+        // skyboxCamera.transform.Rotate(Vector3.up * stationRotation * Time.deltaTime);
+        // skyboxCamera.transform.Rotate(Vector3.down * stationRotation * Time.deltaTime);
+        // skyboxCamera.transform.Rotate(Vector3.right * stationRotation * Time.deltaTime);
+
+        // distance = pc.transform.position.x - transform.position.x;
+        // Transform parent = gameObject.transform.parent;
+        // Transform root = gameObject.transform.root;
+
+        // orbitalRotation = 1f;
+        // stationRotation = 1f;
+
+        // // Move planet relative to player to create size illusion
+        // parent.localPosition = new Vector3(pc.transform.position.x-distance,pc.transform.position.y,pc.transform.position.z);
+
+        // parent.Rotate(Vector3.right * stationRotation * Time.deltaTime);
+        // // root.Rotate(Vector3.down * orbitalRotation * Time.deltaTime);
+        // transform.Rotate(Axis, orbitalRotation * Time.deltaTime);
+
+        // // RenderSettings.skybox.SetFloat("_Rotation", Time.time * orbitalRotation+stationRotation);
+        // // Vector3 stationVector = new Vector3(stationRotation,0f,0f);
+        // // Vector3 orbitalVector = new Vector3(0f,stationRotation,0f);
+
+        // // skyboxVector = stationVector * orbitalVector;
+        // // RenderSettings.skybox.SetVector("_RotationAxis", skyboxVector);
+        // // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,0f,0f));
+        // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(0f,orbitalRotation,0f));
+
+    // public float counter = 0f;
+
+    // private bool axisSwitch = false;
+
+
+        // transform.Rotate(Vector3.right * stationRotation * Time.deltaTime);
+        // RenderSettings.skybox.SetFloat("_Rotation", Time.time * orbitalRotation);
+        // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(0f,orbitalRotation,0f));
+
+        // RenderSettings.skybox.SetFloat("_Rotation", Time.time * stationRotation);
+        // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,0f,0f));
+        
+        // if (axisSwitch) RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(0f,orbitalRotation,0f));
+        // else RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,0f,0f));
+        // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,0f,-stationRotation)+new Vector3(0f,orbitalRotation,0f));
+        // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,-orbitalRotation*.5f,-orbitalRotation*2));
+        // RenderSettings.skybox.SetVector("_RotationAxis", -Axis);
+
+        // axisSwitch = !axisSwitch; //flip switch
+        
+        // RenderSettings.skybox.SetVector("_RotationAxis", Axis);
 
         // transform.localRotation = Quaternion.Euler(0f, skyboxRotationSpeed, 0f);
         // gameObject.transform.Rotate(Vector3.right * stationRotation * Time.deltaTime);
 
-        // RenderSettings.skybox.SetFloat("_Rotation", Time.time * orbitalSpeed);
-        // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,orbitalSpeed,0));
+        // RenderSettings.skybox.SetFloat("_Rotation", Time.time * orbitalRotation);
+        // RenderSettings.skybox.SetVector("_RotationAxis", new Vector3(stationRotation,orbitalRotation,0));
 
 
 //         [Range(-1000.0f, 1000.0f)]
