@@ -1130,7 +1130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MazeGlobals: {fileID: 0}
-  CorridorHall: {fileID: 4138733657458971485, guid: 6cbc36462ddfb4f4a86c92743077aeb7,
+  CorridorHall: {fileID: 4138733657458971485, guid: 56a31bd6bf3189a4ca51ad469c059f6d,
     type: 3}
   CorridorEnd: {fileID: 6442411300058712817, guid: 94f860989f35ea043bdc57b47420056e,
     type: 3}
@@ -1141,8 +1141,18 @@ MonoBehaviour:
   CorridorIntersection: {fileID: 5305678016596889535, guid: 22bb1c75ae9e40d4692f75681b238835,
     type: 3}
   Room2x3: {fileID: 7465821053077798945, guid: 6d9f22eb474a00448ba2f7d6cc49df54, type: 3}
-  Room2x2: {fileID: 7465821053077798945, guid: d825de3d8ccb9e748b739db5f64631ec, type: 3}
+  Room2x2: {fileID: 7465821053077798945, guid: 2913f51a6f394804bb0be7d38163f582, type: 3}
   RoomWall: {fileID: 7465821053077798945, guid: e8d7cfd8bcbb44f48913280119d6e21c,
+    type: 3}
+  RoomWallAndFloor2x4: {fileID: 7465821053077798945, guid: ff9e8d039b53962468ce9c9a541c682b,
+    type: 3}
+  RoomWallAndFloorCorner: {fileID: 7465821053077798945, guid: f37fdcd3ae6a20e49abe4690bf2384f4,
+    type: 3}
+  RoomWall2x1: {fileID: 7465821053077798945, guid: d825de3d8ccb9e748b739db5f64631ec,
+    type: 3}
+  RoomLongWall: {fileID: 7465821053077798945, guid: 3c47b18678397ae43b4508dd2d629cf2,
+    type: 3}
+  RoomLongWall2: {fileID: 7465821053077798945, guid: ab7eaeb4ba1a675408c4c1b43de65762,
     type: 3}
   Doorway: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
   DoorwayCorridorToRoom: {fileID: 5305678016596889535, guid: 11985ea3bfb669247a405d9122614873,
@@ -1151,7 +1161,7 @@ MonoBehaviour:
     type: 3}
   DoorwayRoomToRoom: {fileID: 5305678016596889535, guid: 0d03ae9526b13264a930be417e5086a1,
     type: 3}
-  DoorwayRoomToRoomFlip: {fileID: 5305678016596889535, guid: 0d03ae9526b13264a930be417e5086a1,
+  DoorwayRoomToRoomSlant: {fileID: 5305678016596889535, guid: 82ea534c931dcba4c8e784a4b2288b1a,
     type: 3}
   prefabOffsetX: 0.5
   prefabOffsetZ: 0.5
