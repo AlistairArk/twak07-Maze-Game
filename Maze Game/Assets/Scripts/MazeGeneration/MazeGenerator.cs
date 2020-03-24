@@ -24,7 +24,7 @@ public class MazeGenerator : MonoBehaviour{
 
         RecursiveBacktrack  = gameObject.GetComponent<RecursiveBacktrack>();
         InitializeMaze      = gameObject.GetComponent<InitializeMaze>();
-        MazePrefabs           = gameObject.GetComponent<MazePrefabs>();
+        MazePrefabs         = gameObject.GetComponent<MazePrefabs>();
         MazeGlobals         = gameObject.GetComponent<MazeGlobals>();
         ResetMaze           = gameObject.GetComponent<ResetMaze>();
         Check               = gameObject.GetComponent<Check>();

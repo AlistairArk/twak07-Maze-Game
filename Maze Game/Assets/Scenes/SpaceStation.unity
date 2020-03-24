@@ -240,7 +240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 114751379}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rawMazeParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1140,10 +1140,18 @@ MonoBehaviour:
     type: 3}
   CorridorIntersection: {fileID: 5305678016596889535, guid: 22bb1c75ae9e40d4692f75681b238835,
     type: 3}
-  Doorway: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
   Room2x3: {fileID: 7465821053077798945, guid: 6d9f22eb474a00448ba2f7d6cc49df54, type: 3}
   Room2x2: {fileID: 7465821053077798945, guid: d825de3d8ccb9e748b739db5f64631ec, type: 3}
   RoomWall: {fileID: 7465821053077798945, guid: e8d7cfd8bcbb44f48913280119d6e21c,
+    type: 3}
+  Doorway: {fileID: 5305678016596889535, guid: 12899d1dbad258b42a7d472636d5ab3f, type: 3}
+  DoorwayCorridorToRoom: {fileID: 5305678016596889535, guid: 11985ea3bfb669247a405d9122614873,
+    type: 3}
+  DoorwayCorridorToRoomFlip: {fileID: 5305678016596889535, guid: 11985ea3bfb669247a405d9122614873,
+    type: 3}
+  DoorwayRoomToRoom: {fileID: 5305678016596889535, guid: 0d03ae9526b13264a930be417e5086a1,
+    type: 3}
+  DoorwayRoomToRoomFlip: {fileID: 5305678016596889535, guid: 0d03ae9526b13264a930be417e5086a1,
     type: 3}
   prefabOffsetX: 0.5
   prefabOffsetZ: 0.5
@@ -2342,7 +2350,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 311
+    m_Bits: 1
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3538,7 +3546,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3588,8 +3596,8 @@ MonoBehaviour:
   earth: {fileID: 1175661251}
   distance: 50
   Axis: {x: 0, y: 1, z: 0}
-  orbitalRotation: 10
-  stationRotation: 10
+  orbitalRotation: 0.1
+  stationRotation: 1
 --- !u!1 &2059642318
 GameObject:
   m_ObjectHideFlags: 0

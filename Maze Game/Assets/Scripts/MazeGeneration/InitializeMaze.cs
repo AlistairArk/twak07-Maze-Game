@@ -42,6 +42,7 @@ public class InitializeMaze : MonoBehaviour {
                     cube1.GetComponent<Renderer>().material = wallMat;
                     cube1.AddComponent<ObjectHider>();
                     cube1.tag = "Occludable";
+                    cube1.layer = 10;
                     cell.Add(cube1); // North Wall
 
                     GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -49,6 +50,7 @@ public class InitializeMaze : MonoBehaviour {
                     cube2.GetComponent<Renderer>().material = wallMat;
                     cube2.AddComponent<ObjectHider>();
                     cube2.tag = "Occludable";
+                    cube2.layer = 10;
                     cell.Add(cube2); // East Wall
 
                     if (hideWalls){
@@ -67,14 +69,14 @@ public class InitializeMaze : MonoBehaviour {
                 
                 // Add objects to list
                 cellRow.Add(cell);
-                cellDataGroup.Add(1);  // N
-                cellDataGroup.Add(1);  // E
-                cellDataGroup.Add(1);  // S
-                cellDataGroup.Add(1);  // W 
-                cellDataGroup.Add(0);  // Distance from start
-                cellDataGroup.Add(0);  // On path to goal
-                cellDataGroup.Add(0);  // Room cell
-                cellDataGroup.Add(0);  // RoomCellID
+                cellDataGroup.Add(1);  // 0 - N (=1 if the cell has a North wall)
+                cellDataGroup.Add(1);  // 1 - E (=1 if the cell has a East wall)
+                cellDataGroup.Add(1);  // 2 - S (=1 if the cell has a South wall)
+                cellDataGroup.Add(1);  // 3 - W (=1 if the cell has a West wall)
+                cellDataGroup.Add(0);  // 4 - Distance from start
+                cellDataGroup.Add(0);  // 5 - On path to goal (=1 if cell is on path to the goal) (=0 if cell is not on path to the goal)
+                cellDataGroup.Add(0);  // 6 - (=1 if room cell) (=0 if corridor cell)
+                cellDataGroup.Add(0);  // 7 - Cell UID (=0 if corridor cell) (=+1 room cells - groups of cells for each room are assigned a UID)
                 cellDataRow.Add(cellDataGroup);
             }
             MazeGlobals.cellList.Add(cellRow);
@@ -83,13 +85,14 @@ public class InitializeMaze : MonoBehaviour {
 
 
         // Create level base
-        // GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        // ground.transform.position   = new Vector3(mapScale*(gridX*.5f), 0, mapScale*(gridZ*.5f));
-        // ground.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
-        // ground.layer = 8;
-        // ground.transform.parent = rawMazeParent.transform; // Place object under a single parent
-        // if (hideBase) ground.GetComponent<MeshRenderer>().enabled = false;
-        // ground.transform.parent = mapObjects.transform; // Place object under a single parent
+        GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        ground.transform.position   = new Vector3(mapScale*(gridX*.5f), 0, mapScale*(gridZ*.5f));
+        ground.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
+        ground.layer = 8;
+        ground.transform.parent = rawMazeParent.transform; // Place object under a single parent
+        ground.GetComponent<MeshRenderer>().enabled = false;
+        ground.transform.parent = mapObjects.transform; // Place object under a single parent
+        ground.GetComponent<Collider>().isTrigger = true;
 
         GameObject mapGround = GameObject.CreatePrimitive(PrimitiveType.Cube);
         mapGround.transform.position   = new Vector3(mapScale*(gridX*.5f), -4f, mapScale*(gridZ*.5f));
@@ -105,6 +108,7 @@ public class InitializeMaze : MonoBehaviour {
         cube3.GetComponent<Renderer>().material = wallMat;
         cube3.transform.position = new Vector3(cube3.transform.position.x+(gridX*.5f*mapScale), cube3.transform.position.y, cube3.transform.position.x);
         cube3.transform.parent = mapObjects.transform; // Place object under a single parent
+        cube3.layer = 10;
 
         // West Wall
         GameObject cube4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -112,6 +116,7 @@ public class InitializeMaze : MonoBehaviour {
         cube4.transform.position = new Vector3(cube4.transform.position.x, cube4.transform.position.y, cube4.transform.position.x+(gridZ*.5f*mapScale));
         cube4.GetComponent<Renderer>().material = wallMat;
         cube4.transform.parent = mapObjects.transform; // Place object under a single parent
+        cube4.layer = 10;
 
 
     }
