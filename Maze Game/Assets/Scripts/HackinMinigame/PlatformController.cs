@@ -7,23 +7,43 @@ public class PlatformController : MonoBehaviour{
     public float speed = 10f;
     
     public GameObject ball; 
-    public GameObject platform; 
-    public DeathZone DeathZone;
+    public GameObject platform;
+    public GameObject DeathZoneObject;
+    public int deathZoneGap = 50;
+
+
+    private DeathZone DeathZone;
 
     // Start is called before the first frame update
-    void Start(){
-        
+    void Awake(){
+        DeathZone = DeathZoneObject.GetComponent<DeathZone>();
     }
 
     void ResetBall(){
-        ball.transform.localPosition = new Vector3(25f, 10f, 25f);
+        ball.transform.localPosition = new Vector3(0f, 10f, 0f);
     }
 
 
     void Update()    {
-        if (Input.GetKeyDown("r")){
+
+        Vector3 ballPos = ball.transform.position;
+        Vector3 platformPos = platform.transform.position;
+        Vector3 deathZonePos = DeathZoneObject.transform.position;
+
+        DeathZoneObject.transform.position = new Vector3(deathZonePos.x,
+                                                        platformPos.y-deathZoneGap,
+                                                        deathZonePos.z);
+
+        if (ballPos.y < platformPos.y-deathZoneGap){
             ResetBall();
         }
+
+        // if (Input.GetKeyDown("r") || DeathZone.fail){
+        //     ResetBall();
+        //     DeathZone.fail = false;
+        // }
+
+
         
         if (Input.GetKey("left")){
             print("left key was pressed");
