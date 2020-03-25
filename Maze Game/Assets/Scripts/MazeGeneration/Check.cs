@@ -52,8 +52,8 @@ public class Check : MonoBehaviour {
             }
         }
 
-        MazeGlobals.endX = endX;
-        MazeGlobals.endZ = endZ;
+        MazeGlobals.endX = endX;    // Ideal Goal position
+        MazeGlobals.endZ = endZ;    // Ideal Goal position
         MazeGlobals.endDist = endDist;
     }
 

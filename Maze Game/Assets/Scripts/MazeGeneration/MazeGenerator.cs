@@ -5,7 +5,8 @@ using UnityEngine;
 public class MazeGenerator : MonoBehaviour{
 
 
-    public GameObject GoalObj;
+    public GameObject GoalCube;
+    public GameObject GoalGroup;
     private GoalDetector GoalDetector;
 
     public RecursiveBacktrack RecursiveBacktrack;
@@ -20,7 +21,7 @@ public class MazeGenerator : MonoBehaviour{
 
     // Called before any Start function
     void Awake(){
-        GoalDetector = GoalObj.GetComponent<GoalDetector>();
+        GoalDetector = GoalCube.GetComponent<GoalDetector>();
 
         RecursiveBacktrack  = gameObject.GetComponent<RecursiveBacktrack>();
         InitializeMaze      = gameObject.GetComponent<InitializeMaze>();
@@ -32,6 +33,11 @@ public class MazeGenerator : MonoBehaviour{
 
     void Start(){
         InitializeMaze.Initialize();
+        GenerateSpaceStation();
+    }
+
+
+    void GenerateSpaceStation(){
         RecursiveBacktrack.Generate(startX,startZ);
 
         Check.CellEnds();
@@ -49,13 +55,28 @@ public class MazeGenerator : MonoBehaviour{
         MazeGlobals.charController.enabled = false;
         MazeGlobals.playerObject.transform.position = new Vector3(pcPosX, MazeGlobals.playerObject.transform.position.y, pcPosZ);
         MazeGlobals.charController.enabled = true;
+
+        SetGoalPosition();
     }
+
+    public void SetGoalPosition(){
+        float gX, gZ = 0f;
+        gX  = (MazeGlobals.endX-.5f) * MazeGlobals.mapScale;
+        gZ  = (MazeGlobals.endZ-.5f) * MazeGlobals.mapScale;
+
+        GoalGroup.transform.position = new Vector3(gX, GoalGroup.transform.position.y, gZ);
+    }
+
+
 
     // Update is called once per frame
     void Update(){
         // Debug.Log(GoalDetector.goalTrigger);
         if (GoalDetector.goalTrigger){
             GoalDetector.goalTrigger = false;
+
+            ResetMaze.Reset();
+            GenerateSpaceStation();
         }
     }
 }

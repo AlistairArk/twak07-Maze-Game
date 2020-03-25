@@ -5,6 +5,7 @@ using UnityEngine;
 public class ResetMaze : MonoBehaviour{
 
 
+
     public MazeGlobals MazeGlobals;
 
     void Awake(){
@@ -12,7 +13,9 @@ public class ResetMaze : MonoBehaviour{
     }
     
 
-    void Reset(){
+    public void Reset(){
+        // Set maze prefrences back to their defaults
+
         for(int X = 0; X < MazeGlobals.gridX; X++){
             for(int Z = 0; Z < MazeGlobals.gridZ; Z++){
 
@@ -23,6 +26,7 @@ public class ResetMaze : MonoBehaviour{
                 MazeGlobals.cellData[X][Z][4] = 0;
                 MazeGlobals.cellData[X][Z][5] = 0;
                 MazeGlobals.cellData[X][Z][6] = 0;
+                MazeGlobals.cellData[X][Z][7] = 0;
 
                 if (MazeGlobals.showRawMaze){
                     MazeGlobals.cellList[X][Z][0].SetActive(true);

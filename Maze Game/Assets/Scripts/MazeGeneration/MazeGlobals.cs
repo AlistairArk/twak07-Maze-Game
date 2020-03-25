@@ -65,12 +65,12 @@ public class MazeGlobals : MonoBehaviour{
     public void Awake(){
         charController = playerObject.GetComponent<CharacterController>();
 
-        rawMazeParent = GameObject.Find("MapObjects/rawMazeParent");
-        guideCubeParent = GameObject.Find("MapObjects/guideCubeParent");
-        prefabMazeParent = GameObject.Find("MapObjects/prefabMazeParent");
-        cellDoorParent = GameObject.Find("MapObjects/cellDoorParent");
-        cellWallParent = GameObject.Find("MapObjects/cellWallParent");
-        mapObjects = GameObject.Find("MapObjects");
+        rawMazeParent = GameObject.Find("SpaceStation/MapObjects/rawMazeParent");
+        guideCubeParent = GameObject.Find("SpaceStation/MapObjects/guideCubeParent");
+        prefabMazeParent = GameObject.Find("SpaceStation/MapObjects/prefabMazeParent");
+        cellDoorParent = GameObject.Find("SpaceStation/MapObjects/cellDoorParent");
+        cellWallParent = GameObject.Find("SpaceStation/MapObjects/cellWallParent");
+        mapObjects = GameObject.Find("SpaceStation/MapObjects");
 
     }
 }

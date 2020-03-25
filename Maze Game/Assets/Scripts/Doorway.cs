@@ -58,13 +58,14 @@ public class Doorway : MonoBehaviour {
             OpenAnim();
         }else if(doorStatus==2){
             CloseAnim();
-        }else{
-            if (doorOpen&&!doorLastState){
-                doorStatus=1; // Door OPEN has been triggered
-            }else if (!doorOpen&&doorLastState){
-                doorStatus=2; // Door CLOSE has been triggered
-            }
         }
+     
+        if (doorOpen&&!doorLastState){
+            doorStatus=1; // Door OPEN has been triggered
+        }else if (!doorOpen&&doorLastState){
+            doorStatus=2; // Door CLOSE has been triggered
+        }
+    
 
         doorLastState = doorOpen;
     }
