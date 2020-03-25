@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerminalTrigger : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class TerminalTrigger : MonoBehaviour{
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public bool trigger=false;
+
 }

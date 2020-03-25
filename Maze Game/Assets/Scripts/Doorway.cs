@@ -5,7 +5,8 @@ using UnityEngine;
 public class Doorway : MonoBehaviour {
 
     public bool doorOpen = false;
-    public bool doorLastState = false; // The status of the door at last update
+    public bool doorLastState = false;  // The status of the door at last update
+    public bool doorLocked = true;      // Will become unlocked after hacking
 
     /*
     doorStatus
@@ -37,33 +38,40 @@ public class Doorway : MonoBehaviour {
     // Update is called once per frame
     void Update(){
 
+        // Doorway trigger management
+        bool triggerA = terminalA.GetComponent<TerminalTrigger>().trigger;
+        bool triggerB = terminalB.GetComponent<TerminalTrigger>().trigger;
+
+        if (triggerA||triggerB){
+            // Reset trigger
+            terminalA.GetComponent<TerminalTrigger>().trigger = false;
+            terminalB.GetComponent<TerminalTrigger>().trigger = false;
+
+            if (doorStatus==0){
+                // Trigge open/close
+                doorOpen=!doorOpen;
+            }
+        }
+
+        // Animation system
         if (doorStatus==1){
             OpenAnim();
         }else if(doorStatus==2){
             CloseAnim();
         }else{
-            if (doorOpen&&!doorLastState) doorStatus=1;  // Door OPEN has been triggered
-            else if (!doorOpen&&doorLastState) doorStatus=2; // Door CLOSE has been triggered
+            if (doorOpen&&!doorLastState){
+                doorStatus=1; // Door OPEN has been triggered
+            }else if (!doorOpen&&doorLastState){
+                doorStatus=2; // Door CLOSE has been triggered
+            }
         }
 
         doorLastState = doorOpen;
     }
 
+
+
     void CloseAnim(){
-
-        // Move our position a step closer to the target.
-        float step =  animSpeed * Time.deltaTime; // calculate distance to move
-        doorA.transform.localPosition = Vector3.Lerp(doorA.transform.localPosition, openStateA, step);
-        doorB.transform.localPosition = Vector3.Lerp(doorB.transform.localPosition, openStateB, step);
-
-        // Check if the position of the door and targer position
-        if (Vector3.Distance(doorA.transform.localPosition, openStateA) < 0.01f 
-            && Vector3.Distance(doorB.transform.localPosition, openStateB) < 0.01f)
-            doorStatus = 0;
-    }
-
-    void OpenAnim(){
-
         // Move our position a step closer to the target.
         float step =  animSpeed * Time.deltaTime; // calculate distance to move
         doorA.transform.localPosition = Vector3.Lerp(doorA.transform.localPosition, closedStateA, step);
@@ -72,6 +80,20 @@ public class Doorway : MonoBehaviour {
         // Check if the position of the door and targer position
         if (Vector3.Distance(doorA.transform.localPosition, closedStateA) < 0.01f 
             && Vector3.Distance(doorB.transform.localPosition, closedStateB) < 0.01f)
+            doorStatus = 0;
+    }
+
+
+
+    void OpenAnim(){
+        // Move our position a step closer to the target.
+        float step =  animSpeed * Time.deltaTime; // calculate distance to move
+        doorA.transform.localPosition = Vector3.Lerp(doorA.transform.localPosition, openStateA, step);
+        doorB.transform.localPosition = Vector3.Lerp(doorB.transform.localPosition, openStateB, step);
+
+        // Check if the position of the door and targer position
+        if (Vector3.Distance(doorA.transform.localPosition, openStateA) < 0.01f 
+            && Vector3.Distance(doorB.transform.localPosition, openStateB) < 0.01f)
             doorStatus = 0;
     }
 }

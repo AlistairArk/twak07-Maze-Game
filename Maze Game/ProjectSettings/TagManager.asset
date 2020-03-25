@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Prefab
   - Occludable
+  - Terminal
   layers:
   - Default
   - TransparentFX
