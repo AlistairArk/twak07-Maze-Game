@@ -12,6 +12,7 @@ public class MazePrefabs : MonoBehaviour {
     // Map Prefabs
     [Header("Corridors", order=1)]
     public GameObject CorridorHall;
+    public GameObject CorridorHallExterior;
     public GameObject CorridorEnd;
     public GameObject CorridorCorner;
     public GameObject CorridorTJunction;
@@ -88,7 +89,14 @@ public class MazePrefabs : MonoBehaviour {
                         case (2):
                             // Hallways
                             if (MazeGlobals.cellData[X][Z][0] == 0  && MazeGlobals.cellData[X][Z][2] == 0 ){
-                                prefabCell = Instantiate(CorridorHall, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
+                                if (X==0){
+                                    prefabCell = Instantiate(CorridorHallExterior, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
+                                }else if (X+1==gridX){
+                                    prefabCell = Instantiate(CorridorHallExterior, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
+                                }else{
+                                    prefabCell = Instantiate(CorridorHall, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
+                                }
+
                             } else if (MazeGlobals.cellData[X][Z][1] == 0  && MazeGlobals.cellData[X][Z][3] == 0 ){
                                 prefabCell = Instantiate(CorridorHall, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
 
@@ -306,9 +314,9 @@ public class MazePrefabs : MonoBehaviour {
 
 
                     if (MazeGlobals.cellData[X][Z][0]==1){
-                        if (X-1>=0 && MazeGlobals.cellData[X-1][Z][7]!=currentRoomUID){
+                        if (X==0 || (X-1>=0 && MazeGlobals.cellData[X-1][Z][7]!=currentRoomUID)){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.6f), new Vector3(1,1,1), 90);
-                        }else if (X+1<gridX && MazeGlobals.cellData[X+1][Z][7]!=currentRoomUID){
+                        }else if (X+1==gridX || (X+1<gridX && MazeGlobals.cellData[X+1][Z][7]!=currentRoomUID)){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.2f, 0f, Z+.6f), new Vector3(1,1,1), 90);
                         }else{
                             CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.2f, 0f, Z+.6f), new Vector3(1,1,1), 90);
