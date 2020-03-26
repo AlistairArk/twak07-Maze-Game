@@ -2386,7 +2386,7 @@ MonoBehaviour:
   hackGameGroup: {fileID: 2134756601}
   spaceStationGroup: {fileID: 1595566538}
   enableOcclusionCulling: 1
-  enableMeshCombining: 0
+  enableMeshCombining: 1
   enableDebugRaycast: 1
   gameStatus: 0
 --- !u!114 &549688086
@@ -2446,6 +2446,7 @@ MonoBehaviour:
   cellDoorParent: {fileID: 0}
   cellWallParent: {fileID: 0}
   prefabHackParent: {fileID: 0}
+  cellBaseParent: {fileID: 0}
   mapObjects: {fileID: 0}
 --- !u!114 &549688088
 MonoBehaviour:

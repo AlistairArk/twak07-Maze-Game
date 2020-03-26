@@ -149,7 +149,7 @@ public class MazePrefabs : MonoBehaviour {
   
     public void Rooms(){
         List<List<List<int>>> cellData = MazeGlobals.GetCellData();
-        
+
         int mapScale = MazeGlobals.mapScale;
         int gridX = MazeGlobals.gridX;
         int gridZ = MazeGlobals.gridZ;
@@ -336,7 +336,7 @@ public class MazePrefabs : MonoBehaviour {
                         }else if (Z+1<gridZ && cellData[X][Z+1][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.6f), new Vector3(1,1,1), 180);
                         }else{
-                            CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.6f), new Vector3(1,1,1), 180);
+                            CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.8f), new Vector3(1,1,1), 180);
                         }
                     }
 
@@ -347,7 +347,7 @@ public class MazePrefabs : MonoBehaviour {
                         }else if (X+1<gridX && cellData[X+1][Z][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.4f), new Vector3(1,1,1), 270);
                         }else{
-                            CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.4f), new Vector3(1,1,1), 270);
+                            CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.8f, 0f, Z+.4f), new Vector3(1,1,1), 270);
                         }
                     }
 
