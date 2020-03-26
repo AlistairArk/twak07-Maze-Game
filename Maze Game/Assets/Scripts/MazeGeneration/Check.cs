@@ -72,7 +72,7 @@ public class Check : MonoBehaviour {
         int distance;
 
         // Get starting distance based off goal location
-        // print("Start Point ("+x+", "+z+")");
+        print("Start Point ("+x+", "+z+")");
 
         distance = cellData[x][z][4];
         while (!endFound){

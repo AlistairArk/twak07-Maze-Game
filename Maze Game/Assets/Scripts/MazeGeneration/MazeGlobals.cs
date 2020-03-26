@@ -22,6 +22,7 @@ public class MazeGlobals : MonoBehaviour{
     public bool hideWalls = true;
     public bool hideWaypoint = true;
     public int mode = 0;
+    public int type = 0; // 0 Recursive .. 1 Symmetric
 
     // RawMaze
     [Header("Raw Maze", order=2)]
@@ -60,6 +61,7 @@ public class MazeGlobals : MonoBehaviour{
     [HideInInspector] public GameObject cellDoorParent;
     [HideInInspector] public GameObject cellWallParent;
     [HideInInspector] public GameObject prefabHackParent;
+    [HideInInspector] public GameObject cellBaseParent;
     [HideInInspector] public GameObject mapObjects;
 
 
@@ -71,6 +73,7 @@ public class MazeGlobals : MonoBehaviour{
         prefabMazeParent = GameObject.Find("SpaceStation/MazeObjects/prefabMazeParent");
         cellDoorParent = GameObject.Find("SpaceStation/MazeObjects/cellDoorParent");
         cellWallParent = GameObject.Find("SpaceStation/MazeObjects/cellWallParent");
+        cellBaseParent = GameObject.Find("SpaceStation/MazeObjects/cellBaseParent");
         mapObjects = GameObject.Find("SpaceStation/MazeObjects");
 
         prefabHackParent = GameObject.Find("HackingMinigame/Platform/MazeObjects");

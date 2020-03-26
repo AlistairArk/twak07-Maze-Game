@@ -112,9 +112,7 @@ public class RecursiveBacktrack : MonoBehaviour {
 
         cellData[x][z][0] = 0;
         cellData[x][z+1][2] = 0;
-        
-        if (MazeGlobals.mode==0) MazeGlobals.cellList[x][z][0].SetActive(false);
-        
+                
         z+=1; // Move pointer to the NORTH cell
     }
 
@@ -124,8 +122,6 @@ public class RecursiveBacktrack : MonoBehaviour {
 
         cellData[x][z][1] = 0;
         cellData[x+1][z][3] = 0;
-
-        if (MazeGlobals.mode==0) MazeGlobals.cellList[x][z][1].SetActive(false);
         
         x+=1; // Move pointer to the EAST cell
     }
@@ -136,8 +132,6 @@ public class RecursiveBacktrack : MonoBehaviour {
 
         cellData[x][z][2] = 0;
         cellData[x][z-1][0] = 0;
-
-        if (MazeGlobals.mode==0) MazeGlobals.cellList[x][z-1][0].SetActive(false);
         
         z-=1; // Move pointer to the SOUTH cell
     }
@@ -145,11 +139,9 @@ public class RecursiveBacktrack : MonoBehaviour {
     // Destroy walls and move pointer to next cell
     public void moveW(){
         List<List<List<int>>> cellData = MazeGlobals.GetCellData();
-        
+
         cellData[x][z][3] = 0;
         cellData[x-1][z][1] = 0;
-
-        if (MazeGlobals.mode==0) MazeGlobals.cellList[x-1][z][1].SetActive(false);
         
         x-=1; // Move pointer to the WEST cell
     }

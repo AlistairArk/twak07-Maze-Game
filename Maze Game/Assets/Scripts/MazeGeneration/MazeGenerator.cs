@@ -43,6 +43,9 @@ public class MazeGenerator : MonoBehaviour{
 
     private GameObject lockedDoor;
 
+    public int gameStatus = 0; // 1 if hacking / 0 if station
+
+
     // Called before any Start function
     void Awake(){
         GoalDetector = GoalCube.GetComponent<GoalDetector>();
@@ -60,10 +63,10 @@ public class MazeGenerator : MonoBehaviour{
     }
 
     void Start(){
-        InitializeMaze.Initialize();
+        // InitializeMaze.Initialize();
 
-        MazeGlobals.gridX = gridX;
-        MazeGlobals.gridZ = gridZ;
+        // MazeGlobals.gridX = gridX;
+        // MazeGlobals.gridZ = gridZ;
 
 
         GenerateSpaceStation();
@@ -78,8 +81,17 @@ public class MazeGenerator : MonoBehaviour{
     }
 
 
-    void GenerateSpaceStation(){
-        RecursiveBacktrack.Generate(endX, endZ); // Generate maze from end of maze
+    public void GenerateSpaceStation(){
+        ResetMaze.Reset();
+        
+        switch(MazeGlobals.type){
+            case(0):
+                RecursiveBacktrack.Generate(endX, endZ); // Generate maze from end of maze
+            break;
+            case(1):
+                SymmetricMaze.Generate(endX, endZ); // Generate maze from end of maze
+            break;
+        }
 
         Check.CellEnds();
 
@@ -133,10 +145,12 @@ public class MazeGenerator : MonoBehaviour{
 
 
     public void HackingGame(GameObject doorway, int gridX, int gridZ){
+        gameStatus = 1;
+
         lockedDoor = doorway; // Store callback for later reference - so door can be opened on win
 
-        PlatformController.ResetTries();    // reset try counter / Rotation
-        PlatformController.ResetBall();     // ball position - Do this after or you may trigger a loss on startup
+        PlatformController.ResetTries();    // Reset try counter / Rotation
+        PlatformController.ResetBall();     // Ball position - Do this after or you may trigger a loss on startup
 
         cam1.enabled = !cam1.enabled;
         cam2.enabled = !cam2.enabled;
@@ -183,6 +197,7 @@ public class MazeGenerator : MonoBehaviour{
     void HackingGameEnd(){
         hackGameGroup.SetActive(false);
         spaceStationGroup.SetActive(true);
+        gameStatus = 0;
 
     }
 

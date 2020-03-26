@@ -255,22 +255,22 @@ public class MazePrefabs : MonoBehaviour {
             int cellZ = z+cell[1];
 
             if (cellX == X && cellZ == Z+1){
-                MazeGlobals.cellList[X][Z][0].SetActive(false);
+                // MazeGlobals.cellList[X][Z][0].SetActive(false);
                 cellData[x][z][0]   = 0;
                 cellData[x][z+1][2] = 0;
 
             }else if (cellX == X+1 && cellZ == Z){
-                MazeGlobals.cellList[X][Z][1].SetActive(false);
+                // MazeGlobals.cellList[X][Z][1].SetActive(false);
                 cellData[x][z][1]   = 0;
                 cellData[x+1][z][3] = 0;
 
             }else if (cellX == X && cellZ == Z-1){
-                MazeGlobals.cellList[X][Z-1][0].SetActive(false);
+                // MazeGlobals.cellList[X][Z-1][0].SetActive(false);
                 cellData[X][Z][2]   = 0;
                 cellData[X][Z-1][0] = 0;
 
             }else if (cellX == X-1 && cellZ == Z){
-                MazeGlobals.cellList[X-1][Z][1].SetActive(false);
+                // MazeGlobals.cellList[X-1][Z][1].SetActive(false);
                 cellData[X][Z][3]   = 0;
                 cellData[X-1][Z][1] = 0;
             }
