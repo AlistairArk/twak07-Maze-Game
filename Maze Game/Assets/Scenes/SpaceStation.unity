@@ -1378,9 +1378,11 @@ GameObject:
   - component: {fileID: 549688090}
   - component: {fileID: 549688089}
   - component: {fileID: 549688091}
+  - component: {fileID: 549688093}
+  - component: {fileID: 549688092}
   m_Layer: 0
-  m_Name: Map Generator
-  m_TagString: Untagged
+  m_Name: MazeGenerator
+  m_TagString: MazeGenerator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1470,6 +1472,7 @@ MonoBehaviour:
   GoalGroup: {fileID: 581727590}
   RecursiveBacktrack: {fileID: 0}
   InitializeMaze: {fileID: 549688086}
+  SymmetricMaze: {fileID: 0}
   MazePrefabs: {fileID: 0}
   MazeGlobals: {fileID: 0}
   ResetMaze: {fileID: 549688088}
@@ -1508,6 +1511,7 @@ MonoBehaviour:
   hideBase: 1
   hideWalls: 0
   hideWaypoint: 1
+  mode: 0
   wall: {fileID: 0}
   walls: []
   goalObject: {fileID: 581727590}
@@ -1619,6 +1623,69 @@ MonoBehaviour:
     type: 3}
   prefabOffsetX: 0.5
   prefabOffsetZ: 0.5
+--- !u!114 &549688092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549688082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fb8d42f88c39840835f2737a59f7b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MazeGlobals: {fileID: 0}
+  Check: {fileID: 0}
+--- !u!114 &549688093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549688082}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47d5c3f877fd5924b9ef284c1718b012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridX: 0
+  gridZ: 0
+  endX: 0
+  endZ: 0
+  showRawMaze: 1
+  showPrefabMaze: 1
+  hideBase: 1
+  hideWalls: 1
+  hideWaypoint: 1
+  CorridorHall: {fileID: 0}
+  CorridorEnd: {fileID: 0}
+  CorridorCorner: {fileID: 0}
+  CorridorTJunction: {fileID: 0}
+  CorridorIntersection: {fileID: 0}
+  Doorway: {fileID: 0}
+  Room2x3: {fileID: 0}
+  Room2x2: {fileID: 0}
+  RoomWall: {fileID: 0}
+  wall: {fileID: 0}
+  walls: []
+  goalObject: {fileID: 0}
+  playerObject: {fileID: 0}
+  wallMat: {fileID: 0}
+  playerMat: {fileID: 0}
+  whiteMat: {fileID: 0}
+  gridOffset: 0
+  x: 0
+  z: 0
+  endDist: -1
+  mapScale: 10
+  charController: {fileID: 0}
+  prefabMazeParent: {fileID: 0}
+  rawMazeParent: {fileID: 0}
+  guideCubeParent: {fileID: 0}
+  cellDoorParent: {fileID: 0}
+  cellWallParent: {fileID: 0}
+  mapObjects: {fileID: 0}
 --- !u!1 &556846185
 GameObject:
   m_ObjectHideFlags: 0
@@ -3212,7 +3279,7 @@ GameObject:
   - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Player Camera
-  m_TagString: MainCamera
+  m_TagString: StationCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4363,7 +4430,7 @@ GameObject:
   - component: {fileID: 1661402983}
   m_Layer: 11
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: HackingCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4397,7 +4464,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661402979}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.37254903, g: 0.35686275, b: 0.3137255, a: 1}
@@ -4424,7 +4491,7 @@ Camera:
     m_Bits: 2048
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 1
+  m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1

@@ -15,38 +15,49 @@ public class ResetMaze : MonoBehaviour{
 
     public void Reset(){
         // Set maze prefrences back to their defaults
+        if (MazeGlobals.mode==0){
+            for(int X = 0; X < MazeGlobals.gridX; X++){
+                for(int Z = 0; Z < MazeGlobals.gridZ; Z++){
 
-        for(int X = 0; X < MazeGlobals.gridX; X++){
-            for(int Z = 0; Z < MazeGlobals.gridZ; Z++){
+                    MazeGlobals.cellData[X][Z][0] = 1;
+                    MazeGlobals.cellData[X][Z][1] = 1;
+                    MazeGlobals.cellData[X][Z][2] = 1;
+                    MazeGlobals.cellData[X][Z][3] = 1;
+                    MazeGlobals.cellData[X][Z][4] = 0;
+                    MazeGlobals.cellData[X][Z][5] = 0;
+                    MazeGlobals.cellData[X][Z][6] = 0;
+                    MazeGlobals.cellData[X][Z][7] = 0;
 
-                MazeGlobals.cellData[X][Z][0] = 1;
-                MazeGlobals.cellData[X][Z][1] = 1;
-                MazeGlobals.cellData[X][Z][2] = 1;
-                MazeGlobals.cellData[X][Z][3] = 1;
-                MazeGlobals.cellData[X][Z][4] = 0;
-                MazeGlobals.cellData[X][Z][5] = 0;
-                MazeGlobals.cellData[X][Z][6] = 0;
-                MazeGlobals.cellData[X][Z][7] = 0;
+                    if (MazeGlobals.showRawMaze){
+                        MazeGlobals.cellList[X][Z][0].SetActive(true);
+                        MazeGlobals.cellList[X][Z][1].SetActive(true);
+                    }
+                }
+            }
 
-                if (MazeGlobals.showRawMaze){
-                    MazeGlobals.cellList[X][Z][0].SetActive(true);
-                    MazeGlobals.cellList[X][Z][1].SetActive(true);
+
+            /* You can deactive the container by using SetActive(false); instead of destroying it. And then run a coroutine to destroy every child object every frame. This might speed things up. By the way it is always good to show a loading screen while swithing between levels. */
+            foreach (Transform child in MazeGlobals.rawMazeParent.transform) child.gameObject.SetActive(true);
+            foreach (Transform child in MazeGlobals.guideCubeParent.transform) GameObject.Destroy(child.gameObject);
+            foreach (Transform child in MazeGlobals.prefabMazeParent.transform) GameObject.Destroy(child.gameObject);
+            foreach (Transform child in MazeGlobals.cellDoorParent.transform) GameObject.Destroy(child.gameObject);
+            foreach (Transform child in MazeGlobals.cellWallParent.transform) GameObject.Destroy(child.gameObject);
+
+        }else if(MazeGlobals.mode==1){
+            for(int X = 0; X < MazeGlobals.gridX; X++){
+                for(int Z = 0; Z < MazeGlobals.gridZ; Z++){
+
+                    MazeGlobals.cellData[X][Z][0] = 1;
+                    MazeGlobals.cellData[X][Z][1] = 1;
+                    MazeGlobals.cellData[X][Z][2] = 1;
+                    MazeGlobals.cellData[X][Z][3] = 1;
+                    MazeGlobals.cellData[X][Z][4] = 0;
+                    MazeGlobals.cellData[X][Z][5] = 0;
+                    MazeGlobals.cellData[X][Z][6] = 0;
+                    MazeGlobals.cellData[X][Z][7] = 0;
+                    
                 }
             }
         }
-
-
-        /* You can deactive the container by using SetActive(false); instead of destroying it. And then run a coroutine to destroy every child object every frame. This might speed things up. By the way it is always good to show a loading screen while swithing between levels. */
-        foreach (Transform child in MazeGlobals.rawMazeParent.transform) child.gameObject.SetActive(true);
-        foreach (Transform child in MazeGlobals.guideCubeParent.transform) GameObject.Destroy(child.gameObject);
-        foreach (Transform child in MazeGlobals.prefabMazeParent.transform) GameObject.Destroy(child.gameObject);
-        foreach (Transform child in MazeGlobals.cellDoorParent.transform) GameObject.Destroy(child.gameObject);
-        foreach (Transform child in MazeGlobals.cellWallParent.transform) GameObject.Destroy(child.gameObject);
-
-
-        // RecursiveBacktrack(startX,startZ); // Build Maze
-        // FindMainPath();     // Crawl through the maze and find the main path
-        // AddRooms();         // Interspace rooms along that path 
-        // HidePrefabs();   
     }
 }

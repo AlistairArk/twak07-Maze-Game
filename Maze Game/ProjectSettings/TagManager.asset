@@ -7,6 +7,9 @@ TagManager:
   - Prefab
   - Occludable
   - Terminal
+  - StationCam
+  - HackingCam
+  - MazeGenerator
   layers:
   - Default
   - TransparentFX

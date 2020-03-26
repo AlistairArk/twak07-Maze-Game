@@ -21,19 +21,18 @@ public class MazeGlobals : MonoBehaviour{
     public bool hideBase = true;
     public bool hideWalls = true;
     public bool hideWaypoint = true;
-
-
-
+    public int mode = 0;
 
     // RawMaze
     [Header("Raw Maze", order=2)]
     public GameObject wall;
-    public GameObject[ ] walls;
+    public GameObject[] walls;
     public GameObject goalObject;
     public GameObject playerObject;
 
     public List<List<List<GameObject>>> cellList = new List<List<List<GameObject>>>();
     public List<List<List<int>>> cellData = new List<List<List<int>>>();
+    // public List<List<List<int>>> cellDataHack = new List<List<List<int>>>();
 
     [Header("Materials", order=3)]
     public Material wallMat;

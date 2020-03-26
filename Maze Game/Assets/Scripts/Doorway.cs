@@ -29,10 +29,17 @@ public class Doorway : MonoBehaviour {
     public Vector3 closedStateA; // Open state vectors for door A
     public Vector3 closedStateB; // Open state vectors for door B
 
+
+
+    private MazeGenerator MazeGenerator;
+
     void Start(){
         closedStateA = doorA.transform.localPosition;
         closedStateB = doorB.transform.localPosition;
+
+        MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
     }
+
 
 
     // Update is called once per frame
@@ -58,13 +65,15 @@ public class Doorway : MonoBehaviour {
             OpenAnim();
         }else if(doorStatus==2){
             CloseAnim();
+        }else{
+            if (doorOpen&&!doorLastState){
+                if (!doorLocked) doorStatus=1; // Door OPEN has been triggered
+                else MazeGenerator.HackingGame();
+            }else if (!doorOpen&&doorLastState){
+                doorStatus=2; // Door CLOSE has been triggered
+            }
         }
      
-        if (doorOpen&&!doorLastState){
-            doorStatus=1; // Door OPEN has been triggered
-        }else if (!doorOpen&&doorLastState){
-            doorStatus=2; // Door CLOSE has been triggered
-        }
     
 
         doorLastState = doorOpen;
