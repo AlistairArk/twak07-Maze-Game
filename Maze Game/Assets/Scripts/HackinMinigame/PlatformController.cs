@@ -10,17 +10,36 @@ public class PlatformController : MonoBehaviour{
     public GameObject platform;
     public GameObject DeathZoneObject;
     public int deathZoneGap = 50;
+    public int tries = 5;
 
 
     private DeathZone DeathZone;
+    private MazeGenerator MazeGenerator;
 
     // Start is called before the first frame update
     void Awake(){
         DeathZone = DeathZoneObject.GetComponent<DeathZone>();
+        MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
     }
 
-    void ResetBall(){
-        ball.transform.localPosition = new Vector3(0f, 10f, 0f);
+
+
+    public void ResetBall(){
+        ball.transform.localPosition = new Vector3(5f, 10f, 5f);
+        ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        tries--;
+        print("TRIES LEFT: "+tries);
+        if (tries <= 0) MazeGenerator.HackingGameWin(); // Just win for now
+        // MazeGenerator.HackingGameWin;
+        // MazeGenerator.HackingGameLoss;
+    }
+
+
+    public void ResetTries(){ // Call on startup
+        tries=5; 
+
+        // Reset platform rotation
+        platform.transform.rotation = Quaternion.identity;
     }
 
 
@@ -46,22 +65,22 @@ public class PlatformController : MonoBehaviour{
 
         
         if (Input.GetKey("left")){
-            print("left key was pressed");
+            // print("left key was pressed");
             platform.transform.Rotate(Vector3.forward * speed  * Time.deltaTime);
         }
 
         if (Input.GetKey("right")){
-            print("right key was pressed");
+            // print("right key was pressed");
             platform.transform.Rotate(Vector3.back * speed  * Time.deltaTime);
         }
         
         if (Input.GetKey("up")){
-            print("up key was pressed");
+            // print("up key was pressed");
             platform.transform.Rotate(Vector3.right * speed  * Time.deltaTime);
         }
 
         if (Input.GetKey("down")){
-            print("down key was pressed");
+            // print("down key was pressed");
             platform.transform.Rotate(Vector3.left * speed  * Time.deltaTime);
         }
     }

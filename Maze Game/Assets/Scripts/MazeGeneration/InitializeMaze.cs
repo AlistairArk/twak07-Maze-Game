@@ -14,6 +14,8 @@ public class InitializeMaze : MonoBehaviour {
 
     // Start is called before the first frame update
     public void Initialize() {
+
+        if (MazeGlobals.mode==0) MazeGlobals.cellList = new List<List<List<GameObject>>>();     
         int gridX = MazeGlobals.gridX;
         int gridZ = MazeGlobals.gridZ;
         int mapScale = MazeGlobals.mapScale;
@@ -24,6 +26,8 @@ public class InitializeMaze : MonoBehaviour {
         float wallHeight = MazeGlobals.wallHeight;
         GameObject rawMazeParent = MazeGlobals.rawMazeParent;
         GameObject mapObjects = MazeGlobals.mapObjects;
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
+
 
         for(int cellX = 0; cellX < gridX; cellX++){
 
@@ -32,10 +36,11 @@ public class InitializeMaze : MonoBehaviour {
 
             for(int cellZ = 0; cellZ < gridZ; cellZ++){
 
-                List<GameObject> cell = new List<GameObject>();
                 List<int> cellDataGroup = new List<int>();
+                List<GameObject> cell = new List<GameObject>();
 
-                if (showRawMaze){
+                if (showRawMaze && MazeGlobals.mode==0){
+                    
                     GameObject cube1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     cube1.transform.localScale = new Vector3(.25f, 2*mapScale, 1*mapScale);
                     cube1.transform.Rotate(0f, 90f, 0f);
@@ -52,7 +57,6 @@ public class InitializeMaze : MonoBehaviour {
                     cube2.tag = "Occludable";
                     cube2.layer = 10;
                     cell.Add(cube2); // East Wall
-
                     if (hideWalls){
                         cube1.GetComponent<MeshRenderer>().enabled = false;
                         cube2.GetComponent<MeshRenderer>().enabled = false;
@@ -65,10 +69,12 @@ public class InitializeMaze : MonoBehaviour {
                     // Set position of walls
                     cube1.transform.position = new Vector3(mapScale*(.5f+cellX),    wallHeight,  mapScale*(1f+cellZ));
                     cube2.transform.position = new Vector3(mapScale*(cellX+1f),     wallHeight,  mapScale*(cellZ+.5f));
+                    
+                    // Add objects to list
+                    cellRow.Add(cell);
                 }
                 
                 // Add objects to list
-                cellRow.Add(cell);
                 cellDataGroup.Add(1);  // 0 - N (=1 if the cell has a North wall)
                 cellDataGroup.Add(1);  // 1 - E (=1 if the cell has a East wall)
                 cellDataGroup.Add(1);  // 2 - S (=1 if the cell has a South wall)
@@ -79,8 +85,8 @@ public class InitializeMaze : MonoBehaviour {
                 cellDataGroup.Add(0);  // 7 - Cell UID (=0 if corridor cell) (=+1 room cells - groups of cells for each room are assigned a UID)
                 cellDataRow.Add(cellDataGroup);
             }
-            MazeGlobals.cellList.Add(cellRow);
-            MazeGlobals.cellData.Add(cellDataRow);
+            if (MazeGlobals.mode==0) MazeGlobals.cellList.Add(cellRow);
+            cellData.Add(cellDataRow);
         }
 
 

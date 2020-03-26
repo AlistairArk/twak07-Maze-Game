@@ -5,16 +5,22 @@ using System.Collections;
 public class CombineMeshes : MonoBehaviour {
 
     public bool renderMeshCollider = true;
+    private MazeGenerator MazeGenerator;
+
 
     void Start(){
-        Combine();
+        MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
+        if (MazeGenerator.enableMeshCombining) Combine();
     }
+
+ 
+
+
 
     public GameObject[] Objects;
         
     [ContextMenu("Combine")]
-    public void Combine()
-    {
+    public void Combine(){
         Quaternion oldRot = transform.rotation;
         Vector3 oldPos = transform.position;
         Vector3 oldScl = new Vector3(transform.localScale.x,transform.localScale.y,transform.localScale.z);
@@ -129,8 +135,8 @@ public class CombineMeshes : MonoBehaviour {
         transform.position = oldPos;
         transform.localScale = oldScl;
         foreach (Transform child in gameObject.transform) GameObject.Destroy(child.gameObject);
-        // gameObject.GetComponent<Renderer>().enabled = false;    // Disable renderer
-
+        if (MazeGenerator.enableOcclusionCulling)
+            gameObject.GetComponent<Renderer>().enabled = false;    // Disable renderer
     }
 }
 

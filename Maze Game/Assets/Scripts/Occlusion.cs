@@ -12,10 +12,10 @@ public class Occlusion : MonoBehaviour{
     public List<GameObject> prefabList = new List<GameObject>();  // list of objects rays hit
     public List<GameObject> prefabList2 = new List<GameObject>(); // list of objects rays hit last call
 
-    public bool enableOccluder = true;
-
+    private MazeGenerator MazeGenerator;
     // Start is called before the first frame update
     void Start(){
+        MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
         cam = pcCam.GetComponent<Camera>();
     }
 
@@ -35,7 +35,7 @@ public class Occlusion : MonoBehaviour{
 
         */
 
-        if (enableOccluder){
+        if (MazeGenerator.enableOcclusionCulling){
             prefabList.Clear();         // List objects rays hit
             
             int rayRes = 50;           // Spacing between rays
@@ -60,17 +60,20 @@ public class Occlusion : MonoBehaviour{
                         if (hit.transform.gameObject.tag == "Occludable"){
                             // If it is not already listed by another ray
                             if (!prefabList.Contains(hit.transform.gameObject)){
-                                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
                                 prefabList.Add(hit.transform.gameObject);
+                                if (MazeGenerator.enableDebugRaycast)
+                                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
                             }
                         }else{
                             // Draw ray - Object is not occludable
-                            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+                            if (MazeGenerator.enableDebugRaycast)
+                                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
                         }
 
                     }else{
                         // Draw ray - ray has no contacts
-                        Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
+                        if (MazeGenerator.enableDebugRaycast)
+                            Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
                     }
                 }

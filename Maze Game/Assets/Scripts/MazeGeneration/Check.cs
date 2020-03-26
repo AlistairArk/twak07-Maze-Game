@@ -26,6 +26,7 @@ public class Check : MonoBehaviour {
 
 
     public void CellEnds(){
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
 
         int gridX = MazeGlobals.gridX;
         int gridZ = MazeGlobals.gridZ;
@@ -39,15 +40,15 @@ public class Check : MonoBehaviour {
             for(int Z = 0; Z < gridZ; Z++){
                 
                 int findCount = 0;
-                for (int i = 0; i < 4; i++) if (MazeGlobals.cellData[X][Z][i]==0) findCount++;
+                for (int i = 0; i < 4; i++) if (cellData[X][Z][i]==0) findCount++;
 
                 // If end cell is further than the current end cell
-                if (findCount==1 && (MazeGlobals.cellData[X][Z][4]>endDist  ||  endDist==-1)){
+                if (findCount==1 && (cellData[X][Z][4]>endDist  ||  endDist==-1)){
                     
                     // Set new end point
                     endX = X+1;
                     endZ = Z+1;
-                    endDist = MazeGlobals.cellData[X][Z][4];
+                    endDist = cellData[X][Z][4];
                 }
             }
         }
@@ -60,6 +61,7 @@ public class Check : MonoBehaviour {
 
 
     public void MainPath(){
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
 
         MazeGlobals.optimalPath.Clear();
         bool endFound = false;
@@ -72,29 +74,29 @@ public class Check : MonoBehaviour {
         // Get starting distance based off goal location
         // print("Start Point ("+x+", "+z+")");
 
-        distance = MazeGlobals.cellData[x][z][4];
+        distance = cellData[x][z][4];
         while (!endFound){
             counter++;
 
             // Find neighboring cell with lowest distance from start
 
             // If there is a adjacent path && distance is less than previous (i.e. getting closer to the start.)
-            if (MazeGlobals.cellData[x][z][0]==0 && MazeGlobals.cellData[x][z+1][4]<distance){ // North
-                distance=MazeGlobals.cellData[x][z+1][4]; z++;
+            if (cellData[x][z][0]==0 && cellData[x][z+1][4]<distance){ // North
+                distance=cellData[x][z+1][4]; z++;
 
-            }else if (MazeGlobals.cellData[x][z][1]==0 && MazeGlobals.cellData[x+1][z][4]<distance){ // East
-                distance=MazeGlobals.cellData[x+1][z][4]; x++;
+            }else if (cellData[x][z][1]==0 && cellData[x+1][z][4]<distance){ // East
+                distance=cellData[x+1][z][4]; x++;
 
-            }else if (MazeGlobals.cellData[x][z][2]==0 && MazeGlobals.cellData[x][z-1][4]<distance){ // South
-                distance=MazeGlobals.cellData[x][z-1][4]; z--;
+            }else if (cellData[x][z][2]==0 && cellData[x][z-1][4]<distance){ // South
+                distance=cellData[x][z-1][4]; z--;
 
-            }else if (MazeGlobals.cellData[x][z][3]==0 && MazeGlobals.cellData[x-1][z][4]<distance){ // West
-                distance=MazeGlobals.cellData[x-1][z][4]; x--;
+            }else if (cellData[x][z][3]==0 && cellData[x-1][z][4]<distance){ // West
+                distance=cellData[x-1][z][4]; x--;
             }
 
             // if (MazeGlobals.hideWaypoint==false) GuideCube(x,z);
 
-            MazeGlobals.cellData[x][z][5]=1;   // Mark cell as on path
+            cellData[x][z][5]=1;   // Mark cell as on path
             MazeGlobals.optimalPath.Add(new List<int>{x,z});
 
 
@@ -102,5 +104,6 @@ public class Check : MonoBehaviour {
                 endFound = true;
             }
         }
+
     }
 }

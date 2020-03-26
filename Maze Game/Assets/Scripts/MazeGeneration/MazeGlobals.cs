@@ -31,8 +31,9 @@ public class MazeGlobals : MonoBehaviour{
     public GameObject playerObject;
 
     public List<List<List<GameObject>>> cellList = new List<List<List<GameObject>>>();
+    public List<List<List<GameObject>>> cellListHack = new List<List<List<GameObject>>>();
     public List<List<List<int>>> cellData = new List<List<List<int>>>();
-    // public List<List<List<int>>> cellDataHack = new List<List<List<int>>>();
+    public List<List<List<int>>> cellDataHack = new List<List<List<int>>>();
 
     [Header("Materials", order=3)]
     public Material wallMat;
@@ -58,18 +59,33 @@ public class MazeGlobals : MonoBehaviour{
     [HideInInspector] public GameObject guideCubeParent;
     [HideInInspector] public GameObject cellDoorParent;
     [HideInInspector] public GameObject cellWallParent;
+    [HideInInspector] public GameObject prefabHackParent;
     [HideInInspector] public GameObject mapObjects;
 
 
     public void Awake(){
         charController = playerObject.GetComponent<CharacterController>();
 
-        rawMazeParent = GameObject.Find("SpaceStation/MapObjects/rawMazeParent");
-        guideCubeParent = GameObject.Find("SpaceStation/MapObjects/guideCubeParent");
-        prefabMazeParent = GameObject.Find("SpaceStation/MapObjects/prefabMazeParent");
-        cellDoorParent = GameObject.Find("SpaceStation/MapObjects/cellDoorParent");
-        cellWallParent = GameObject.Find("SpaceStation/MapObjects/cellWallParent");
-        mapObjects = GameObject.Find("SpaceStation/MapObjects");
+        rawMazeParent = GameObject.Find("SpaceStation/MazeObjects/rawMazeParent");
+        guideCubeParent = GameObject.Find("SpaceStation/MazeObjects/guideCubeParent");
+        prefabMazeParent = GameObject.Find("SpaceStation/MazeObjects/prefabMazeParent");
+        cellDoorParent = GameObject.Find("SpaceStation/MazeObjects/cellDoorParent");
+        cellWallParent = GameObject.Find("SpaceStation/MazeObjects/cellWallParent");
+        mapObjects = GameObject.Find("SpaceStation/MazeObjects");
 
+        prefabHackParent = GameObject.Find("HackingMinigame/Platform/MazeObjects");
+    }
+
+
+    public List<List<List<int>>> GetCellData(){
+        if (mode==0) return (cellData);
+        else if (mode==1) return (cellDataHack);
+        else return (cellData);
+    }
+
+    public List<List<List<GameObject>>> GetCellList(){
+        if (mode==0) return (cellList);
+        else if (mode==1) return (cellListHack);
+        else return (cellList);
     }
 }

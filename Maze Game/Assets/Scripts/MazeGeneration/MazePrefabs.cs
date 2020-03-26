@@ -59,6 +59,8 @@ public class MazePrefabs : MonoBehaviour {
         // Reset the prefab list
         MazeGlobals.prefabList = new List<List<GameObject>>();
 
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
+
         for(int X = 0; X < gridX; X++){
             
             List<GameObject> prefabRow = new List<GameObject>();
@@ -68,18 +70,18 @@ public class MazePrefabs : MonoBehaviour {
                 int findCount = 0;
 
                 for (int i = 0; i < 4; i++){
-                    if (MazeGlobals.cellData[X][Z][i]==0) findCount++;
+                    if (cellData[X][Z][i]==0) findCount++;
                 }
 
                 GameObject prefabCell;
                 if (MazeGlobals.showPrefabMaze){
                     switch(findCount) {
                          case (1):
-                            if (MazeGlobals.cellData[X][Z][0] == 0 ){
+                            if (cellData[X][Z][0] == 0 ){
                                 prefabCell = Instantiate(CorridorEnd, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
-                            } else if (MazeGlobals.cellData[X][Z][1] == 0){
+                            } else if (cellData[X][Z][1] == 0){
                                 prefabCell = Instantiate(CorridorEnd, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,270,0));
-                            } else if (MazeGlobals.cellData[X][Z][2] == 0){
+                            } else if (cellData[X][Z][2] == 0){
                                 prefabCell = Instantiate(CorridorEnd, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                             } else {
                                 prefabCell = Instantiate(CorridorEnd, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
@@ -88,7 +90,7 @@ public class MazePrefabs : MonoBehaviour {
                             break;
                         case (2):
                             // Hallways
-                            if (MazeGlobals.cellData[X][Z][0] == 0  && MazeGlobals.cellData[X][Z][2] == 0 ){
+                            if (cellData[X][Z][0] == 0  && cellData[X][Z][2] == 0 ){
                                 if (X==0){
                                     prefabCell = Instantiate(CorridorHallExterior, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                                 }else if (X+1==gridX){
@@ -97,15 +99,15 @@ public class MazePrefabs : MonoBehaviour {
                                     prefabCell = Instantiate(CorridorHall, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
                                 }
 
-                            } else if (MazeGlobals.cellData[X][Z][1] == 0  && MazeGlobals.cellData[X][Z][3] == 0 ){
+                            } else if (cellData[X][Z][1] == 0  && cellData[X][Z][3] == 0 ){
                                 prefabCell = Instantiate(CorridorHall, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
 
                             // Corners
-                            } else if (MazeGlobals.cellData[X][Z][0] == 0  && MazeGlobals.cellData[X][Z][1] == 0 ){
+                            } else if (cellData[X][Z][0] == 0  && cellData[X][Z][1] == 0 ){
                                 prefabCell = Instantiate(CorridorCorner, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,270,0));
-                            } else if (MazeGlobals.cellData[X][Z][1] == 0  && MazeGlobals.cellData[X][Z][2] == 0 ){
+                            } else if (cellData[X][Z][1] == 0  && cellData[X][Z][2] == 0 ){
                                 prefabCell = Instantiate(CorridorCorner, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
-                            } else if (MazeGlobals.cellData[X][Z][2] == 0  && MazeGlobals.cellData[X][Z][3] == 0 ){
+                            } else if (cellData[X][Z][2] == 0  && cellData[X][Z][3] == 0 ){
                                 prefabCell = Instantiate(CorridorCorner, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
                             } else{
                                 prefabCell = Instantiate(CorridorCorner, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
@@ -114,11 +116,11 @@ public class MazePrefabs : MonoBehaviour {
                             break;
                         case (3):
                             // T Junction
-                            if (MazeGlobals.cellData[X][Z][0] == 1){
+                            if (cellData[X][Z][0] == 1){
                                 prefabCell = Instantiate(CorridorTJunction, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,90,0));
-                            } else if (MazeGlobals.cellData[X][Z][1] == 1){
+                            } else if (cellData[X][Z][1] == 1){
                                 prefabCell = Instantiate(CorridorTJunction, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,180,0));
-                            } else if (MazeGlobals.cellData[X][Z][2] == 1){
+                            } else if (cellData[X][Z][2] == 1){
                                 prefabCell = Instantiate(CorridorTJunction, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,270,0));
                             } else{
                                 prefabCell = Instantiate(CorridorTJunction, new Vector3((X+prefabOffsetX)*mapScale, 0, (Z+prefabOffsetZ)*mapScale), Quaternion.Euler(0,0,0));
@@ -146,6 +148,8 @@ public class MazePrefabs : MonoBehaviour {
 
   
     public void Rooms(){
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
+        
         int mapScale = MazeGlobals.mapScale;
         int gridX = MazeGlobals.gridX;
         int gridZ = MazeGlobals.gridZ;
@@ -190,7 +194,7 @@ public class MazePrefabs : MonoBehaviour {
 
 
                     // If cell is in grid && cell is on a path && cell is not room
-                    if (cellX<gridX && cellZ<gridZ && MazeGlobals.cellData[cellX][cellZ][5]==1 && MazeGlobals.cellData[cellX][cellZ][6]==0){
+                    if (cellX<gridX && cellZ<gridZ && cellData[cellX][cellZ][5]==1 && cellData[cellX][cellZ][6]==0){
                         cellCount--;
                     }else{
                         break;
@@ -226,7 +230,7 @@ public class MazePrefabs : MonoBehaviour {
                     foreach(List<int> cell in room){
                         cellX = cell[0]+X;
                         cellZ = cell[1]+Z;
-                        MazeGlobals.cellData[cellX][cellZ][7] = roomUID; // assign UID to cell in room
+                        cellData[cellX][cellZ][7] = roomUID; // assign UID to cell in room
 
                         RoomCell(cellX,cellZ,room); // n
                     }
@@ -242,6 +246,7 @@ public class MazePrefabs : MonoBehaviour {
 
 
     public void RoomCell(int X, int Z, List<List<int>> room){
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
 
         // Disable walls in same room
         foreach(List<int> cell in room){
@@ -251,27 +256,27 @@ public class MazePrefabs : MonoBehaviour {
 
             if (cellX == X && cellZ == Z+1){
                 MazeGlobals.cellList[X][Z][0].SetActive(false);
-                MazeGlobals.cellData[x][z][0]   = 0;
-                MazeGlobals.cellData[x][z+1][2] = 0;
+                cellData[x][z][0]   = 0;
+                cellData[x][z+1][2] = 0;
 
             }else if (cellX == X+1 && cellZ == Z){
                 MazeGlobals.cellList[X][Z][1].SetActive(false);
-                MazeGlobals.cellData[x][z][1]   = 0;
-                MazeGlobals.cellData[x+1][z][3] = 0;
+                cellData[x][z][1]   = 0;
+                cellData[x+1][z][3] = 0;
 
             }else if (cellX == X && cellZ == Z-1){
                 MazeGlobals.cellList[X][Z-1][0].SetActive(false);
-                MazeGlobals.cellData[X][Z][2]   = 0;
-                MazeGlobals.cellData[X][Z-1][0] = 0;
+                cellData[X][Z][2]   = 0;
+                cellData[X][Z-1][0] = 0;
 
             }else if (cellX == X-1 && cellZ == Z){
                 MazeGlobals.cellList[X-1][Z][1].SetActive(false);
-                MazeGlobals.cellData[X][Z][3]   = 0;
-                MazeGlobals.cellData[X-1][Z][1] = 0;
+                cellData[X][Z][3]   = 0;
+                cellData[X-1][Z][1] = 0;
             }
         }
 
-        MazeGlobals.cellData[X][Z][6]=1;        // Mark cell as room
+        cellData[X][Z][6]=1;        // Mark cell as room
 
         // print("(X, Z) ("+X+", "+Z+")");
         Destroy(MazeGlobals.prefabList[X][Z]);
@@ -280,6 +285,7 @@ public class MazePrefabs : MonoBehaviour {
 
 
     public void PlaceDoors(){
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
 
         int gridX = MazeGlobals.gridX;
         int gridZ = MazeGlobals.gridZ;
@@ -295,17 +301,17 @@ public class MazePrefabs : MonoBehaviour {
                 bool northDoor = false;
                 bool westDoor = false;
 
-                currentRoomUID = MazeGlobals.cellData[X][Z][7]; // Get cell UID
+                currentRoomUID = cellData[X][Z][7]; // Get cell UID
 
                 // If - Within room cell
-                if (MazeGlobals.cellData[X][Z][7]!=0){
+                if (cellData[X][Z][7]!=0){
 
 
                     // WALLS
-                    if (MazeGlobals.cellData[X][Z][3]==1){
-                        if (Z-1>=0 && MazeGlobals.cellData[X][Z-1][7]!=currentRoomUID){
+                    if (cellData[X][Z][3]==1){
+                        if (Z-1>=0 && cellData[X][Z-1][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.4f), new Vector3(1,1,1), 0);
-                        }else if (Z+1<gridZ && MazeGlobals.cellData[X][Z+1][7]!=currentRoomUID){
+                        }else if (Z+1<gridZ && cellData[X][Z+1][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.2f), new Vector3(1,1,1), 0);
                         }else{
                             CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.2f), new Vector3(1,1,1), 0);
@@ -313,10 +319,10 @@ public class MazePrefabs : MonoBehaviour {
                     }
 
 
-                    if (MazeGlobals.cellData[X][Z][0]==1){
-                        if (X==0 || (X-1>=0 && MazeGlobals.cellData[X-1][Z][7]!=currentRoomUID)){
+                    if (cellData[X][Z][0]==1){
+                        if (X==0 || (X-1>=0 && cellData[X-1][Z][7]!=currentRoomUID)){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.6f), new Vector3(1,1,1), 90);
-                        }else if (X+1==gridX || (X+1<gridX && MazeGlobals.cellData[X+1][Z][7]!=currentRoomUID)){
+                        }else if (X+1==gridX || (X+1<gridX && cellData[X+1][Z][7]!=currentRoomUID)){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.2f, 0f, Z+.6f), new Vector3(1,1,1), 90);
                         }else{
                             CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.2f, 0f, Z+.6f), new Vector3(1,1,1), 90);
@@ -324,10 +330,10 @@ public class MazePrefabs : MonoBehaviour {
                     }
 
 
-                    if (MazeGlobals.cellData[X][Z][1]==1){
-                        if (Z-1>=0 && MazeGlobals.cellData[X][Z-1][7]!=currentRoomUID){
+                    if (cellData[X][Z][1]==1){
+                        if (Z-1>=0 && cellData[X][Z-1][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.8f), new Vector3(1,1,1), 180);
-                        }else if (Z+1<gridZ && MazeGlobals.cellData[X][Z+1][7]!=currentRoomUID){
+                        }else if (Z+1<gridZ && cellData[X][Z+1][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.6f), new Vector3(1,1,1), 180);
                         }else{
                             CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.6f), new Vector3(1,1,1), 180);
@@ -335,10 +341,10 @@ public class MazePrefabs : MonoBehaviour {
                     }
 
 
-                    if (MazeGlobals.cellData[X][Z][2]==1){
-                        if (X-1>=0 && MazeGlobals.cellData[X-1][Z][7]!=currentRoomUID){
+                    if (cellData[X][Z][2]==1){
+                        if (X-1>=0 && cellData[X-1][Z][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.8f, 0f, Z+.4f), new Vector3(1,1,1), 270);
-                        }else if (X+1<gridX && MazeGlobals.cellData[X+1][Z][7]!=currentRoomUID){
+                        }else if (X+1<gridX && cellData[X+1][Z][7]!=currentRoomUID){
                             CreatePrefab(RoomLongWall, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.4f), new Vector3(1,1,1), 270);
                         }else{
                             CreatePrefab(RoomLongWall2, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.4f), new Vector3(1,1,1), 270);
@@ -352,20 +358,20 @@ public class MazePrefabs : MonoBehaviour {
 
                     // Check Left (WEST)
                     // If - Withing boundaries of map && If no wall to left of cell
-                    if (X-1 >= 0 && MazeGlobals.cellData[X][Z][3]==0){ 
+                    if (X-1 >= 0 && cellData[X][Z][3]==0){ 
 
-                        if (MazeGlobals.cellData[X-1][Z][7]==0){ // If corridor is north of cell
+                        if (cellData[X-1][Z][7]==0){ // If corridor is north of cell
                             westDoor=true;
                             // If there is a wall to the bottom || different room
-                            if (Z == 0 || MazeGlobals.cellData[X][Z-1][7]!=currentRoomUID)
+                            if (Z == 0 || cellData[X][Z-1][7]!=currentRoomUID)
                                 CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.2f, 0f, Z+.5f), new Vector3(-1,1,1), -90);
                             else
                                 CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.2f, 0f, Z+.5f), new Vector3(1,1,1), -90);
 
-                        }else if (MazeGlobals.cellData[X-1][Z][7]!=currentRoomUID){ // else if - Another room is west of cell
+                        }else if (cellData[X-1][Z][7]!=currentRoomUID){ // else if - Another room is west of cell
                             westDoor=true;
                             // If there is a wall to the bottom || different room
-                            if (Z == 0 || MazeGlobals.cellData[X][Z-1][7]!=currentRoomUID)
+                            if (Z == 0 || cellData[X][Z-1][7]!=currentRoomUID)
                                 CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.4f), new Vector3(1,1,1), -90);
                             else
                                 CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.6f), new Vector3(-1,1,1), -90);
@@ -376,23 +382,23 @@ public class MazePrefabs : MonoBehaviour {
 
                     // Check Left (NORTH)
                     // If - Withing boundaries of map && If no wall to north of cell
-                    if (Z+1 < gridZ && MazeGlobals.cellData[X][Z][0]==0 ){
+                    if (Z+1 < gridZ && cellData[X][Z][0]==0 ){
                         
 
-                        if (MazeGlobals.cellData[X][Z+1][7]==0){ // If corridor is north of cell
+                        if (cellData[X][Z+1][7]==0){ // If corridor is north of cell
                             northDoor=true;
 
                             // If there is a wall to the left || different room
-                            if (X+1 >= gridX || MazeGlobals.cellData[X+1][Z][7]!=currentRoomUID)
+                            if (X+1 >= gridX || cellData[X+1][Z][7]!=currentRoomUID)
                                 CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.5f, 0f, Z+.8f), new Vector3(1,1,1), 0);
                             else
                                 CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.5f, 0f, Z+.8f), new Vector3(-1,1,1), 0);
                         
-                        }else if (MazeGlobals.cellData[X][Z+1][7]!=currentRoomUID){ // else if - Another room is north of cell
+                        }else if (cellData[X][Z+1][7]!=currentRoomUID){ // else if - Another room is north of cell
                             northDoor=true;
                             
                             // If there is a wall to the left || different room
-                            if (X+1 >= gridX || MazeGlobals.cellData[X+1][Z][7]!=currentRoomUID)
+                            if (X+1 >= gridX || cellData[X+1][Z][7]!=currentRoomUID)
                                 CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.6f), new Vector3(-1,1,1), 0);
                             else
                                 CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.6f), new Vector3(1,1,1), 0);
@@ -403,9 +409,9 @@ public class MazePrefabs : MonoBehaviour {
 
                     // Check Left (NORTH)
                     // if within corridor && north cell is room 
-                    if ( MazeGlobals.cellData[X][Z][0]==0 && Z+1 < gridX && MazeGlobals.cellData[X][Z+1][7]!=0){
+                    if ( cellData[X][Z][0]==0 && Z+1 < gridX && cellData[X][Z+1][7]!=0){
                         // If there is a wall to the left of room cell || North room is different to North east room
-                        if (X+1 >= gridX || MazeGlobals.cellData[X+1][Z+1][7]!=MazeGlobals.cellData[X][Z+1][7])
+                        if (X+1 >= gridX || cellData[X+1][Z+1][7]!=cellData[X][Z+1][7])
                             CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.5f, 0f, Z+1.2f), new Vector3(-1,1,1), 180);
                         else
                             CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.5f, 0f, Z+1.2f), new Vector3(1,1,1), 180);
@@ -414,9 +420,9 @@ public class MazePrefabs : MonoBehaviour {
 
                     // Check UP (WEST)
                     // if within corridor && west cell is room 
-                    if ( MazeGlobals.cellData[X][Z][3]==0 && X-1>0 && MazeGlobals.cellData[X-1][Z][7]!=0){
+                    if ( cellData[X][Z][3]==0 && X-1>0 && cellData[X-1][Z][7]!=0){
 
-                        if (Z+1 >= gridZ || MazeGlobals.cellData[X-1][Z+1][7]!=MazeGlobals.cellData[X-1][Z][7])
+                        if (Z+1 >= gridZ || cellData[X-1][Z+1][7]!=cellData[X-1][Z][7])
                             CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X-.2f, 0f, Z+.5f), new Vector3(-1,1,1), 90);
                         else
                             CreatePrefab(DoorwayCorridorToRoom, MazeGlobals.cellDoorParent, new Vector3(X-.2f, 0f, Z+.5f), new Vector3(1,1,1), 90);

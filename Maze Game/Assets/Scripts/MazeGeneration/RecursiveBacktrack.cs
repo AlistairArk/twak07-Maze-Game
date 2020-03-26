@@ -46,6 +46,7 @@ public class RecursiveBacktrack : MonoBehaviour {
         stack.Add(currentCell);     // Place starting cell into stack
         visited.Add(currentCell);   // Add starting cell to visited list
 
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
 
         while(stack.Count > 0){
             /*
@@ -53,7 +54,7 @@ public class RecursiveBacktrack : MonoBehaviour {
                 - Used in deciding the optimal location of the goal cell
                 - Path finding between start and end points
             */
-            MazeGlobals.cellData[x][z][4] = MazeGlobals.startDistance;
+            cellData[x][z][4] = MazeGlobals.startDistance;
 
             List<string> availableCells = new List<string>();
 
@@ -64,7 +65,7 @@ public class RecursiveBacktrack : MonoBehaviour {
             if (Check.CellIsAvailable(x-1,z, gridX, gridZ, visited)) availableCells.Add("w");
 
             // Log cells relative distance from start
-            MazeGlobals.cellData[x][z][4] = MazeGlobals.startDistance;
+            cellData[x][z][4] = MazeGlobals.startDistance;
             
             if (availableCells.Count > 0){
                 MazeGlobals.startDistance+=1; // Increment "Distance from start" counter
@@ -107,40 +108,48 @@ public class RecursiveBacktrack : MonoBehaviour {
 
     // Destroy walls and move pointer to next cell
     public void moveN(){
-        MazeGlobals.cellData[x][z][0] = 0;
-        MazeGlobals.cellData[x][z+1][2] = 0;
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
+
+        cellData[x][z][0] = 0;
+        cellData[x][z+1][2] = 0;
         
-        if (MazeGlobals.showRawMaze) MazeGlobals.cellList[x][z][0].SetActive(false);
+        if (MazeGlobals.mode==0) MazeGlobals.cellList[x][z][0].SetActive(false);
         
         z+=1; // Move pointer to the NORTH cell
     }
 
     // Destroy walls and move pointer to next cell
     public void moveE(){
-        MazeGlobals.cellData[x][z][1] = 0;
-        MazeGlobals.cellData[x+1][z][3] = 0;
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
 
-        if (MazeGlobals.showRawMaze) MazeGlobals.cellList[x][z][1].SetActive(false);
+        cellData[x][z][1] = 0;
+        cellData[x+1][z][3] = 0;
+
+        if (MazeGlobals.mode==0) MazeGlobals.cellList[x][z][1].SetActive(false);
         
         x+=1; // Move pointer to the EAST cell
     }
 
     // Destroy walls and move pointer to next cell
     public void moveS(){
-        MazeGlobals.cellData[x][z][2] = 0;
-        MazeGlobals.cellData[x][z-1][0] = 0;
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
 
-        if (MazeGlobals.showRawMaze) MazeGlobals.cellList[x][z-1][0].SetActive(false);
+        cellData[x][z][2] = 0;
+        cellData[x][z-1][0] = 0;
+
+        if (MazeGlobals.mode==0) MazeGlobals.cellList[x][z-1][0].SetActive(false);
         
         z-=1; // Move pointer to the SOUTH cell
     }
 
     // Destroy walls and move pointer to next cell
     public void moveW(){
-        MazeGlobals.cellData[x][z][3] = 0;
-        MazeGlobals.cellData[x-1][z][1] = 0;
+        List<List<List<int>>> cellData = MazeGlobals.GetCellData();
+        
+        cellData[x][z][3] = 0;
+        cellData[x-1][z][1] = 0;
 
-        if (MazeGlobals.showRawMaze) MazeGlobals.cellList[x-1][z][1].SetActive(false);
+        if (MazeGlobals.mode==0) MazeGlobals.cellList[x-1][z][1].SetActive(false);
         
         x-=1; // Move pointer to the WEST cell
     }

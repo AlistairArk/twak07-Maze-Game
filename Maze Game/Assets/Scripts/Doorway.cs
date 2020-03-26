@@ -68,7 +68,7 @@ public class Doorway : MonoBehaviour {
         }else{
             if (doorOpen&&!doorLastState){
                 if (!doorLocked) doorStatus=1; // Door OPEN has been triggered
-                else MazeGenerator.HackingGame();
+                else MazeGenerator.HackingGame(gameObject,4,4); // Hand reference for win/loss callback
             }else if (!doorOpen&&doorLastState){
                 doorStatus=2; // Door CLOSE has been triggered
             }
@@ -106,4 +106,13 @@ public class Doorway : MonoBehaviour {
             && Vector3.Distance(doorB.transform.localPosition, openStateB) < 0.01f)
             doorStatus = 0;
     }
+
+
+    public void HackWin(){
+        doorLocked=false;
+    }
+
+    public void HackLoss(){
+        doorLocked=true;
+    } 
 }
