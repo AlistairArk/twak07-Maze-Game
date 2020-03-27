@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/SpaceStation.unity
+- path: Assets/SFLCK_2/Scenes/Demo_1.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

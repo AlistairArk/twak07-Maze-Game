@@ -6,17 +6,22 @@ public class Occlusion : MonoBehaviour{
 
     public List<GameObject> objectList = new List<GameObject>(); // list of last shown.
 
-    public GameObject pcCam;
+
     private Camera cam;
 
     public List<GameObject> prefabList = new List<GameObject>();  // list of objects rays hit
     public List<GameObject> prefabList2 = new List<GameObject>(); // list of objects rays hit last call
 
     private MazeGenerator MazeGenerator;
+
+    public bool rayRed = true;
+    public bool rayGreen = true;
+    public bool rayYellow = true;
+    public bool rayBlue = true;
     // Start is called before the first frame update
     void Start(){
         MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
-        cam = pcCam.GetComponent<Camera>();
+        cam = GameObject.FindWithTag("StationCam").GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -50,31 +55,43 @@ public class Occlusion : MonoBehaviour{
                 while (screenY>-rayRes){
                     screenY-=rayRes;
 
-                    Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 0);
+                    Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 5);
                     Ray ray = cam.ScreenPointToRay(rayPos);
-                    
                     RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, Mathf.Infinity)){ // If object hit
 
-                        // If object is tagged as occludable
-                        if (hit.transform.gameObject.tag == "Occludable"){
-                            // If it is not already listed by another ray
-                            if (!prefabList.Contains(hit.transform.gameObject)){
-                                prefabList.Add(hit.transform.gameObject);
-                                if (MazeGenerator.enableDebugRaycast)
-                                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                    bool rayHit = false;
+                    int i=0;
+                    while(i<2){
+                        if (Physics.Raycast(ray, out hit, Mathf.Infinity)){ // If object hit
+
+                            // If object is tagged as occludable
+                            if (hit.transform.gameObject.tag == "Occludable"){ // Ray will stop
+                                // If it is not already listed by another ray
+                                if (!prefabList.Contains(hit.transform.gameObject)){
+                                    prefabList.Add(hit.transform.gameObject);
+                                    if (MazeGenerator.enableDebugRaycast && rayGreen)
+                                        Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                                }
+                                rayHit=true;
+                                i=2;
+                            }else if (hit.transform.gameObject.tag == "Transparent"){   // Ray can pass through
+                                // If it is not already listed by another ray
+                                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+
+                            }else{  // Ray will stop
+                                // Draw ray - Object is not occludable
+                                if (MazeGenerator.enableDebugRaycast && rayYellow)
+                                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+                                rayHit=true;
+                                i=2;
                             }
+                            // i++;
                         }else{
-                            // Draw ray - Object is not occludable
-                            if (MazeGenerator.enableDebugRaycast)
-                                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+                            // Draw ray - ray has no contacts
+                            if (MazeGenerator.enableDebugRaycast && rayRed)
+                                Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
                         }
-
-                    }else{
-                        // Draw ray - ray has no contacts
-                        if (MazeGenerator.enableDebugRaycast)
-                            Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
-
+                        i++;
                     }
                 }
             }
@@ -96,3 +113,50 @@ public class Occlusion : MonoBehaviour{
         }
     }
 }
+
+
+                    // screenY-=rayRes;
+
+                    // Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 0);
+                    // // Ray ray = cam.ScreenPointToRay(rayPos);
+                    // // RaycastHit[] hits = Physics.RaycastAll(ray, out hits, Mathf.Infinity);
+                    
+                    // Ray ray = cam.ScreenPointToRay(rayPos);
+                    // RaycastHit[] hits;
+                    // hits = Physics.RaycastAll(ray).OrderBy(h=>h.distance).ToArray();
+
+                    // // // Order hits in terms of distance
+                    // // System.Array.Sort(hits, (x,y) => x.distance.CompareTo(y.distance));
+
+                    // if (hits.Length>0){ // If object hit
+
+                    //     int i = 0;
+                    //     while (i < hits.Length) {
+                    //         RaycastHit hit = hits[i];
+                    //         // Debug.Log (hit.collider.gameObject.name);
+                    //         // If object is tagged as occludable
+                    //         if (hit.transform.gameObject.tag == "Occludable"){ // Ray will stop
+                    //             // If it is not already listed by another ray
+                    //             if (!prefabList.Contains(hit.transform.gameObject)){
+                    //                 prefabList.Add(hit.transform.gameObject);
+                    //                 if (MazeGenerator.enableDebugRaycast && rayGreen)
+                    //                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                    //             }
+                    //             i = hits.Length;
+                    //         }else if (hit.transform.gameObject.tag == "Transparent"){   // Ray can pass through
+                    //             // If it is not already listed by another ray
+                    //             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+                    //         }else{  // Ray will stop
+                    //             // Draw ray - Object is not occludable
+                    //             if (MazeGenerator.enableDebugRaycast && rayYellow)
+                    //                 Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+                    //             i = hits.Length;
+                    //         }
+                    //         i++;
+                    //     }
+                    // }else{
+                    //     // Draw ray - ray has no contacts
+                    //     if (MazeGenerator.enableDebugRaycast && rayRed)
+                    //         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
+
+                    // }

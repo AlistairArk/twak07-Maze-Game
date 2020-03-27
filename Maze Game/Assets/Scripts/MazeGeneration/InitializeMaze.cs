@@ -55,21 +55,28 @@ public class InitializeMaze : MonoBehaviour {
 
 
         // Create level base
-        GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        ground.transform.position   = new Vector3(mapScale*(gridX*.5f), 0, mapScale*(gridZ*.5f));
-        ground.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
-        ground.layer = 8;
-        ground.transform.parent = rawMazeParent.transform; // Place object under a single parent
-        ground.GetComponent<MeshRenderer>().enabled = false;
-        ground.transform.parent = cellBaseParent.transform; // Place object under a single parent
-        ground.GetComponent<Collider>().isTrigger = true;
+        if (MazeGlobals.mode==0){
+            GameObject mapGround = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            mapGround.transform.position   = new Vector3(mapScale*(gridX*.5f), -4f, mapScale*(gridZ*.5f));
+            mapGround.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
+            mapGround.GetComponent<Renderer>().material = whiteMat;
+            mapGround.layer = 8;
+            mapGround.transform.parent = cellBaseParent.transform; // Place object under a single parent
+        }
+    }
+}
 
-        GameObject mapGround = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        mapGround.transform.position   = new Vector3(mapScale*(gridX*.5f), -4f, mapScale*(gridZ*.5f));
-        mapGround.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
-        mapGround.GetComponent<Renderer>().material = whiteMat;
-        mapGround.layer = 8;
-        mapGround.transform.parent = cellBaseParent.transform; // Place object under a single parent
+
+        
+        // GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        // ground.transform.position   = new Vector3(mapScale*(gridX*.5f), 0, mapScale*(gridZ*.5f));
+        // ground.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
+        // ground.layer = 8;
+        // ground.transform.parent = rawMazeParent.transform; // Place object under a single parent
+        // ground.GetComponent<MeshRenderer>().enabled = false;
+        // ground.transform.parent = cellBaseParent.transform; // Place object under a single parent
+        // ground.GetComponent<Collider>().isTrigger = true;
+
 
         // // South Wall
         // GameObject cube3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -87,7 +94,3 @@ public class InitializeMaze : MonoBehaviour {
         // cube4.GetComponent<Renderer>().material = wallMat;
         // cube4.transform.parent = cellBaseParent.transform; // Place object under a single parent
         // cube4.layer = 10;
-
-
-    }
-}

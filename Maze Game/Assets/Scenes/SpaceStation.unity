@@ -2247,7 +2247,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
@@ -2386,7 +2386,7 @@ MonoBehaviour:
   hackGameGroup: {fileID: 2134756601}
   spaceStationGroup: {fileID: 1595566538}
   enableOcclusionCulling: 1
-  enableMeshCombining: 1
+  enableMeshCombining: 0
   enableDebugRaycast: 1
   gameStatus: 0
 --- !u!114 &549688086
@@ -4443,9 +4443,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectList: []
-  pcCam: {fileID: 963194225}
   prefabList: []
   prefabList2: []
+  rayRed: 1
+  rayGreen: 1
+  rayYellow: 1
+  rayBlue: 1
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0
