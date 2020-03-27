@@ -2385,8 +2385,8 @@ MonoBehaviour:
   Check: {fileID: 0}
   hackGameGroup: {fileID: 2134756601}
   spaceStationGroup: {fileID: 1595566538}
-  enableOcclusionCulling: 1
-  enableMeshCombining: 0
+  enableCulling: 1
+  enableMeshCombining: 1
   enableDebugRaycast: 1
   gameStatus: 0
 --- !u!114 &549688086
@@ -4387,7 +4387,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4097
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4449,6 +4449,7 @@ MonoBehaviour:
   rayGreen: 1
   rayYellow: 1
   rayBlue: 1
+  enableOcclusionCulling: 1
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0

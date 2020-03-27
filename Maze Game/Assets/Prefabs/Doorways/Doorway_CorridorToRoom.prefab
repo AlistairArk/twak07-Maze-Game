@@ -123,7 +123,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
@@ -1999,7 +1999,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2468742494276185784}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2031,7 +2031,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3494765137705742652}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door Right
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2065,7 +2065,7 @@ GameObject:
   - component: {fileID: 2846710900580136220}
   - component: {fileID: 2846710900581136320}
   - component: {fileID: 2846710900576765864}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door_1_R
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2145,7 +2145,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: f1a43410b6955414193cd47904a47607, type: 3}
@@ -2161,7 +2161,7 @@ GameObject:
   - component: {fileID: 2846710900580136192}
   - component: {fileID: 2846710900581136322}
   - component: {fileID: 2846710900576765866}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door_1_Glass_L
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2239,7 +2239,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300008, guid: f1a43410b6955414193cd47904a47607, type: 3}
@@ -2255,7 +2255,7 @@ GameObject:
   - component: {fileID: 2846710900580136198}
   - component: {fileID: 2846710900581136324}
   - component: {fileID: 2846710900576765870}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: 'Door_1_M '
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2333,7 +2333,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: f1a43410b6955414193cd47904a47607, type: 3}
@@ -2349,7 +2349,7 @@ GameObject:
   - component: {fileID: 2846710900580136194}
   - component: {fileID: 2846710900581136348}
   - component: {fileID: 2846710900576765860}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door_1_Glass_R
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2427,7 +2427,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300006, guid: f1a43410b6955414193cd47904a47607, type: 3}
@@ -2442,7 +2442,7 @@ GameObject:
   - component: {fileID: 2846710900583036200}
   - component: {fileID: 2846710900580136200}
   - component: {fileID: 2846710900581136328}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Display_Monitor_Tiny_Closed
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2521,7 +2521,7 @@ GameObject:
   - component: {fileID: 2846710900583036202}
   - component: {fileID: 2846710900580136202}
   - component: {fileID: 2846710900581136330}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Display_Monitor_Tiny_Open
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2600,7 +2600,7 @@ GameObject:
   - component: {fileID: 2846710900583036204}
   - component: {fileID: 2846710900580136204}
   - component: {fileID: 2846710900581136332}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Display_Monitor_Tiny_Open
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2679,7 +2679,7 @@ GameObject:
   - component: {fileID: 2846710900583036206}
   - component: {fileID: 2846710900580136206}
   - component: {fileID: 2846710900581136334}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Display_Monitor_Tiny_Closed
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2759,7 +2759,7 @@ GameObject:
   - component: {fileID: 2846710900580136196}
   - component: {fileID: 2846710900581136326}
   - component: {fileID: 2846710900576765868}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door_1_Transparent
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -2842,7 +2842,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: f1a43410b6955414193cd47904a47607, type: 3}
@@ -2937,7 +2937,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
@@ -3768,7 +3768,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
@@ -4449,7 +4449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2163170636351461101}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door Left
   m_TagString: Transparent
   m_Icon: {fileID: 0}
@@ -4562,7 +4562,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
@@ -5286,22 +5286,42 @@ PrefabInstance:
     - target: {fileID: 689432489426469825, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
       propertyPath: m_TagString
-      value: Transparent
+      value: Terminal
+      objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469825, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 689432489426469827, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
       propertyPath: m_TagString
       value: Transparent
       objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469827, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 689432489426469829, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_TagString
+      value: Transparent
+      objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469829, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469831, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
       propertyPath: m_TagString
       value: Transparent
       objectReference: {fileID: 0}
     - target: {fileID: 689432489426469831, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
-      propertyPath: m_TagString
-      value: Transparent
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 689432489426903009, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
@@ -5362,6 +5382,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Transparent
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168809510170969447, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2deb88894c2eb8f448f352cf1f7c3cf1, type: 3}
@@ -5642,22 +5667,42 @@ PrefabInstance:
     - target: {fileID: 689432489426469825, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
       propertyPath: m_TagString
-      value: Transparent
+      value: Terminal
+      objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469825, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 689432489426469827, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
       propertyPath: m_TagString
       value: Transparent
       objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469827, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 689432489426469829, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_TagString
+      value: Transparent
+      objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469829, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 689432489426469831, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
       propertyPath: m_TagString
       value: Transparent
       objectReference: {fileID: 0}
     - target: {fileID: 689432489426469831, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
-      propertyPath: m_TagString
-      value: Transparent
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 689432489426903009, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}
@@ -5718,6 +5763,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Transparent
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168809510170969447, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7614864493012603450, guid: 2deb88894c2eb8f448f352cf1f7c3cf1,
         type: 3}

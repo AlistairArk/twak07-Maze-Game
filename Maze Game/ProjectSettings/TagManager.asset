@@ -10,6 +10,7 @@ TagManager:
   - StationCam
   - HackingCam
   - MazeGenerator
+  - Transparent
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Skybox
   - Minimap
   - Hacking
-  - 
+  - Transparent
   - 
   - 
   - 

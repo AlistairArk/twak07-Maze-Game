@@ -18,6 +18,8 @@ public class Occlusion : MonoBehaviour{
     public bool rayGreen = true;
     public bool rayYellow = true;
     public bool rayBlue = true;
+    public bool enableOcclusionCulling = true;
+
     // Start is called before the first frame update
     void Start(){
         MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
@@ -26,7 +28,12 @@ public class Occlusion : MonoBehaviour{
 
     // Update is called once per frame
     void FixedUpdate(){
+        if (MazeGenerator.enableCulling && enableOcclusionCulling) OcclusionCulling();
+        else if (MazeGenerator.enableCulling) FrustumCulling();
+    }
 
+
+    void OcclusionCulling(){
         /*
         rayRes - The amount of spacing between each ray
                 Higher means more precision - but at the cost of performance.
@@ -40,123 +47,167 @@ public class Occlusion : MonoBehaviour{
 
         */
 
-        if (MazeGenerator.enableOcclusionCulling){
-            prefabList.Clear();         // List objects rays hit
-            
-            int rayRes = 50;           // Spacing between rays
-            int screenX = Screen.width+rayRes; // Pixel width of screen
+        prefabList.Clear();         // List objects rays hit
+        
+        int rayRes = 50;           // Spacing between rays
+        int screenX = Screen.width+rayRes; // Pixel width of screen
 
-            // Loop across pixels in screen
-            while (screenX>0){
+        // Loop across pixels in screen
+        while (screenX>0){
 
-                screenX-=rayRes;
-                int screenY = Screen.height+rayRes;
+            screenX-=rayRes;
+            int screenY = Screen.height+rayRes;
 
-                while (screenY>-rayRes){
-                    screenY-=rayRes;
+            while (screenY>-rayRes){
+                screenY-=rayRes;
 
-                    Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 5);
-                    Ray ray = cam.ScreenPointToRay(rayPos);
-                    RaycastHit hit;
+                Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 0);
+                Ray ray = cam.ScreenPointToRay(rayPos);
+                RaycastHit hit;
 
-                    bool rayHit = false;
-                    int i=0;
-                    while(i<2){
-                        if (Physics.Raycast(ray, out hit, Mathf.Infinity)){ // If object hit
+                bool rayHit = false;
+                int i=0;
+                while(i<2){
+                    // If object hit / Layermask Default layer
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << 0)){ 
 
-                            // If object is tagged as occludable
-                            if (hit.transform.gameObject.tag == "Occludable"){ // Ray will stop
-                                // If it is not already listed by another ray
-                                if (!prefabList.Contains(hit.transform.gameObject)){
-                                    prefabList.Add(hit.transform.gameObject);
-                                    if (MazeGenerator.enableDebugRaycast && rayGreen)
-                                        Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
-                                }
-                                rayHit=true;
-                                i=2;
-                            }else if (hit.transform.gameObject.tag == "Transparent"){   // Ray can pass through
-                                // If it is not already listed by another ray
-                                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
-
-                            }else{  // Ray will stop
-                                // Draw ray - Object is not occludable
-                                if (MazeGenerator.enableDebugRaycast && rayYellow)
-                                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
-                                rayHit=true;
-                                i=2;
+                        // If object is tagged as occludable
+                        if (hit.transform.gameObject.tag == "Occludable"){ // Ray will stop
+                            // If it is not already listed by another ray
+                            if (!prefabList.Contains(hit.transform.gameObject)){
+                                prefabList.Add(hit.transform.gameObject);
+                                if (MazeGenerator.enableDebugRaycast && rayGreen)
+                                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
                             }
-                            // i++;
-                        }else{
-                            // Draw ray - ray has no contacts
-                            if (MazeGenerator.enableDebugRaycast && rayRed)
-                                Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
+                            rayHit=true;
+                            i=2;
+                        }else if (hit.transform.gameObject.tag == "Transparent"){   // Ray can pass through
+                            // If it is not already listed by another ray
+                            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+
+                        }else{  // Ray will stop
+                            // Draw ray - Object is not occludable
+                            if (MazeGenerator.enableDebugRaycast && rayYellow)
+                                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+                            rayHit=true;
+                            i=2;
+                        }
+                        // i++;
+                    }else{
+                        // Draw ray - ray has no contacts
+                        if (MazeGenerator.enableDebugRaycast && rayRed)
+                            Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
+                    }
+                    i++;
+                }
+            }
+        }
+
+        RenderObject();
+
+        
+    }
+
+
+    void FrustumCulling(){
+
+        prefabList.Clear();         // List objects rays hit
+        int rayRes = 10;            // Spacing between rays
+        int screenX = Screen.width-(int)((double)(Screen.width+rayRes)*.5); // Pixel width of screen
+
+        // Loop across pixels in screen
+        while (screenX>0){
+
+            screenX-=rayRes;
+            int screenY = Screen.height-(int)((double)(Screen.height+rayRes)*.5);
+
+            while (screenY>-rayRes){
+                screenY-=rayRes;
+
+
+                Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 0);
+                // Ray ray = cam.ScreenPointToRay(rayPos);
+                // RaycastHit[] hits = Physics.RaycastAll(ray, out hits, Mathf.Infinity);
+                
+                Ray ray = cam.ScreenPointToRay(rayPos);
+                RaycastHit[] hits;
+                hits = Physics.RaycastAll(ray); // .OrderBy(h=>h.distance).ToArray();
+
+                // // Order hits in terms of distance
+                // System.Array.Sort(hits, (x,y) => x.distance.CompareTo(y.distance));
+
+                if (hits.Length>0){ // If object hit
+
+                    int i = 0;
+                    while (i < hits.Length) {
+                        RaycastHit hit = hits[i];
+                        // Debug.Log (hit.collider.gameObject.name);
+                        // If object is tagged as occludable
+                        if (hit.transform.gameObject.tag == "Occludable"){ // Ray will stop
+                            // If it is not already listed by another ray
+                            if (!prefabList.Contains(hit.transform.gameObject)){
+                                prefabList.Add(hit.transform.gameObject);
+                                // if (MazeGenerator.enableDebugRaycast && rayGreen)
+                                //     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                            }
+                            // i = hits.Length;
+                        }else if (hit.transform.gameObject.tag == "Transparent"){   // Ray can pass through
+                            // If it is not already listed by another ray
+                            // Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+                        }else{  // Ray will stop
+                            // Draw ray - Object is not occludable
+                            // if (MazeGenerator.enableDebugRaycast && rayYellow)
+                            //     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+                            // i = hits.Length;
                         }
                         i++;
                     }
-                }
-            }
+                }else{
+                    // Draw ray - ray has no contacts
+                    if (MazeGenerator.enableDebugRaycast && rayRed)
+                        Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
-            // Iterate over list of objects rays hit in the CURRENT call
-            foreach (GameObject cell in prefabList)     // If the object was not added to the list last call,
-                if (!prefabList2.Contains(cell))        // it must be inactive - hence, activate it.
-                    cell.GetComponent<Renderer>().enabled = true; 
-            
-            // Iterate over list of objects rays hit in the LAST call
-            foreach (GameObject cell in prefabList2){
-                if (!prefabList.Contains(cell) && cell!=null){         //  If the object can no longer be found - cull it
-                    // Debug.Log(cell.name);
-                    cell.GetComponent<Renderer>().enabled = false;
                 }
             }
-            // Set new list of currently rendered objects       
-            prefabList2 = new List<GameObject>(prefabList); 
         }
+        RenderObject();
+    }
+
+
+    public void RenderObject(){
+        // Iterate over list of objects rays hit in the CURRENT call
+        foreach (GameObject cell in prefabList)     // If the object was not added to the list last call,
+            if (!prefabList2.Contains(cell))        // it must be inactive - hence, activate it.
+                cell.GetComponent<Renderer>().enabled = true; 
+        
+        // Iterate over list of objects rays hit in the LAST call
+        foreach (GameObject cell in prefabList2){
+            if (!prefabList.Contains(cell) && cell!=null){         //  If the object can no longer be found - cull it
+                // Debug.Log(cell.name);
+                cell.GetComponent<Renderer>().enabled = false;
+            }
+        }
+        // Set new list of currently rendered objects       
+        prefabList2 = new List<GameObject>(prefabList); 
+        
     }
 }
 
 
-                    // screenY-=rayRes;
 
-                    // Vector3 rayPos = new Vector3(screenX, screenY-rayRes, 0);
-                    // // Ray ray = cam.ScreenPointToRay(rayPos);
-                    // // RaycastHit[] hits = Physics.RaycastAll(ray, out hits, Mathf.Infinity);
-                    
-                    // Ray ray = cam.ScreenPointToRay(rayPos);
-                    // RaycastHit[] hits;
-                    // hits = Physics.RaycastAll(ray).OrderBy(h=>h.distance).ToArray();
+        // GameObject[] prefabs;
+        // prefabs = GameObject.FindGameObjectsWithTag("Occludable");
+     
 
-                    // // // Order hits in terms of distance
-                    // // System.Array.Sort(hits, (x,y) => x.distance.CompareTo(y.distance));
-
-                    // if (hits.Length>0){ // If object hit
-
-                    //     int i = 0;
-                    //     while (i < hits.Length) {
-                    //         RaycastHit hit = hits[i];
-                    //         // Debug.Log (hit.collider.gameObject.name);
-                    //         // If object is tagged as occludable
-                    //         if (hit.transform.gameObject.tag == "Occludable"){ // Ray will stop
-                    //             // If it is not already listed by another ray
-                    //             if (!prefabList.Contains(hit.transform.gameObject)){
-                    //                 prefabList.Add(hit.transform.gameObject);
-                    //                 if (MazeGenerator.enableDebugRaycast && rayGreen)
-                    //                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
-                    //             }
-                    //             i = hits.Length;
-                    //         }else if (hit.transform.gameObject.tag == "Transparent"){   // Ray can pass through
-                    //             // If it is not already listed by another ray
-                    //             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
-                    //         }else{  // Ray will stop
-                    //             // Draw ray - Object is not occludable
-                    //             if (MazeGenerator.enableDebugRaycast && rayYellow)
-                    //                 Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
-                    //             i = hits.Length;
-                    //         }
-                    //         i++;
-                    //     }
-                    // }else{
-                    //     // Draw ray - ray has no contacts
-                    //     if (MazeGenerator.enableDebugRaycast && rayRed)
-                    //         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
-
-                    // }
+        // foreach (GameObject prefab in prefabs){
+        //     if (prefab.name=="Occludable"){
+        //         // print("checking");
+        //         if (prefab.transform.parent.transform.GetComponent<Renderer>().isVisible){
+        //             prefab.GetComponent<Renderer>().enabled = true;
+        //             // Debug.Log("visible");
+        //         }else{
+        //             // Debug.Log("NOT Visible");
+        //             prefab.transform.GetComponent<Renderer>().enabled = false;
+        //         }
+        //     }
+        // }

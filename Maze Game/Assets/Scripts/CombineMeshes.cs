@@ -135,7 +135,7 @@ public class CombineMeshes : MonoBehaviour {
         transform.position = oldPos;
         transform.localScale = oldScl;
         foreach (Transform child in gameObject.transform) GameObject.Destroy(child.gameObject);
-        if (MazeGenerator.enableOcclusionCulling)
+        if (MazeGenerator.enableCulling)
             gameObject.GetComponent<Renderer>().enabled = false;    // Disable renderer
     }
 }

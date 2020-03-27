@@ -37,7 +37,7 @@ public class MazeGenerator : MonoBehaviour{
     private PlatformController PlatformController;
 
     [Header("Parameters", order=3)]
-    public bool enableOcclusionCulling=false;
+    public bool enableCulling=false;
     public bool enableMeshCombining=false;
     public bool enableDebugRaycast=false;
 
