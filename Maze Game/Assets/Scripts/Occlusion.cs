@@ -76,6 +76,7 @@ public class Occlusion : MonoBehaviour{
                             // If it is not already listed by another ray
                             if (!prefabList.Contains(hit.transform.gameObject)){
                                 prefabList.Add(hit.transform.gameObject);
+
                                 if (MazeGenerator.enableDebugRaycast && rayGreen)
                                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
                             }
@@ -176,15 +177,30 @@ public class Occlusion : MonoBehaviour{
 
     public void RenderObject(){
         // Iterate over list of objects rays hit in the CURRENT call
-        foreach (GameObject cell in prefabList)     // If the object was not added to the list last call,
-            if (!prefabList2.Contains(cell))        // it must be inactive - hence, activate it.
+        foreach (GameObject cell in prefabList){     // If the object was not added to the list last call,
+            if (!prefabList2.Contains(cell)){        // it must be inactive - hence, activate it.
                 cell.GetComponent<Renderer>().enabled = true; 
-        
+
+                foreach(Transform tr in cell.transform.parent){
+                    if(tr.tag == "OccludableOther"){
+                        tr.gameObject.SetActive(true);
+                        break;
+                    }
+                }
+            }
+        }
         // Iterate over list of objects rays hit in the LAST call
         foreach (GameObject cell in prefabList2){
             if (!prefabList.Contains(cell) && cell!=null){         //  If the object can no longer be found - cull it
                 // Debug.Log(cell.name);
                 cell.GetComponent<Renderer>().enabled = false;
+
+                foreach(Transform tr in cell.transform.parent){
+                    if(tr.tag == "OccludableOther"){
+                        tr.gameObject.SetActive(false);
+                        break;
+                    }
+                }
             }
         }
         // Set new list of currently rendered objects       

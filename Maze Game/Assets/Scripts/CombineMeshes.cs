@@ -135,8 +135,17 @@ public class CombineMeshes : MonoBehaviour {
         transform.position = oldPos;
         transform.localScale = oldScl;
         foreach (Transform child in gameObject.transform) GameObject.Destroy(child.gameObject);
-        if (MazeGenerator.enableCulling)
+
+        if (MazeGenerator.enableCulling){
             gameObject.GetComponent<Renderer>().enabled = false;    // Disable renderer
+
+            foreach(Transform tr in gameObject.transform.parent){
+                if(tr.tag == "OccludableOther"){
+                    tr.gameObject.SetActive(false);
+                    break;
+                }
+            }
+        }
     }
 }
 
