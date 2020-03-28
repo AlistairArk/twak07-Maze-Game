@@ -23,7 +23,8 @@ public class Occlusion : MonoBehaviour{
     // Start is called before the first frame update
     void Start(){
         MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
-        cam = GameObject.FindWithTag("StationCam").GetComponent<Camera>();
+        // cam = GameObject.FindWithTag("StationCam").GetComponent<Camera>();
+        cam = GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -104,9 +105,7 @@ public class Occlusion : MonoBehaviour{
             }
         }
 
-        RenderObject();
-
-        
+        RenderObject();  
     }
 
 

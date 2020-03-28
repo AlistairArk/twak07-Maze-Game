@@ -12,6 +12,17 @@ TagManager:
   - MazeGenerator
   - Transparent
   - OccludableOther
+  - PlayerManager
+  - StationCamVR
+  - StationCamStandard
+  - MenuCamVR
+  - MenuCamStandard
+  - HackerCamVR
+  - HackerCamStandard
+  - OrbitalCam
+  - MenuGroup
+  - StationGroup
+  - HackingGroup
   layers:
   - Default
   - TransparentFX

@@ -63,21 +63,7 @@ public class MazeGenerator : MonoBehaviour{
     }
 
     void Start(){
-        // InitializeMaze.Initialize();
-
-        // MazeGlobals.gridX = gridX;
-        // MazeGlobals.gridZ = gridZ;
-
-
-        GenerateSpaceStation();
-
-        cam1 = GameObject.FindWithTag("StationCam").GetComponent<Camera>();
-        cam2 = GameObject.FindWithTag("HackingCam").GetComponent<Camera>();
-        cam2.enabled = false;
-
-        hackGameGroup.SetActive(false);
-
-        // HackingGame(gameObject, 4, 4);
+        // GenerateSpaceStation();
     }
 
 
@@ -202,10 +188,27 @@ public class MazeGenerator : MonoBehaviour{
     }
 
     public void SetHackGoalPosition(){
+    }
+}
         // float gX, gZ = 0f;
         // gX  = (MazeGlobals.endX-.5f) * MazeGlobals.mapScale;
         // gZ  = (MazeGlobals.endZ-.5f) * MazeGlobals.mapScale;
 
         // GoalGroup.transform.position = new Vector3(gX, GoalGroup.transform.position.y, gZ);
-    }
-}
+
+
+
+        // InitializeMaze.Initialize();
+
+        // MazeGlobals.gridX = gridX;
+        // MazeGlobals.gridZ = gridZ;
+
+
+
+        // cam1 = GameObject.FindWithTag("StationCam").GetComponent<Camera>();
+        // cam2 = GameObject.FindWithTag("HackingCam").GetComponent<Camera>();
+        // cam2.enabled = false;
+
+        // hackGameGroup.SetActive(false);
+
+        // HackingGame(gameObject, 4, 4);

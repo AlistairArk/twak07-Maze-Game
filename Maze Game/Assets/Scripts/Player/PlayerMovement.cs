@@ -2,21 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
-{
+public class PlayerMovement : MonoBehaviour{
 
-    public CharacterController controller;
+    [Header("Settings", order=0)]
+    public bool enableVR = false;
 
+    [Header("Player Movement", order=1)]
     public float speed = 12f;
     public float gravity = -9.81f;
-
-    public Transform groundCheck;
     public float groundDistance = 0.4f;
+
+    [Header("Arguments", order=2)]
+    public CharacterController controller;
+    public GameObject playerCamera;
+    public GameObject xrCam;
     public LayerMask groundMask; 
 
-    Vector3 velocity;
-    bool isGrounded;
-    public GameObject playerCamera;
+    [Header("Misc.", order=3)]
+    public Transform groundCheck;
+    public Vector3 velocity;
+    public bool isGrounded;
+    public GameObject activeCam;
+
+    void Awake(){
+        
+        // if (enableVR){
+        //     xrCam.SetActive(true);
+        //     playerCamera.SetActive(false);
+        //     activeCam = xrCam;
+        // }else{
+        //     xrCam.SetActive(false);
+        //     playerCamera.SetActive(true);
+        //     activeCam = playerCamera;
+        // }
+    }
+
 
     // Update is called once per frame
     void FixedUpdate() {
