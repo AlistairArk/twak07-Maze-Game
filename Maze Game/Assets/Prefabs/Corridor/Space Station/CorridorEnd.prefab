@@ -1531,11 +1531,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 10800000, guid: d5c25941f8dbec94e8c7030f450e2655, type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: -0.02
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 10800000, guid: d5c25941f8dbec94e8c7030f450e2655, type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 1e-45
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: d5c25941f8dbec94e8c7030f450e2655, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 2855346583350514119, guid: d5c25941f8dbec94e8c7030f450e2655,
         type: 3}
@@ -5405,11 +5409,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 10800000, guid: d5c25941f8dbec94e8c7030f450e2655, type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: -0.02
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 10800000, guid: d5c25941f8dbec94e8c7030f450e2655, type: 3}
       propertyPath: m_BoundingSphereOverride.w
       value: 1e-45
+      objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: d5c25941f8dbec94e8c7030f450e2655, type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2855346583350514119, guid: d5c25941f8dbec94e8c7030f450e2655,
         type: 3}

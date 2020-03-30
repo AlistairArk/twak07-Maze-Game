@@ -6,6 +6,7 @@ public class MazeGenerator : MonoBehaviour{
 
 
     public GameObject GoalCube;
+    public GameObject GoalHackCube;
     public GameObject GoalGroup;
     private GoalDetector GoalDetector;
 
@@ -44,6 +45,8 @@ public class MazeGenerator : MonoBehaviour{
     private GameObject lockedDoor;
 
     public int gameStatus = 0; // 1 if hacking / 0 if station
+    private PlayerManager PlayerManager;
+
 
 
     // Called before any Start function
@@ -60,10 +63,18 @@ public class MazeGenerator : MonoBehaviour{
         Check               = gameObject.GetComponent<Check>();
 
         PlatformController = hackGameGroup.GetComponent<PlatformController>();
+        PlayerManager = GameObject.FindWithTag("PlayerManager").GetComponent<PlayerManager>();
     }
 
     void Start(){
-        // GenerateSpaceStation();
+        // // GenerateSpaceStation();
+        // float pcPosX = (startX+.5f) * MazeGlobals.mapScale;
+        // float pcPosZ = (startZ+.5f) * MazeGlobals.mapScale;
+
+        // Temporarily disable controller while repositioning the player object
+        MazeGlobals.charController.enabled = false;
+        MazeGlobals.playerGroup.transform.position = new Vector3(5f, MazeGlobals.playerGroup.transform.position.y, 5f);
+        MazeGlobals.charController.enabled = true;
     }
 
 
@@ -87,13 +98,6 @@ public class MazeGenerator : MonoBehaviour{
 
         MazePrefabs.Rooms(); // Interspace rooms along that path
 
-        float pcPosX = (startX+.5f) * MazeGlobals.mapScale;
-        float pcPosZ = (startZ+.5f) * MazeGlobals.mapScale;
-
-        // Temporarily disable controller while repositioning the player object
-        MazeGlobals.charController.enabled = false;
-        MazeGlobals.playerObject.transform.position = new Vector3(pcPosX, MazeGlobals.playerObject.transform.position.y, pcPosZ);
-        MazeGlobals.charController.enabled = true;
 
         SetGoalPosition();
     }
@@ -138,9 +142,10 @@ public class MazeGenerator : MonoBehaviour{
         PlatformController.ResetTries();    // Reset try counter / Rotation
         PlatformController.ResetBall();     // Ball position - Do this after or you may trigger a loss on startup
 
-        cam1.enabled = !cam1.enabled;
-        cam2.enabled = !cam2.enabled;
-        
+        // cam1.enabled = !cam1.enabled;
+        // cam2.enabled = !cam2.enabled;
+        PlayerManager.GameToHack();
+
         MazeGlobals.mode = 1;
 
         // Set new grid size before reset
@@ -181,34 +186,15 @@ public class MazeGenerator : MonoBehaviour{
     }
 
     void HackingGameEnd(){
-        hackGameGroup.SetActive(false);
-        spaceStationGroup.SetActive(true);
+        PlayerManager.HackToGame();
+
+        // hackGameGroup.SetActive(false);
+        // spaceStationGroup.SetActive(true);
         gameStatus = 0;
 
     }
 
     public void SetHackGoalPosition(){
+        GoalHackCube.transform.position = new Vector3((MazeGlobals.gridX-.5f)*10f, GoalHackCube.transform.position.y+2f, (MazeGlobals.gridZ-.5f)*10f);
     }
 }
-        // float gX, gZ = 0f;
-        // gX  = (MazeGlobals.endX-.5f) * MazeGlobals.mapScale;
-        // gZ  = (MazeGlobals.endZ-.5f) * MazeGlobals.mapScale;
-
-        // GoalGroup.transform.position = new Vector3(gX, GoalGroup.transform.position.y, gZ);
-
-
-
-        // InitializeMaze.Initialize();
-
-        // MazeGlobals.gridX = gridX;
-        // MazeGlobals.gridZ = gridZ;
-
-
-
-        // cam1 = GameObject.FindWithTag("StationCam").GetComponent<Camera>();
-        // cam2 = GameObject.FindWithTag("HackingCam").GetComponent<Camera>();
-        // cam2.enabled = false;
-
-        // hackGameGroup.SetActive(false);
-
-        // HackingGame(gameObject, 4, 4);

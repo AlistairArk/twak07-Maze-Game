@@ -30,6 +30,7 @@ public class MazeGlobals : MonoBehaviour{
     public GameObject[] walls;
     public GameObject goalObject;
     public GameObject playerObject;
+    public GameObject playerGroup;
 
     public List<List<List<GameObject>>> cellList = new List<List<List<GameObject>>>();
     public List<List<List<GameObject>>> cellListHack = new List<List<List<GameObject>>>();

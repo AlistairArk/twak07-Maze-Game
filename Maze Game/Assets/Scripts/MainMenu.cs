@@ -4,20 +4,6 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour{
 
-    [Header("Menu", order=0)]
-
-    public GameObject menuUI;
-    public GameObject cam2Object;
-    private Camera cam2;
-
-
-    [Header("In Game", order=1)]
-    public GameObject cam1Object;
-    public GameObject gameUI;
-    private Camera cam1;
-
-    [Header("Misc.", order=2)]
-    public bool showMenu = true;
 
     private MazeGenerator MazeGenerator;
     private MazeGlobals MazeGlobals;
@@ -28,9 +14,11 @@ public class MainMenu : MonoBehaviour{
         // cam2 = cam2Object.GetComponent<Camera>();
         // cam1.enabled = true;
         // cam2.enabled = false;
-        // MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
-        // MazeGlobals = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGlobals>();
+        MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
+        MazeGlobals = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGlobals>();
         PlayerManager = GameObject.FindWithTag("PlayerManager").GetComponent<PlayerManager>();
+
+
     }
 
 
@@ -64,10 +52,11 @@ public class MainMenu : MonoBehaviour{
 
 
 
-    // public void ButtonPlayGame(){
-    //     // showMenu =!showMenu;
-        
-    // } 
+    public void ButtonPlayGame(){ // Default settings
+        Debug.Log("PRESSED");
+        MazeGenerator.GenerateSpaceStation();
+        PlayerManager.MenuToGame();
+    } 
 
 
     public void Example1(){     // Small Maze No Rooms

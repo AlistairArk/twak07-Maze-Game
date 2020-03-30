@@ -13,6 +13,7 @@ public class Occlusion : MonoBehaviour{
     public List<GameObject> prefabList2 = new List<GameObject>(); // list of objects rays hit last call
 
     private MazeGenerator MazeGenerator;
+    private PlayerManager PlayerManager;
 
     public bool rayRed = true;
     public bool rayGreen = true;
@@ -23,6 +24,7 @@ public class Occlusion : MonoBehaviour{
     // Start is called before the first frame update
     void Start(){
         MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
+        PlayerManager = GameObject.FindWithTag("PlayerManager").GetComponent<PlayerManager>();
         // cam = GameObject.FindWithTag("StationCam").GetComponent<Camera>();
         cam = GetComponent<Camera>();
     }
@@ -51,13 +53,20 @@ public class Occlusion : MonoBehaviour{
         prefabList.Clear();         // List objects rays hit
         
         int rayRes = 50;           // Spacing between rays
+        if (PlayerManager.enableVR) rayRes*=2;
+
         int screenX = Screen.width+rayRes; // Pixel width of screen
 
+        bool screenPass = true;
         // Loop across pixels in screen
         while (screenX>0){
+            if (PlayerManager.enableVR && screenX>0) screenPass = false;
+            else if (PlayerManager.enableVR && screenX*2>0) screenPass = false;
 
             screenX-=rayRes;
-            int screenY = Screen.height+rayRes;
+            int screenY;
+            if (PlayerManager.enableVR) screenY = Screen.height*2+rayRes;
+            else screenY = Screen.height+rayRes;
 
             while (screenY>-rayRes){
                 screenY-=rayRes;
@@ -80,6 +89,8 @@ public class Occlusion : MonoBehaviour{
 
                                 if (MazeGenerator.enableDebugRaycast && rayGreen)
                                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                            } else {
+                                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.cyan);    
                             }
                             rayHit=true;
                             i=2;
