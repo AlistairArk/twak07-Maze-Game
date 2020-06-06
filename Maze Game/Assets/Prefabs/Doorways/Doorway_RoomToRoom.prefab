@@ -287,8 +287,8 @@ Transform:
   - {fileID: 6214421817779653139}
   - {fileID: 6214421817779653137}
   - {fileID: 6214421817779653143}
-  m_Father: {fileID: 5461694045861269836}
-  m_RootOrder: 5
+  m_Father: {fileID: 2700713856533731963}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8797127140525919933
 MonoBehaviour:
@@ -697,9 +697,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4573153802335715653}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.6, y: 0, z: 6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 6214421817779653147}
+  - {fileID: 4130793257401137927}
   m_Father: {fileID: 5461694045861269836}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -736,8 +738,6 @@ Transform:
   - {fileID: 5585232773880017494}
   - {fileID: 7954272547099166503}
   - {fileID: 2700713856533731963}
-  - {fileID: 6214421817779653147}
-  - {fileID: 4130793257401137927}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -801,8 +801,8 @@ MonoBehaviour:
   terminalB: {fileID: 7954272547099073287}
   doorA: {fileID: 973487987805214326}
   doorB: {fileID: 6214421817779951163}
-  openStateA: {x: -2, y: 0, z: 0}
-  openStateB: {x: 2, y: 0, z: 0}
+  openStateA: {x: 1, y: 0, z: 6}
+  openStateB: {x: 5, y: 0, z: 6}
   closedStateA: {x: 0, y: 0, z: 0}
   closedStateB: {x: 0, y: 0, z: 0}
 --- !u!114 &6106974609000972928
@@ -3173,8 +3173,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6214421817779653145}
-  m_Father: {fileID: 5461694045861269836}
-  m_RootOrder: 4
+  m_Father: {fileID: 2700713856533731963}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6214421817776785979
 MeshFilter:

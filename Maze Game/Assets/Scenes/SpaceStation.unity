@@ -1957,8 +1957,8 @@ MonoBehaviour:
   Check: {fileID: 0}
   hackGameGroup: {fileID: 2134756601}
   spaceStationGroup: {fileID: 1595566538}
-  enableCulling: 1
-  enableMeshCombining: 1
+  enableCulling: 0
+  enableMeshCombining: 0
   enableDebugRaycast: 1
   gameStatus: 0
 --- !u!114 &549688086
@@ -4024,6 +4024,8 @@ MonoBehaviour:
   pauseTimer: 1
   timeTaken: 0
   cellsTravelled: 0
+  playerX: 0
+  playerZ: 0
 --- !u!1 &917992091
 GameObject:
   m_ObjectHideFlags: 0

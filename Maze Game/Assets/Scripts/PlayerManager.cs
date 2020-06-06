@@ -67,7 +67,7 @@ public class PlayerManager : MonoBehaviour{
         /*
         Reset metric parameters and calculate parameters for the next maze generaton
         */
-
+        print("RESETTING METRICS");
         timeTaken = 0f;
         cellsTravelled = 0;
 

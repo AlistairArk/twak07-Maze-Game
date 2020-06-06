@@ -29,15 +29,21 @@ public class Doorway : MonoBehaviour {
     public Vector3 closedStateA; // Open state vectors for door A
     public Vector3 closedStateB; // Open state vectors for door B
 
-
-
+    private PlayerManager PlayerManager;
     private MazeGenerator MazeGenerator;
+
+
+
 
     void Start(){
         closedStateA = doorA.transform.localPosition;
         closedStateB = doorB.transform.localPosition;
 
         MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
+        PlayerManager = GameObject.FindWithTag("PlayerManager").GetComponent<PlayerManager>();
+
+        // Check player manager door lock probability
+        doorLocked = false; // Easiest test
     }
 
 
