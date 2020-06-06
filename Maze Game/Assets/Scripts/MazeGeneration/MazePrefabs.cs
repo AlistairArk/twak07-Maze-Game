@@ -374,9 +374,9 @@ public class MazePrefabs : MonoBehaviour {
                             // westDoor=true;
                             // If there is a wall to the bottom || different room
                             if (Z == 0 || cellData[X][Z-1][7]!=currentRoomUID)
-                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.4f), new Vector3(1,1,1), -90);
+                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 1f, Z+.4f), new Vector3(1,1,1), -90);
                             else
-                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.6f), new Vector3(-1,1,1), -90);
+                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.4f), new Vector3(1,1,1), -90);
                         }
                     }
                     
@@ -401,7 +401,7 @@ public class MazePrefabs : MonoBehaviour {
                             
                             // If there is a wall to the left || different room
                             if (X+1 >= gridX || cellData[X+1][Z][7]!=currentRoomUID)
-                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.6f, 0f, Z+.6f), new Vector3(-1,1,1), 0);
+                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.6f), new Vector3(1,1,1), 0);
                             else
                                 CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.6f), new Vector3(1,1,1), 0);
                         }
