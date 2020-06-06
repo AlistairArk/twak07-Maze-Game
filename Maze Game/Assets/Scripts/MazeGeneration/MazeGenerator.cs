@@ -80,8 +80,8 @@ public class MazeGenerator : MonoBehaviour{
 
     public void GenerateSpaceStation(){
         ResetMaze.Reset();
-        PlayerManager.ResetMetrics();   // Reset metrics and generate meterics for next maze generation
-        
+        PlayerManager.ResetMetrics();       // Reset metrics and generate meterics for next maze generation
+
         switch(MazeGlobals.type){
             case(0):
                 RecursiveBacktrack.Generate(endX, endZ); // Generate maze from end of maze

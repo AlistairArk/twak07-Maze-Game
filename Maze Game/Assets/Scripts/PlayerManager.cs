@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour{
     public bool pauseTimer = true;      // Timer is paused while in hacker game
     public float timeTaken = 0;         // Time taken to clear the maze  
     public int cellsTravelled = 0;      // Distance travelled (measured in number of maze cells)  
-    public int playerX = 0; public int playerY = 0;     // Log player co-ords for cell movement
+    public int playerX = 0; public int playerZ = 0;     // Log player co-ords for cell movement
 
     // Start is called before the first frame update
     void Awake(){
@@ -51,7 +51,16 @@ public class PlayerManager : MonoBehaviour{
 
     void FixedUpdate(){
         // Only record player time while the pause timer is set to false
-        if (!pauseTimer) timeTaken+=0.02f;
+        if (!pauseTimer){
+            timeTaken+=0.02f;
+            
+            // if player moves to new cell
+            if (playerX!=(int)stationCamStandard.transform.position.x/10 || playerZ!=(int)stationCamStandard.transform.position.z/10){
+                playerX = (int)stationCamStandard.transform.position.x/10;
+                playerZ = (int)stationCamStandard.transform.position.z/10;
+                cellsTravelled++;              
+            }
+        }
     }
 
     public void ResetMetrics(){
@@ -80,6 +89,7 @@ public class PlayerManager : MonoBehaviour{
     void MenuState(){
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        pauseTimer = true;
 
         menuGroup.SetActive(true);
         stationGroup.SetActive(false);
@@ -106,6 +116,7 @@ public class PlayerManager : MonoBehaviour{
     public void MenuToGame(){
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        pauseTimer = false;
 
         orbitalCam.SetActive(true);
         menuGroup.SetActive(false);
@@ -123,6 +134,7 @@ public class PlayerManager : MonoBehaviour{
     public void GameToMenu(){
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        pauseTimer = true;
 
         menuGroup.SetActive(true);
         orbitalCam.SetActive(false);
@@ -142,6 +154,7 @@ public class PlayerManager : MonoBehaviour{
         stationGroup.SetActive(false);
         hackingGroup.SetActive(true);
         orbitalCam.SetActive(false);
+        pauseTimer = true;
 
         if (enableVR){
             stationCamVR.SetActive(false);
@@ -158,6 +171,7 @@ public class PlayerManager : MonoBehaviour{
         stationGroup.SetActive(true);
         hackingGroup.SetActive(false);
         orbitalCam.SetActive(true);
+        pauseTimer = false;
 
         if (enableVR){
             stationCamVR.SetActive(true);
