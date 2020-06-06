@@ -22,7 +22,7 @@ public class MazeGlobals : MonoBehaviour{
     public bool hideWalls = true;
     public bool hideWaypoint = true;
     public int mode = 0;
-    public int type = 0; // 0 Recursive .. 1 Symmetric
+    public int type = 1; // 0 Recursive .. 1 Symmetric
 
     // RawMaze
     [Header("Raw Maze", order=2)]

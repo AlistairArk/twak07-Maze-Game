@@ -5,6 +5,7 @@ using UnityEngine;
 public class InitializeMaze : MonoBehaviour {
 
     public MazeGlobals MazeGlobals;
+    public bool createBase = false;
 
     void Awake(){
         MazeGlobals = gameObject.GetComponent<MazeGlobals>();
@@ -55,7 +56,7 @@ public class InitializeMaze : MonoBehaviour {
 
 
         // Create level base
-        if (MazeGlobals.mode==0){
+        if (MazeGlobals.mode==0 && createBase){
             GameObject mapGround = GameObject.CreatePrimitive(PrimitiveType.Cube);
             mapGround.transform.position   = new Vector3(mapScale*(gridX*.5f), -4f, mapScale*(gridZ*.5f));
             mapGround.transform.localScale = new Vector3(mapScale*gridX, 0.01f, mapScale*gridZ);
@@ -63,6 +64,8 @@ public class InitializeMaze : MonoBehaviour {
             mapGround.layer = 8;
             mapGround.transform.parent = cellBaseParent.transform; // Place object under a single parent
         }
+
+        // Create teleporter base 
     }
 }
 

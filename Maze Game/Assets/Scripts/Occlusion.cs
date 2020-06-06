@@ -57,11 +57,11 @@ public class Occlusion : MonoBehaviour{
 
         int screenX = Screen.width+rayRes; // Pixel width of screen
 
-        bool screenPass = true;
+        // bool screenPass = true;
         // Loop across pixels in screen
         while (screenX>0){
-            if (PlayerManager.enableVR && screenX>0) screenPass = false;
-            else if (PlayerManager.enableVR && screenX*2>0) screenPass = false;
+            // if (PlayerManager.enableVR && screenX>0) screenPass = false;
+            // else if (PlayerManager.enableVR && screenX*2>0) screenPass = false;
 
             screenX-=rayRes;
             int screenY;
@@ -75,7 +75,6 @@ public class Occlusion : MonoBehaviour{
                 Ray ray = cam.ScreenPointToRay(rayPos);
                 RaycastHit hit;
 
-                bool rayHit = false;
                 int i=0;
                 while(i<2){
                     // If object hit / Layermask Default layer
@@ -92,7 +91,6 @@ public class Occlusion : MonoBehaviour{
                             } else {
                                 Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.cyan);    
                             }
-                            rayHit=true;
                             i=2;
                         }else if (hit.transform.gameObject.tag == "Transparent"){   // Ray can pass through
                             // If it is not already listed by another ray
@@ -102,7 +100,6 @@ public class Occlusion : MonoBehaviour{
                             // Draw ray - Object is not occludable
                             if (MazeGenerator.enableDebugRaycast && rayYellow)
                                 Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
-                            rayHit=true;
                             i=2;
                         }
                         // i++;

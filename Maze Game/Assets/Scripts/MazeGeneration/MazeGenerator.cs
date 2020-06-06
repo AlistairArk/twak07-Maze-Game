@@ -20,8 +20,8 @@ public class MazeGenerator : MonoBehaviour{
     public ResetMaze ResetMaze;
     public Check Check;
 
-    private int startX = 0;
-    private int startZ = 0;
+    // private int startX = 0;
+    // private int startZ = 0;
     private int endX = 0;
     private int endZ = 0;
     private int gridX = 10; // Initial grid size
@@ -80,6 +80,7 @@ public class MazeGenerator : MonoBehaviour{
 
     public void GenerateSpaceStation(){
         ResetMaze.Reset();
+        PlayerManager.ResetMetrics();   // Reset metrics and generate meterics for next maze generation
         
         switch(MazeGlobals.type){
             case(0):

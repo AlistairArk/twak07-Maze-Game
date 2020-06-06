@@ -25,29 +25,7 @@ public class MainMenu : MonoBehaviour{
 
 
     void Update() {
-        // if (MazeGenerator.gameStatus==0){   // If the player is not hacking
-        //     switch(showMenu){
-        //         case(true): // Menu
-        //         cam2.enabled = true;
-        //         cam1.enabled = false;
-        //         gameUI.SetActive(false);
-        //         menuUI.SetActive(true);
-        //         Cursor.lockState = CursorLockMode.None;
-        //         break;
 
-        //         case(false): // Game
-        //         cam1.enabled = true;
-        //         cam2.enabled = false;
-        //         gameUI.SetActive(true);
-        //         menuUI.SetActive(false);
-        //         Cursor.lockState = CursorLockMode.Locked;
-        //         break;
-        //     }
-
-        //     // if (Input.GetKeyDown(KeyCode.Escape)) {
-        //     //     showMenu =!showMenu;
-        //     // }
-        // }
     }
 
 
@@ -63,6 +41,7 @@ public class MainMenu : MonoBehaviour{
         MazeGlobals.mode=0;
         MazeGlobals.gridX=5;
         MazeGlobals.gridZ=5;
+        MazeGlobals.gridZ=5;
 
         MazeGenerator.GenerateSpaceStation();
         PlayerManager.MenuToGame();
@@ -70,16 +49,17 @@ public class MainMenu : MonoBehaviour{
 
     public void Example2(){     // Large maze large rooms
         MazeGlobals.mode=0;
-        MazeGlobals.gridX=10;
-        MazeGlobals.gridZ=10;
+        MazeGlobals.gridX=50;
+        MazeGlobals.gridZ=30;
         
         MazeGenerator.GenerateSpaceStation();
         PlayerManager.MenuToGame();
     } 
 
     public void Example3(){     // Smalls Maze small rooms
-        MazeGlobals.gridX=10;
-        MazeGlobals.gridZ=10;
+        MazeGlobals.gridX=50;
+        MazeGlobals.gridZ=50;
+        MazeGlobals.type=0;
         
         MazeGenerator.GenerateSpaceStation();
         PlayerManager.MenuToGame();

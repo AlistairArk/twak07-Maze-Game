@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour{
     public GameObject orbitalCam;   
 
     [Header("Object Groups", order=2)]
-    public GameObject menuGroup;   
+    public GameObject menuGroup;
     public GameObject stationGroup;   
     public GameObject hackingGroup;   
 
@@ -25,6 +25,12 @@ public class PlayerManager : MonoBehaviour{
     [Header("Misc.", order=3)]
     public string gameState = "menu";
 
+
+    [Header("Player Attributes", order=0)]
+    public bool pauseTimer = true;      // Timer is paused while in hacker game
+    public float timeTaken = 0;         // Time taken to clear the maze  
+    public int cellsTravelled = 0;      // Distance travelled (measured in number of maze cells)  
+    public int playerX = 0; public int playerY = 0;     // Log player co-ords for cell movement
 
     // Start is called before the first frame update
     void Awake(){
@@ -43,8 +49,38 @@ public class PlayerManager : MonoBehaviour{
         MenuState();
     }
 
+    void FixedUpdate(){
+        // Only record player time while the pause timer is set to false
+        if (!pauseTimer) timeTaken+=0.02f;
+    }
+
+    public void ResetMetrics(){
+        /*
+        Reset metric parameters and calculate parameters for the next maze generaton
+        */
+
+        timeTaken = 0f;
+        cellsTravelled = 0;
+
+        // Check how player peformed in the last maze
+
+        // Check how the player peformed in the current maze
+
+        // If the player peforms better than last time create a harder maze
+
+        // If the player peforms worse, create an easier maze
+
+        // If player peforms about the same, create the same maze.
+
+
+
+    }
+
 
     void MenuState(){
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         menuGroup.SetActive(true);
         stationGroup.SetActive(false);
         hackingGroup.SetActive(false);
@@ -68,6 +104,9 @@ public class PlayerManager : MonoBehaviour{
 
 
     public void MenuToGame(){
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         orbitalCam.SetActive(true);
         menuGroup.SetActive(false);
         stationGroup.SetActive(true);
@@ -82,6 +121,9 @@ public class PlayerManager : MonoBehaviour{
     }
 
     public void GameToMenu(){
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         menuGroup.SetActive(true);
         orbitalCam.SetActive(false);
         stationGroup.SetActive(false);
