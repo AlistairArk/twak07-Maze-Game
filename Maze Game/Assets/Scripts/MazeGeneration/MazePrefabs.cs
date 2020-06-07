@@ -39,6 +39,7 @@ public class MazePrefabs : MonoBehaviour {
     public GameObject DoorwayRoomToRoomSlant;
 
     [Header("Misc.", order=5)]
+    public GameObject mapBase;
     public float prefabOffsetX = 0.5f;
     public float prefabOffsetZ = 0.5f;
 
@@ -46,6 +47,19 @@ public class MazePrefabs : MonoBehaviour {
     void Awake(){
         MazeGlobals = gameObject.GetComponent<MazeGlobals>();
     }
+
+    public void Base(){
+        int gridX = MazeGlobals.gridX;
+        int gridZ = MazeGlobals.gridZ;
+        int mapScale = MazeGlobals.mapScale;
+        GameObject mapBase = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        mapBase.transform.position   = new Vector3(mapScale*(gridX*.5f), 10f, mapScale*(gridZ*.5f));
+        mapBase.transform.localScale = new Vector3(mapScale*gridX, 0.1f, mapScale*gridZ);
+        // mapBase.GetComponent<Renderer>().material = whiteMat;
+        // mapBase.layer = 8;
+        mapBase.transform.parent =  MazeGlobals.cellDoorParent.transform; // Place object under a single parent
+    }
+
 
     public void Corridors(){
         int gridX = MazeGlobals.gridX;
@@ -374,7 +388,7 @@ public class MazePrefabs : MonoBehaviour {
                             // westDoor=true;
                             // If there is a wall to the bottom || different room
                             if (Z == 0 || cellData[X][Z-1][7]!=currentRoomUID)
-                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 1f, Z+.4f), new Vector3(1,1,1), -90);
+                                CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.4f), new Vector3(1,1,1), -90);
                             else
                                 CreatePrefab(DoorwayRoomToRoom, MazeGlobals.cellDoorParent, new Vector3(X+.4f, 0f, Z+.4f), new Vector3(1,1,1), -90);
                         }

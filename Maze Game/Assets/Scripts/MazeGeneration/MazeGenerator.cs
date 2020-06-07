@@ -93,6 +93,8 @@ public class MazeGenerator : MonoBehaviour{
 
         Check.CellEnds();
 
+        MazePrefabs.Base();
+
         MazePrefabs.Corridors();
         
         Check.MainPath(); // Crawl through the maze and find the main path
