@@ -46,6 +46,8 @@ public class MazeGenerator : MonoBehaviour{
 
     public int gameStatus = 0; // 1 if hacking / 0 if station
     private PlayerManager PlayerManager;
+    private GameObject PlayerGroup;
+    private GameObject StationCamStandard;
 
 
 
@@ -64,6 +66,8 @@ public class MazeGenerator : MonoBehaviour{
 
         PlatformController = hackGameGroup.GetComponent<PlatformController>();
         PlayerManager = GameObject.FindWithTag("PlayerManager").GetComponent<PlayerManager>();
+        PlayerGroup = GameObject.FindWithTag("PlayerGroup");
+        StationCamStandard = GameObject.FindWithTag("StationCamStandard");
     }
 
     void Start(){
@@ -79,6 +83,7 @@ public class MazeGenerator : MonoBehaviour{
 
 
     public void GenerateSpaceStation(){
+
         ResetMaze.Reset();
         PlayerManager.ResetMetrics();       // Reset metrics and generate meterics for next maze generation
 
@@ -101,8 +106,9 @@ public class MazeGenerator : MonoBehaviour{
 
         MazePrefabs.Rooms(); // Interspace rooms along that path
 
-
         SetGoalPosition();
+
+        StationCamStandard.transform.position = new Vector3(StationCamStandard.transform.position.x,1f,StationCamStandard.transform.position.z);
     }
 
     public void SetGoalPosition(){
@@ -122,6 +128,9 @@ public class MazeGenerator : MonoBehaviour{
     void Update(){
         // Debug.Log(GoalDetector.goalTrigger);
         if (GoalDetector.goalTrigger){
+            // PlayerGroup = GameObject.FindWithTag("PlayerGroup");
+            // if (PlayerGroup!=null) PlayerGroup.SetActive(false);
+            
             GoalDetector.goalTrigger = false;
 
             MazeGlobals.mode = 0;
@@ -133,6 +142,9 @@ public class MazeGenerator : MonoBehaviour{
             MazeGlobals.gridZ = gridZ;
             ResetMaze.Reset();
             GenerateSpaceStation();
+
+            StationCamStandard.transform.position = new Vector3(StationCamStandard.transform.position.x,10000f,StationCamStandard.transform.position.z);
+            // if (PlayerGroup!=null) PlayerGroup.SetActive(true);
         }
     }
 

@@ -38,8 +38,12 @@ public class MazePrefabs : MonoBehaviour {
     public GameObject DoorwayRoomToRoom;
     public GameObject DoorwayRoomToRoomSlant;
 
-    [Header("Misc.", order=5)]
+    [Header("Minimap", order=5)]
     public GameObject mapBase;
+    public Material matWhite;
+    public Material matBlack;
+
+    [Header("Misc.", order=6)]
     public float prefabOffsetX = 0.5f;
     public float prefabOffsetZ = 0.5f;
 
@@ -55,8 +59,9 @@ public class MazePrefabs : MonoBehaviour {
         GameObject mapBase = GameObject.CreatePrimitive(PrimitiveType.Cube);
         mapBase.transform.position   = new Vector3(mapScale*(gridX*.5f), 10f, mapScale*(gridZ*.5f));
         mapBase.transform.localScale = new Vector3(mapScale*gridX, 0.1f, mapScale*gridZ);
-        // mapBase.GetComponent<Renderer>().material = whiteMat;
+        mapBase.GetComponent<Renderer>().material = matBlack;
         // mapBase.layer = 8;
+        mapBase.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
         mapBase.transform.parent =  MazeGlobals.cellDoorParent.transform; // Place object under a single parent
     }
 

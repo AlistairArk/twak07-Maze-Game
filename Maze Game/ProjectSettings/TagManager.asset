@@ -23,6 +23,7 @@ TagManager:
   - MenuGroup
   - StationGroup
   - HackingGroup
+  - PlayerGroup
   layers:
   - Default
   - TransparentFX
