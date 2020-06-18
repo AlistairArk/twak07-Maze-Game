@@ -24,16 +24,21 @@ public class PlayerManager : MonoBehaviour{
 
     [Header("Misc.", order=3)]
     public string gameState = "menu";
+    public MazeGlobals MazeGlobals;
 
 
     [Header("Player Attributes", order=0)]
     public bool pauseTimer = true;      // Timer is paused while in hacker game
     public float timeTaken = 0;         // Time taken to clear the maze  
+    public float timeTakenL = 0;        // Time taken last maze
     public int cellsTravelled = 0;      // Distance travelled (measured in number of maze cells)  
     public int playerX = 0; public int playerZ = 0;     // Log player co-ords for cell movement
+    public float doorLockChance = 0f;
 
     // Start is called before the first frame update
     void Awake(){
+        MazeGlobals = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGlobals>();
+        
         menuGroup    = GameObject.FindWithTag("MenuGroup");
         stationGroup = GameObject.FindWithTag("StationGroup");
         hackingGroup = GameObject.FindWithTag("HackingGroup");
@@ -45,6 +50,7 @@ public class PlayerManager : MonoBehaviour{
         hackerCamStandard  = GameObject.FindWithTag("HackerCamStandard");
         hackerCamVR        = GameObject.FindWithTag("HackerCamVR");
         orbitalCam         = GameObject.FindWithTag("OrbitalCam");
+
 
         MenuState();
     }
@@ -67,21 +73,68 @@ public class PlayerManager : MonoBehaviour{
         /*
         Reset metric parameters and calculate parameters for the next maze generaton
         */
-        print("RESETTING METRICS");
-        timeTaken = 0f;
-        cellsTravelled = 0;
+        float averageSpeed = 10f;
+        int changeDif = 0;
+
+        print("=====================================");
+        print(MazeGlobals.startDistance);
+        print(MazeGlobals.endX);
+        print(MazeGlobals.endZ);
+
+        print(MazeGlobals.endDist); // end cells relative distance from start
+
 
         // Check how player peformed in the last maze
 
         // Check how the player peformed in the current maze
+        // Distance Check
+        if (cellsTravelled < (MazeGlobals.endDist*=0.80)){
+            changeDif++;
+        }else if (cellsTravelled > (MazeGlobals.endDist*=1.20)){
+            changeDif--;
+        }else{
+            // No changes to difficulty
+        }
+
+        // Time Check
+        if (timeTakenL < (timeTaken*=0.80)){
+            changeDif++;
+        }else if (timeTakenL > (timeTaken*=1.20)){
+            changeDif--;
+        }else{
+            // No changes to difficulty
+        }
+
 
         // If the player peforms better than last time create a harder maze
+        switch(changeDif){
+            case(-2): // Decrease locked door and size
+            doorLockChance-=.1f;
+            break;
+
+            case(-1): // Decrease size
+            MazeGlobals.gridX-=1;
+            MazeGlobals.gridZ-=1;
+            break;
+
+            case(1): // Increase size
+            MazeGlobals.gridX+=1;
+            MazeGlobals.gridZ+=1;
+            break;
+
+            case(2): // Increase locked door and size
+            doorLockChance+=.1f;
+            break;
+        }
 
         // If the player peforms worse, create an easier maze
 
         // If player peforms about the same, create the same maze.
 
 
+        print("==========RESETTING METRICS==========");
+        timeTaken = 0f;
+        cellsTravelled = 0;
 
     }
 

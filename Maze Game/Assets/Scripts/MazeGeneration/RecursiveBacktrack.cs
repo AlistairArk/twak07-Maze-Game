@@ -55,6 +55,7 @@ public class RecursiveBacktrack : MonoBehaviour {
                 - Path finding between start and end points
             */
             cellData[x][z][4] = MazeGlobals.startDistance;
+            if (cellData[x][z][4]>MazeGlobals.endDist) MazeGlobals.endDist=cellData[x][z][4];
 
             List<string> availableCells = new List<string>();
 
