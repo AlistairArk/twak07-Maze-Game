@@ -85,7 +85,6 @@ public class MazeGenerator : MonoBehaviour{
     public void GenerateSpaceStation(){
 
         ResetMaze.Reset();
-        PlayerManager.ResetMetrics();       // Reset metrics and generate meterics for next maze generation
 
         switch(MazeGlobals.type){
             case(0):
@@ -136,10 +135,12 @@ public class MazeGenerator : MonoBehaviour{
             MazeGlobals.mode = 0;
 
             // Update grid size before reset
-            gridX = 10;
-            gridZ = 10;
-            MazeGlobals.gridX = gridX;
-            MazeGlobals.gridZ = gridZ;
+            PlayerManager.ResetMetrics();   // Reset metrics and generate meterics for next maze generation
+
+            // gridX = 10;
+            // gridZ = 10;
+            // MazeGlobals.gridX = gridX;
+            // MazeGlobals.gridZ = gridZ;
             ResetMaze.Reset();
             GenerateSpaceStation();
 
@@ -193,11 +194,13 @@ public class MazeGenerator : MonoBehaviour{
     public void HackingGameWin(){
         lockedDoor.GetComponent<Doorway>().HackWin();
         HackingGameEnd();
+        PlayerManager.RaiseHackDifficulty();
     }
 
     public void HackingGameLoss(){
         lockedDoor.GetComponent<Doorway>().HackLoss();
         HackingGameEnd();
+        PlayerManager.LowerHackDifficulty();
     }
 
     void HackingGameEnd(){

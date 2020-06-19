@@ -43,7 +43,12 @@ public class Doorway : MonoBehaviour {
         PlayerManager = GameObject.FindWithTag("PlayerManager").GetComponent<PlayerManager>();
 
         // Check player manager door lock probability
-        doorLocked = false; // Easiest test
+        float randValue = Random.Range(0f, 100.0f)*0.001f;
+        if (randValue > PlayerManager.doorLockChance){
+            doorLocked = false;
+        }else{
+            doorLocked = true;
+        }
     }
 
 

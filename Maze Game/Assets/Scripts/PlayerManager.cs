@@ -33,7 +33,8 @@ public class PlayerManager : MonoBehaviour{
     public float timeTakenL = 0;        // Time taken last maze
     public int cellsTravelled = 0;      // Distance travelled (measured in number of maze cells)  
     public int playerX = 0; public int playerZ = 0;     // Log player co-ords for cell movement
-    public float doorLockChance = 0f;
+    public float doorLockChance = .05f;
+    public float pathWidthMulti = 1f;
 
     // Start is called before the first frame update
     void Awake(){
@@ -73,7 +74,7 @@ public class PlayerManager : MonoBehaviour{
         /*
         Reset metric parameters and calculate parameters for the next maze generaton
         */
-        float averageSpeed = 10f;
+        float averageSpeed = 1.475f;
         int changeDif = 0;
 
         print("=====================================");
@@ -88,25 +89,29 @@ public class PlayerManager : MonoBehaviour{
 
         // Check how the player peformed in the current maze
         // Distance Check
-        if (cellsTravelled < (MazeGlobals.endDist*=0.80)){
+        if (cellsTravelled < (MazeGlobals.endDist*0.80)){
             changeDif++;
-        }else if (cellsTravelled > (MazeGlobals.endDist*=1.20)){
+        }else if (cellsTravelled > (MazeGlobals.endDist*1.20)){
             changeDif--;
         }else{
             // No changes to difficulty
         }
 
+        timeTakenL = averageSpeed*cellsTravelled;
         // Time Check
-        if (timeTakenL < (timeTaken*=0.80)){
+        if (timeTaken < (timeTakenL*0.80)){
             changeDif++;
-        }else if (timeTakenL > (timeTaken*=1.20)){
+        }else if (timeTaken > (timeTakenL*1.20)){
             changeDif--;
         }else{
             // No changes to difficulty
         }
 
+        print(timeTaken+"  "+timeTakenL+"  "+averageSpeed+"  "+cellsTravelled);
+        print(changeDif);
 
         // If the player peforms better than last time create a harder maze
+        // If the player peforms worse, create an easier maze
         switch(changeDif){
             case(-2): // Decrease locked door and size
             doorLockChance-=.1f;
@@ -127,15 +132,29 @@ public class PlayerManager : MonoBehaviour{
             break;
         }
 
-        // If the player peforms worse, create an easier maze
+        // Map size limit
+        if (MazeGlobals.gridX<5){
+            MazeGlobals.gridX = 5;
+            MazeGlobals.gridZ = 5;
+        }else if (MazeGlobals.gridX>50){
+            MazeGlobals.gridX = 50;
+            MazeGlobals.gridZ = 50;
+        }
+
+        if (doorLockChance<0f){
+            doorLockChance = 0f;
+        }else if (doorLockChance>1f){
+            doorLockChance = 1f;
+        }
+
 
         // If player peforms about the same, create the same maze.
 
 
         print("==========RESETTING METRICS==========");
+        print("Merics: "+MazeGlobals.gridX+"  "+MazeGlobals.gridZ);
         timeTaken = 0f;
         cellsTravelled = 0;
-
     }
 
 
@@ -233,5 +252,42 @@ public class PlayerManager : MonoBehaviour{
             stationCamStandard.SetActive(true);
             hackerCamStandard.SetActive(false);
         }
+    }
+
+
+    public void RaiseHackDifficulty(){
+        doorLockChance+=.05f;
+
+        if (doorLockChance<.05f){
+            doorLockChance = .05f;
+        }else if (doorLockChance>1f){
+            doorLockChance = 1f;
+        }
+
+        pathWidthMulti-=.3f;
+        if (pathWidthMulti<1f){
+            pathWidthMulti = 1f;
+        }else if (pathWidthMulti>2f){
+            pathWidthMulti = 2f;
+        }
+    }
+
+
+    public void LowerHackDifficulty(){
+        doorLockChance-=.5f;
+
+        if (doorLockChance<.05f){
+            doorLockChance = .05f;
+        }else if (doorLockChance>1f){
+            doorLockChance = 1f;
+        }
+
+        pathWidthMulti+=.3f;
+        if (pathWidthMulti<1f){
+            pathWidthMulti = 1f;
+        }else if (pathWidthMulti>2f){
+            pathWidthMulti = 2f;
+        }
+        print("Difficulty Lowering: "+pathWidthMulti);
     }
 }

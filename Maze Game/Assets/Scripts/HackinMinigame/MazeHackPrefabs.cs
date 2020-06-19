@@ -20,16 +20,19 @@ public class MazeHackPrefabs : MonoBehaviour{
     [Header("Misc.", order=5)]
     public float prefabOffsetX = 0.5f;
     public float prefabOffsetZ = 0.5f;
+    private PlayerManager PlayerManager;
 
 
     void Awake(){
         MazeGlobals = gameObject.GetComponent<MazeGlobals>();
+        PlayerManager = GameObject.FindWithTag("PlayerManager").GetComponent<PlayerManager>();
     }
+
 
     public void Corridors(){
         int gridX = MazeGlobals.gridX;
         int gridZ = MazeGlobals.gridZ;
-        int mapScale = MazeGlobals.mapScale;
+        float mapScale = MazeGlobals.mapScale;
 
         float mapHeight = 0f;
         List<List<List<int>>> cellData = MazeGlobals.GetCellData();
@@ -120,6 +123,7 @@ public class MazeHackPrefabs : MonoBehaviour{
         prefabCell = Instantiate(prefab, pos, Quaternion.Euler(rot.x,rot.y,rot.z));
         prefabCell.transform.parent = MazeGlobals.prefabHackParent.transform;
         prefabCell.transform.localPosition = pos;
+        prefabCell.transform.localScale = new Vector3(PlayerManager.pathWidthMulti, PlayerManager.pathWidthMulti, PlayerManager.pathWidthMulti);
         prefabCell.layer = 11; // Set layer to "HackingCam" to make it viewable by the camera
         return prefabCell;
     }

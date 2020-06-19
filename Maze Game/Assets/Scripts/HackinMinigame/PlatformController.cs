@@ -15,11 +15,13 @@ public class PlatformController : MonoBehaviour{
 
     private DeathZone DeathZone;
     private MazeGenerator MazeGenerator;
+    private GoalDetector GoalDetector;
 
     // Start is called before the first frame update
     void Awake(){
         DeathZone = DeathZoneObject.GetComponent<DeathZone>();
         MazeGenerator = GameObject.FindWithTag("MazeGenerator").GetComponent<MazeGenerator>();
+        GoalDetector = GameObject.FindWithTag("HackGoal").GetComponent<GoalDetector>();
     }
 
 
@@ -29,9 +31,7 @@ public class PlatformController : MonoBehaviour{
         ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
         tries--;
         print("TRIES LEFT: "+tries);
-        if (tries <= 0) MazeGenerator.HackingGameWin(); // Just win for now
-        // MazeGenerator.HackingGameWin;
-        // MazeGenerator.HackingGameLoss;
+        if (tries <= 0) MazeGenerator.HackingGameLoss(); // Just win for now
     }
 
 
@@ -57,6 +57,12 @@ public class PlatformController : MonoBehaviour{
             ResetBall();
         }
 
+        // Trigger win
+        if (GoalDetector.goalTrigger){
+            GoalDetector.goalTrigger = false;
+            MazeGenerator.HackingGameWin();
+        }
+
         // if (Input.GetKeyDown("r") || DeathZone.fail){
         //     ResetBall();
         //     DeathZone.fail = false;
@@ -66,22 +72,22 @@ public class PlatformController : MonoBehaviour{
         
         if (Input.GetKey("left")){
             // print("left key was pressed");
-            platform.transform.Rotate(Vector3.forward * speed  * Time.deltaTime);
+            platform.transform.Rotate(Vector3.forward * speed * Time.deltaTime);
         }
 
         if (Input.GetKey("right")){
             // print("right key was pressed");
-            platform.transform.Rotate(Vector3.back * speed  * Time.deltaTime);
+            platform.transform.Rotate(Vector3.back * speed * Time.deltaTime);
         }
         
         if (Input.GetKey("up")){
             // print("up key was pressed");
-            platform.transform.Rotate(Vector3.right * speed  * Time.deltaTime);
+            platform.transform.Rotate(Vector3.right * speed * Time.deltaTime);
         }
 
         if (Input.GetKey("down")){
             // print("down key was pressed");
-            platform.transform.Rotate(Vector3.left * speed  * Time.deltaTime);
+            platform.transform.Rotate(Vector3.left * speed * Time.deltaTime);
         }
     }
 }
